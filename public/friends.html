@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>フレンド - RIZAP Fitness</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/friends.css">
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+</head>
+<body>
+  <div class="page-wrapper has-bottom-nav">
+    <!-- ヘッダー -->
+    <header class="header">
+      <div class="header-content">
+        <a href="home.html" class="back-button">
+          <span>←</span>
+          <span>ホーム</span>
+        </a>
+        <h1 class="header-title">フレンド</h1>
+        <div style="width: 60px;"></div>
+      </div>
+    </header>
+
+    <main class="main-content">
+      <div class="container friends-container">
+        <!-- メッセージ表示 -->
+        <div id="error-message" class="error-message"></div>
+        <div id="success-message" class="success-message"></div>
+
+        <div class="friends-layout">
+          <!-- 左カラム：フレンド追加・自分のID -->
+          <div class="friends-left">
+            <!-- フレンド追加セクション -->
+            <section class="add-friend-section card slide-up">
+              <h2 class="card-title">
+                <span>➕</span>
+                フレンドを追加
+              </h2>
+
+              <form id="add-friend-form">
+                <div class="form-group">
+                  <label for="friend-id" class="form-label">ユーザーID</label>
+                  <input
+                    type="text"
+                    id="friend-id"
+                    class="form-input"
+                    placeholder="例: username#1234"
+                    required
+                  >
+                  <p class="input-hint">フレンドのユーザーIDを入力してください</p>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-full">
+                  <span>👥</span>
+                  フレンドを追加
+                </button>
+              </form>
+
+              <!-- 検索結果 -->
+              <div id="search-result" class="search-result" style="display: none;">
+                <div class="search-result-content">
+                  <img id="result-avatar" src="" alt="" class="avatar avatar-sm">
+                  <span id="result-username" class="result-username"></span>
+                </div>
+                <button id="confirm-add-btn" class="btn btn-primary btn-sm">追加</button>
+              </div>
+            </section>
+
+            <!-- 自分のユーザーID -->
+            <section class="my-id-section card slide-up">
+              <h2 class="card-title">
+                <span>🆔</span>
+                あなたのユーザーID
+              </h2>
+
+              <div class="my-id-display">
+                <code id="my-user-id"></code>
+                <button id="copy-id-btn" class="copy-btn" title="コピー">
+                  📋
+                </button>
+              </div>
+              <p class="id-hint">このIDをフレンドに共有しよう</p>
+            </section>
+          </div>
+
+          <!-- 右カラム：フレンドリスト -->
+          <div class="friends-right">
+            <!-- フレンドリスト -->
+            <section class="friends-list-section card slide-up">
+              <h2 class="card-title">
+                <span>👥</span>
+                フレンドリスト
+                <span id="friend-count" class="friend-count">(0)</span>
+              </h2>
+
+              <div id="friends-list" class="friends-list">
+                <!-- フレンドはJSで動的に追加 -->
+                <div class="empty-state" id="empty-friends">
+                  <div class="empty-state-icon">👥</div>
+                  <p>まだフレンドがいません<br>ユーザーIDを使って追加しよう！</p>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- ボトムナビゲーション -->
+    <nav class="nav-bottom">
+      <ul class="nav-list">
+        <li class="nav-item">
+          <a href="home.html" class="nav-link">
+            <span class="nav-icon">🏠</span>
+            <span>ホーム</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="training.html" class="nav-link">
+            <span class="nav-icon">💪</span>
+            <span>記録</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="friends.html" class="nav-link active">
+            <span class="nav-icon">👥</span>
+            <span>フレンド</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="profile.html" class="nav-link">
+            <span class="nav-icon">👤</span>
+            <span>プロフィール</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+
+  <!-- 削除確認モーダル -->
+  <div id="delete-modal" class="modal">
+    <div class="modal-content">
+      <h3 class="modal-title">フレンドを削除</h3>
+      <p class="modal-message">
+        <span id="delete-target-name"></span>さんをフレンドから削除しますか？
+      </p>
+      <div class="modal-actions">
+        <button id="confirm-delete-btn" class="btn btn-danger">削除</button>
+        <button id="cancel-delete-btn" class="btn btn-secondary">キャンセル</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ローディング -->
+  <div id="loading" class="loading">
+    <div class="loading-spinner"></div>
+  </div>
+
+  <!-- JavaScript -->
+  <script src="js/firebase-config.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/friends.js"></script>
+</body>
+</html>

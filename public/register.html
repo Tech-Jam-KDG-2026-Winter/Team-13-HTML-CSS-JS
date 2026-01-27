@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>新規登録 - RIZAP Fitness</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/register.css">
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+</head>
+<body>
+  <div class="page-wrapper">
+    <main class="main-content">
+      <div class="container">
+        <!-- ヘッダー -->
+        <div class="register-header">
+          <a href="login.html" class="back-button">
+            <span>←</span>
+            <span>ログインに戻る</span>
+          </a>
+        </div>
+
+        <!-- タイトル -->
+        <div class="title-section">
+          <h1 class="page-title">アカウント作成</h1>
+          <p class="page-subtitle">新しい挑戦を始めよう</p>
+        </div>
+
+        <!-- 登録フォーム -->
+        <div class="register-form-wrapper slide-up">
+          <form id="register-form" class="register-form">
+            <!-- エラーメッセージ -->
+            <div id="error-message" class="error-message"></div>
+
+            <div class="form-group">
+              <label for="username" class="form-label">ユーザーネーム</label>
+              <input
+                type="text"
+                id="username"
+                class="form-input"
+                placeholder="1〜20文字"
+                required
+                maxlength="20"
+                autocomplete="username"
+              >
+              <p class="input-hint">他のユーザーに表示される名前です</p>
+            </div>
+
+            <div class="form-group">
+              <label for="email" class="form-label">メールアドレス</label>
+              <input
+                type="email"
+                id="email"
+                class="form-input"
+                placeholder="example@email.com"
+                required
+                autocomplete="email"
+              >
+            </div>
+
+            <div class="form-group">
+              <label for="password" class="form-label">パスワード</label>
+              <input
+                type="password"
+                id="password"
+                class="form-input"
+                placeholder="6文字以上"
+                required
+                minlength="6"
+                autocomplete="new-password"
+              >
+            </div>
+
+            <div class="form-group">
+              <label for="password-confirm" class="form-label">パスワード（確認）</label>
+              <input
+                type="password"
+                id="password-confirm"
+                class="form-input"
+                placeholder="パスワードを再入力"
+                required
+                autocomplete="new-password"
+              >
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-full">
+              アカウントを作成
+            </button>
+          </form>
+
+          <div class="login-link">
+            <p>既にアカウントをお持ちの方は</p>
+            <a href="login.html">ログインはこちら</a>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- ローディング -->
+  <div id="loading" class="loading">
+    <div class="loading-spinner"></div>
+  </div>
+
+  <!-- JavaScript -->
+  <script src="js/firebase-config.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/register.js"></script>
+</body>
+</html>

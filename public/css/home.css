@@ -1,0 +1,308 @@
+/* ============================================
+   ホームページスタイル
+   ============================================ */
+
+/* ログアウトボタン */
+.logout-btn {
+  background: transparent;
+  border: 1px solid var(--color-gold);
+  color: var(--color-gold);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-size: var(--font-lg);
+}
+
+.logout-btn:hover {
+  background: rgba(212, 175, 55, 0.1);
+}
+
+/* 今日のスコアカード */
+.today-score-card {
+  text-align: center;
+  background: linear-gradient(135deg, rgba(184, 134, 11, 0.2), rgba(212, 175, 55, 0.1));
+  border-color: var(--color-gold);
+}
+
+.score-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+}
+
+.score-header h2 {
+  font-size: var(--font-lg);
+  color: var(--color-white);
+}
+
+.score-icon {
+  font-size: var(--font-2xl);
+  animation: pulse 2s infinite;
+}
+
+.score-display {
+  font-family: var(--font-family-en);
+  font-size: 4rem;
+  font-weight: 800;
+  background: var(--gradient-gold);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1;
+  margin: var(--spacing-md) 0;
+}
+
+/* ランキングセクション */
+.ranking-section {
+  margin-top: var(--spacing-lg);
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-md);
+}
+
+.section-header .card-title {
+  margin-bottom: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.add-friend-link {
+  font-size: var(--font-sm);
+  color: var(--color-gold);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  transition: opacity var(--transition-fast);
+}
+
+.add-friend-link:hover {
+  opacity: 0.8;
+}
+
+/* ランキングリスト */
+.ranking-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.ranking-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: var(--border-radius-md);
+  transition: background var(--transition-fast);
+}
+
+.ranking-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.ranking-item.is-me {
+  background: rgba(212, 175, 55, 0.1);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+}
+
+.rank-badge {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: var(--font-sm);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.rank-badge.rank-1 {
+  background: linear-gradient(135deg, #FFD700, #FFA500);
+  color: var(--color-black);
+}
+
+.rank-badge.rank-2 {
+  background: linear-gradient(135deg, #C0C0C0, #A8A8A8);
+  color: var(--color-black);
+}
+
+.rank-badge.rank-3 {
+  background: linear-gradient(135deg, #CD7F32, #8B4513);
+  color: var(--color-white);
+}
+
+.rank-badge.rank-other {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--color-white);
+}
+
+.ranking-user-info {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  min-width: 0;
+}
+
+.ranking-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid var(--color-gold);
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.ranking-username {
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ranking-score {
+  font-family: var(--font-family-en);
+  font-weight: 700;
+  color: var(--color-gold);
+  flex-shrink: 0;
+}
+
+/* 最近のトレーニングセクション */
+.recent-section {
+  margin-top: var(--spacing-lg);
+}
+
+.recent-section .card-title {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.recent-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.recent-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-md);
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: var(--border-radius-md);
+}
+
+.recent-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.recent-type {
+  font-weight: 500;
+}
+
+.recent-details {
+  font-size: var(--font-xs);
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.recent-score {
+  font-family: var(--font-family-en);
+  font-weight: 700;
+  color: var(--color-gold);
+}
+
+/* 空の状態 */
+.empty-state {
+  padding: var(--spacing-xl);
+}
+
+.empty-state p {
+  line-height: 1.5;
+}
+
+/* ============================================
+   レスポンシブ - PC用2カラムレイアウト
+   ============================================ */
+
+/* ホームレイアウト */
+.home-layout {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.home-left,
+.home-right {
+  width: 100%;
+}
+
+@media (min-width: 480px) {
+  .score-display {
+    font-size: 5rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .home-container {
+    max-width: 900px;
+  }
+
+  .home-layout {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .home-left {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .home-right {
+    width: 360px;
+    flex-shrink: 0;
+  }
+
+  .ranking-section {
+    margin-top: 0;
+  }
+
+  .recent-section {
+    margin-top: var(--spacing-lg);
+  }
+}
+
+@media (min-width: 1024px) {
+  .home-container {
+    max-width: 1100px;
+  }
+
+  .home-right {
+    width: 400px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .home-container {
+    max-width: 1200px;
+  }
+
+  .home-right {
+    width: 450px;
+  }
+}

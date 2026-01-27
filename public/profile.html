@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>プロフィール - RIZAP Fitness</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/profile.css">
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+</head>
+<body>
+  <div class="page-wrapper has-bottom-nav">
+    <!-- ヘッダー -->
+    <header class="header">
+      <div class="header-content">
+        <a href="home.html" class="back-button">
+          <span>←</span>
+          <span>ホーム</span>
+        </a>
+        <h1 class="header-title">プロフィール</h1>
+        <div style="width: 60px;"></div>
+      </div>
+    </header>
+
+    <main class="main-content">
+      <div class="container profile-container">
+        <!-- メッセージ表示 -->
+        <div id="error-message" class="error-message"></div>
+        <div id="success-message" class="success-message"></div>
+
+        <div class="profile-layout">
+          <!-- 左カラム：プロフィールカード -->
+          <div class="profile-left">
+            <!-- プロフィールカード -->
+            <section class="profile-card card slide-up">
+              <!-- アイコン -->
+              <div class="avatar-section">
+                <div class="avatar-wrapper">
+                  <img id="profile-avatar" src="" alt="プロフィール画像" class="avatar avatar-lg">
+                </div>
+              </div>
+
+              <!-- ユーザーネーム編集 -->
+              <div class="profile-info">
+                <div class="editable-field">
+                  <span id="username-display" class="username-display"></span>
+                  <button id="edit-username-btn" class="edit-btn" title="編集">
+                    ✏️
+                  </button>
+                </div>
+                <div id="username-edit" class="edit-form" style="display: none;">
+                  <input type="text" id="username-input" class="form-input" maxlength="20">
+                  <div class="edit-actions">
+                    <button id="save-username-btn" class="btn btn-primary btn-sm">保存</button>
+                    <button id="cancel-username-btn" class="btn btn-secondary btn-sm">キャンセル</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- ユーザーID -->
+              <div class="user-id-section">
+                <span class="user-id-label">ユーザーID</span>
+                <div class="user-id-value">
+                  <code id="user-id-code"></code>
+                  <button id="copy-id-btn" class="copy-btn" title="コピー">
+                    📋
+                  </button>
+                </div>
+                <p class="user-id-hint">このIDをフレンドに共有しよう</p>
+              </div>
+            </section>
+
+            <!-- スコア統計 -->
+            <section class="stats-section card slide-up">
+              <h2 class="card-title">
+                <span>📊</span>
+                スコア統計
+              </h2>
+
+              <div class="stats-grid">
+                <div class="stat-item">
+                  <span class="stat-value" id="total-score">0</span>
+                  <span class="stat-label">累計スコア</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-value" id="today-score">0</span>
+                  <span class="stat-label">今日のスコア</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-value" id="total-trainings">0</span>
+                  <span class="stat-label">トレーニング回数</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-value" id="total-calories">0</span>
+                  <span class="stat-label">消費カロリー</span>
+                </div>
+              </div>
+            </section>
+
+            <!-- ログアウトボタン（PC時は左に移動） -->
+            <button id="logout-btn" class="btn btn-danger btn-full mt-lg">
+              ログアウト
+            </button>
+          </div>
+
+          <!-- 右カラム：トレーニング履歴 -->
+          <div class="profile-right">
+            <!-- トレーニング履歴 -->
+            <section class="history-section card slide-up">
+              <h2 class="card-title">
+                <span>📝</span>
+                トレーニング履歴
+              </h2>
+
+              <div id="training-history" class="history-list">
+                <!-- 履歴はJSで動的に追加 -->
+                <div class="empty-state" id="empty-history">
+                  <div class="empty-state-icon">🏃</div>
+                  <p>まだトレーニング履歴がありません</p>
+                </div>
+              </div>
+
+              <button id="load-more-btn" class="btn btn-secondary btn-full mt-md" style="display: none;">
+                もっと見る
+              </button>
+            </section>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- ボトムナビゲーション -->
+    <nav class="nav-bottom">
+      <ul class="nav-list">
+        <li class="nav-item">
+          <a href="home.html" class="nav-link">
+            <span class="nav-icon">🏠</span>
+            <span>ホーム</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="training.html" class="nav-link">
+            <span class="nav-icon">💪</span>
+            <span>記録</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="friends.html" class="nav-link">
+            <span class="nav-icon">👥</span>
+            <span>フレンド</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="profile.html" class="nav-link active">
+            <span class="nav-icon">👤</span>
+            <span>プロフィール</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+
+  <!-- ローディング -->
+  <div id="loading" class="loading">
+    <div class="loading-spinner"></div>
+  </div>
+
+  <!-- JavaScript -->
+  <script src="js/firebase-config.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/profile.js"></script>
+</body>
+</html>

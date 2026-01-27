@@ -1,0 +1,298 @@
+/* ============================================
+   フレンドページスタイル
+   ============================================ */
+
+/* フレンド追加セクション */
+.add-friend-section .card-title {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.input-hint {
+  font-size: var(--font-xs);
+  color: rgba(255, 255, 255, 0.5);
+  margin-top: var(--spacing-xs);
+}
+
+/* 検索結果 */
+.search-result {
+  margin-top: var(--spacing-lg);
+  padding: var(--spacing-md);
+  background: rgba(212, 175, 55, 0.1);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  border-radius: var(--border-radius-md);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.search-result-content {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.result-username {
+  font-weight: 500;
+}
+
+/* 自分のユーザーIDセクション */
+.my-id-section {
+  margin-top: var(--spacing-lg);
+}
+
+.my-id-section .card-title {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.my-id-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md);
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: var(--border-radius-md);
+}
+
+.my-id-display code {
+  font-size: var(--font-lg);
+  color: var(--color-gold);
+  font-family: var(--font-family-en);
+  letter-spacing: 0.05em;
+}
+
+.copy-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: var(--font-base);
+  transition: transform var(--transition-fast);
+}
+
+.copy-btn:hover {
+  transform: scale(1.2);
+}
+
+.id-hint {
+  text-align: center;
+  font-size: var(--font-xs);
+  color: rgba(255, 255, 255, 0.5);
+  margin-top: var(--spacing-sm);
+}
+
+/* フレンドリストセクション */
+.friends-list-section {
+  margin-top: var(--spacing-lg);
+}
+
+.friends-list-section .card-title {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.friend-count {
+  font-size: var(--font-sm);
+  font-weight: normal;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* フレンドリスト */
+.friends-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.friend-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: var(--border-radius-md);
+  transition: background var(--transition-fast);
+}
+
+.friend-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.friend-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 2px solid var(--color-gold);
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.friend-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.friend-name {
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.friend-id {
+  font-size: var(--font-xs);
+  color: rgba(255, 255, 255, 0.5);
+  font-family: monospace;
+}
+
+.friend-score {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.friend-score-value {
+  display: block;
+  font-family: var(--font-family-en);
+  font-weight: 700;
+  color: var(--color-gold);
+}
+
+.friend-score-label {
+  font-size: var(--font-xs);
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.delete-friend-btn {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  font-size: var(--font-lg);
+  padding: var(--spacing-sm);
+  transition: color var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.delete-friend-btn:hover {
+  color: #dc3545;
+}
+
+/* モーダル */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+  padding: var(--spacing-lg);
+}
+
+.modal.active {
+  display: flex;
+}
+
+.modal-content {
+  background: #1a1a1a;
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-xl);
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+}
+
+.modal-title {
+  font-size: var(--font-lg);
+  margin-bottom: var(--spacing-md);
+  color: var(--color-gold);
+}
+
+.modal-message {
+  margin-bottom: var(--spacing-xl);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.modal-actions {
+  display: flex;
+  gap: var(--spacing-md);
+  justify-content: center;
+}
+
+/* 空の状態 */
+.empty-state p {
+  line-height: 1.5;
+}
+
+/* ============================================
+   レスポンシブ - PC用2カラムレイアウト
+   ============================================ */
+
+/* フレンドレイアウト */
+.friends-layout {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.friends-left,
+.friends-right {
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .friends-container {
+    max-width: 900px;
+  }
+
+  .friends-layout {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .friends-left {
+    width: 360px;
+    flex-shrink: 0;
+  }
+
+  .friends-right {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .my-id-section {
+    margin-top: var(--spacing-lg);
+  }
+
+  .friends-list-section {
+    margin-top: 0;
+  }
+}
+
+@media (min-width: 1024px) {
+  .friends-container {
+    max-width: 1100px;
+  }
+
+  .friends-left {
+    width: 400px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .friends-container {
+    max-width: 1200px;
+  }
+
+  .friends-left {
+    width: 420px;
+  }
+}
