@@ -438,3 +438,33 @@ const DEFAULT_ICON_URL = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/200
 function getIconUrl(iconURL) {
   return iconURL || DEFAULT_ICON_URL;
 }
+
+// ============================================
+// Cloudinary 画像アップロード
+// ============================================
+
+/**
+ * Cloudinaryに画像をアップロード
+ * @param {File} file - アップロードするファイル
+ * @returns {Promise<string>} アップロードされた画像のURL
+ */
+async function uploadImageToCloudinary(file) {
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('upload_preset', 'Techjam');
+
+  const res = await fetch(
+    'https://api.cloudinary.com/v1_1/dflobm8ij/image/upload',
+    {
+      method: 'POST',
+      body: formData,
+    }
+  );
+
+  if (!res.ok) {
+    throw new Error('画像のアップロードに失敗しました');
+  }
+
+  const data = await res.json();
+  return data.secure_url;
+}

@@ -10,6 +10,7 @@ const TRAININGS_PER_PAGE = 10;
 
 // DOM要素の取得
 const profileAvatar = document.getElementById('profile-avatar');
+const avatarInput = document.getElementById('avatar-input');
 const usernameDisplay = document.getElementById('username-display');
 const editUsernameBtn = document.getElementById('edit-username-btn');
 const usernameEdit = document.getElementById('username-edit');
@@ -65,6 +66,9 @@ document.addEventListener('DOMContentLoaded', () => {
 // ============================================
 
 function setupEventListeners() {
+  // アバター変更
+  avatarInput.addEventListener('change', handleAvatarChange);
+
   // ユーザーネーム編集
   editUsernameBtn.addEventListener('click', showUsernameEdit);
   saveUsernameBtn.addEventListener('click', saveUsername);
@@ -93,6 +97,61 @@ function displayProfile() {
 
   // ユーザーID
   userIdCode.textContent = currentUserData?.userID || '未設定';
+}
+
+// ============================================
+// アバター変更
+// ============================================
+
+async function handleAvatarChange(e) {
+  console.log('handleAvatarChange called');
+  const file = e.target.files[0];
+  if (!file) {
+    console.log('No file selected');
+    return;
+  }
+  console.log('File selected:', file.name, file.size, file.type);
+
+  // ファイルサイズチェック（5MB以下）
+  if (file.size > 5 * 1024 * 1024) {
+    showError('画像サイズは5MB以下にしてください');
+    return;
+  }
+
+  // 画像タイプチェック
+  if (!file.type.startsWith('image/')) {
+    showError('画像ファイルを選択してください');
+    return;
+  }
+
+  try {
+    toggleLoading(true);
+    console.log('Uploading to Cloudinary...');
+
+    // Cloudinaryにアップロード
+    const imageUrl = await uploadImageToCloudinary(file);
+    console.log('Upload successful:', imageUrl);
+
+    // Firestoreを更新
+    console.log('Updating Firestore...');
+    await db.collection('users').doc(currentUser.uid).update({
+      iconURL: imageUrl
+    });
+    console.log('Firestore updated');
+
+    // 表示を更新
+    profileAvatar.src = imageUrl;
+    currentUserData.iconURL = imageUrl;
+
+    showSuccess('プロフィール画像を更新しました');
+  } catch (error) {
+    console.error('アバター更新エラー:', error);
+    showError('画像のアップロードに失敗しました');
+  } finally {
+    toggleLoading(false);
+    // input をリセット（同じファイルを再選択可能に）
+    avatarInput.value = '';
+  }
 }
 
 // ============================================

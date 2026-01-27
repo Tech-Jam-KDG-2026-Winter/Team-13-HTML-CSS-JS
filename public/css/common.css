@@ -599,17 +599,77 @@ a:hover {
   padding-bottom: 80px;
 }
 
-/* レスポンシブ対応 */
+
+/* ============================================
+   レスポンシブ対応
+   ============================================ */
+
+/* タブレット・PC（768px以上） */
 @media (min-width: 768px) {
   .container {
     max-width: 600px;
   }
 
   .header-content {
-    max-width: 600px;
+    max-width: 1200px;
+  }
+
+  /* フッターナビをヘッダーに移動 */
+  .nav-bottom {
+    position: fixed;
+    top: 0;
+    bottom: auto;
+    border-top: none;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+    padding: var(--spacing-sm) var(--spacing-lg);
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.98), rgba(0, 0, 0, 0.95));
+    backdrop-filter: blur(10px);
   }
 
   .nav-list {
-    max-width: 600px;
+    max-width: 1200px;
+    justify-content: center;
+    gap: var(--spacing-sm);
+  }
+
+  .nav-item {
+    flex: none;
+  }
+
+  /* ヘッダー用のナビリンクスタイル */
+  .nav-link {
+    flex-direction: row;
+    padding: var(--spacing-sm) var(--spacing-lg);
+    border-radius: var(--border-radius-md);
+    font-size: var(--font-sm);
+    font-weight: 500;
+    gap: var(--spacing-sm);
+    transition: all var(--transition-fast);
+  }
+
+  .nav-link:hover {
+    background: rgba(212, 175, 55, 0.1);
+    color: var(--color-gold);
+  }
+
+  .nav-link.active {
+    background: rgba(212, 175, 55, 0.15);
+    color: var(--color-gold);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+  }
+
+  .nav-icon {
+    font-size: var(--font-lg);
+  }
+
+  /* フッター用のパディングをヘッダー用に変更 */
+  .has-bottom-nav {
+    padding-bottom: 0;
+    padding-top: 65px;
+  }
+
+  /* モバイル専用要素を非表示 */
+  .mobile-only {
+    display: none !important;
   }
 }

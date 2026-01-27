@@ -21,8 +21,8 @@
 </head>
 <body>
   <div class="page-wrapper has-bottom-nav">
-    <!-- ヘッダー -->
-    <header class="header">
+    <!-- ヘッダー（モバイル用） -->
+    <header class="header mobile-only">
       <div class="header-content">
         <a href="home.html" class="back-button">
           <span>←</span>
@@ -48,6 +48,10 @@
               <div class="avatar-section">
                 <div class="avatar-wrapper">
                   <img id="profile-avatar" src="" alt="プロフィール画像" class="avatar avatar-lg">
+                  <label for="avatar-input" class="avatar-edit-btn" title="画像を変更">
+                    📷
+                  </label>
+                  <input type="file" id="avatar-input" accept="image/*" style="display: none;">
                 </div>
               </div>
 
