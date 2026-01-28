@@ -37,7 +37,7 @@ const TRAINING_TYPES = [
   { id: 'Overhead triceps extension', name: 'オーバーヘッドトライセプスエクステンション', category: 'arms', caloriesPerMinute: 6 },
   { id: 'Diamond push-up', name: 'ダイヤモンドプッシュアップ', category: 'arms', caloriesPerMinute: 6 },
   { id: 'Bench dips', name: 'ベンチディップス', category: 'arms', caloriesPerMinute: 8 },
-  { id: 'Cable pushdown', name: 'ケーブルプッシュダウン', category: 'arms', caloriesPerMinute: 6 }
+  { id: 'Cable pushdown', name: 'ケーブルプッシュダウン', category: 'arms', caloriesPerMinute: 6 },
 
 
   // 足
@@ -65,7 +65,7 @@ const TRAINING_TYPES = [
   { id: 'Barbell Squat (High Intensity)', name: 'バーベルスクワッド(高強度)', category: 'legs', caloriesPerMinute: 6 },
   { id: 'Barbell Squat (Medium Intensity)', name: 'バーベルスクワッド(中強度)', category: 'legs', caloriesPerMinute: 8 },
   { id: 'Barbell Squat (Low Intensity)', name: 'バーベルスクワッド(低強度)', category: 'legs', caloriesPerMinute: 12 },
-  { id: 'Hack Squat', name: 'ハックスクワッド', category: 'legs', caloriesPerMinute: 7 }
+  { id: 'Hack Squat', name: 'ハックスクワッド', category: 'legs', caloriesPerMinute: 7 },
 
 
   // 腹筋
