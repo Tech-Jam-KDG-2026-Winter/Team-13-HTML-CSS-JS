@@ -25,7 +25,7 @@
     <header class="header mobile-only">
       <div class="header-content">
         <a href="home.html" class="back-button">
-          <span>←</span>
+          <i data-lucide="arrow-left"></i>
           <span>ホーム</span>
         </a>
         <h1 class="header-title">トレーニング記録</h1>
@@ -108,25 +108,25 @@
       <ul class="nav-list">
         <li class="nav-item">
           <a href="home.html" class="nav-link">
-            <span class="nav-icon">🏠</span>
+            <span class="nav-icon"><i data-lucide="home"></i></span>
             <span>ホーム</span>
           </a>
         </li>
         <li class="nav-item">
           <a href="training.html" class="nav-link active">
-            <span class="nav-icon">💪</span>
+            <span class="nav-icon"><i data-lucide="dumbbell"></i></span>
             <span>記録</span>
           </a>
         </li>
         <li class="nav-item">
           <a href="friends.html" class="nav-link">
-            <span class="nav-icon">👥</span>
+            <span class="nav-icon"><i data-lucide="users"></i></span>
             <span>フレンド</span>
           </a>
         </li>
         <li class="nav-item">
           <a href="profile.html" class="nav-link">
-            <span class="nav-icon">👤</span>
+            <span class="nav-icon"><i data-lucide="user"></i></span>
             <span>プロフィール</span>
           </a>
         </li>
@@ -164,5 +164,9 @@
   <script src="js/utils.js"></script>
   <script src="js/training-data.js"></script>
   <script src="js/training.js"></script>
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>lucide.createIcons();</script>
 </body>
 </html>
