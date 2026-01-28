@@ -56,6 +56,11 @@
                 <!-- 種目ボタンはJSで動的に生成 -->
               </div>
             </section>
+
+            <!-- 記録ボタン -->
+            <button id="save-training-btn" class="btn btn-primary btn-full btn-lg">
+              トレーニングを記録
+            </button>
           </div>
 
           <!-- 右カラム：時間・プレビュー・ボタン -->
@@ -65,12 +70,8 @@
               <h2 class="card-title">トレーニング時間</h2>
 
               <div class="duration-input-wrapper">
-                <button class="duration-adjust-btn" id="duration-minus">−</button>
-                <div class="duration-display">
-                  <input type="number" id="duration-input" value="30" min="1" max="999" class="duration-value">
-                  <span class="duration-unit">分</span>
-                </div>
-                <button class="duration-adjust-btn" id="duration-plus">+</button>
+                <input type="number" id="duration-input" class="duration-input" value="30" min="1" max="120">
+                <span class="duration-unit">分</span>
               </div>
 
               <div class="quick-duration">
@@ -97,11 +98,6 @@
                 </div>
               </div>
             </section>
-
-            <!-- 記録ボタン -->
-            <button id="save-training-btn" class="btn btn-primary btn-full btn-lg">
-              トレーニングを記録
-            </button>
           </div>
         </div>
       </div>

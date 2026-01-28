@@ -12,8 +12,6 @@ let duration = 30;
 const categoryTabs = document.getElementById('category-tabs');
 const trainingTypes = document.getElementById('training-types');
 const durationInput = document.getElementById('duration-input');
-const durationMinus = document.getElementById('duration-minus');
-const durationPlus = document.getElementById('duration-plus');
 const quickBtns = document.querySelectorAll('.quick-btn');
 const previewCalories = document.getElementById('preview-calories');
 const previewScore = document.getElementById('preview-score');
@@ -108,13 +106,11 @@ function setupEventListeners() {
   // トレーニング種目選択
   trainingTypes.addEventListener('click', handleTypeSelect);
 
-  // 時間調整ボタン
-  durationMinus.addEventListener('click', () => adjustDuration(-5));
-  durationPlus.addEventListener('click', () => adjustDuration(5));
-
   // 時間入力
-  durationInput.addEventListener('input', handleDurationInput);
-  durationInput.addEventListener('blur', validateDuration);
+  durationInput.addEventListener('input', () => {
+    const value = parseInt(durationInput.value, 10) || 0;
+    setDuration(value);
+  });
 
   // クイック時間ボタン
   quickBtns.forEach((btn) => {
@@ -161,35 +157,12 @@ function handleTypeSelect(e) {
 }
 
 // ============================================
-// 時間入力
+// 時間設定
 // ============================================
 
-function adjustDuration(delta) {
-  const newDuration = Math.max(1, Math.min(999, duration + delta));
-  setDuration(newDuration);
-}
-
-function handleDurationInput() {
-  const value = parseInt(durationInput.value, 10);
-  if (!isNaN(value)) {
-    duration = Math.max(1, Math.min(999, value));
-    updateQuickBtnState();
-    updatePreview();
-  }
-}
-
-function validateDuration() {
-  if (isNaN(durationInput.value) || durationInput.value === '') {
-    durationInput.value = duration;
-  } else {
-    duration = Math.max(1, Math.min(999, parseInt(durationInput.value, 10)));
-    durationInput.value = duration;
-  }
-}
-
 function setDuration(value) {
-  duration = value;
-  durationInput.value = value;
+  duration = Math.max(1, Math.min(120, value));
+  durationInput.value = duration;
   updateQuickBtnState();
   updatePreview();
 }

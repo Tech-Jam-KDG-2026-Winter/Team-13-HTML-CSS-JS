@@ -227,19 +227,18 @@ async function loadFriendsList() {
     for (const friendId of friends) {
       const friendData = await getUserData(friendId);
       if (friendData) {
-        const todayScore = await getTodayScore(friendId);
         friendsData.push({
           id: friendId,
           username: friendData.username,
           userID: friendData.userID,
           iconURL: friendData.iconURL,
-          todayScore: todayScore
+          totalScore: friendData.totalScore || 0
         });
       }
     }
 
     // スコアで降順ソート
-    friendsData.sort((a, b) => b.todayScore - a.todayScore);
+    friendsData.sort((a, b) => b.totalScore - a.totalScore);
 
     // フレンドリストを表示
     const friendsHTML = friendsData.map((friend) => `
@@ -250,8 +249,8 @@ async function loadFriendsList() {
           <span class="friend-id">${friend.userID}</span>
         </div>
         <div class="friend-score">
-          <span class="friend-score-value">${friend.todayScore.toLocaleString()}</span>
-          <span class="friend-score-label">今日のpt</span>
+          <span class="friend-score-value">${friend.totalScore.toLocaleString()}</span>
+          <span class="friend-score-label">合計pt</span>
         </div>
         <button class="delete-friend-btn" data-friend-id="${friend.id}" data-friend-name="${escapeHtml(friend.username)}" title="削除">
           🗑️

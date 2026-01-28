@@ -142,61 +142,31 @@
   margin-top: 0;
 }
 
+/* 時間入力 */
 .duration-input-wrapper {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: var(--spacing-lg);
+  gap: var(--spacing-sm);
   margin-bottom: var(--spacing-lg);
 }
 
-.duration-adjust-btn {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
+.duration-input {
+  width: 100px;
+  padding: var(--spacing-md);
   background: rgba(255, 255, 255, 0.1);
   border: 2px solid var(--color-gold);
+  border-radius: var(--border-radius-md);
   color: var(--color-gold);
-  font-size: var(--font-xl);
-  font-weight: bold;
-  cursor: pointer;
-  transition: all var(--transition-fast);
-}
-
-.duration-adjust-btn:hover {
-  background: rgba(212, 175, 55, 0.2);
-}
-
-.duration-adjust-btn:active {
-  transform: scale(0.95);
-}
-
-.duration-display {
-  display: flex;
-  align-items: baseline;
-  gap: var(--spacing-xs);
-}
-
-.duration-value {
-  width: 80px;
   font-family: var(--font-family-en);
-  font-size: var(--font-3xl);
+  font-size: var(--font-2xl);
   font-weight: 700;
-  background: transparent;
-  border: none;
-  color: var(--color-gold);
   text-align: center;
-  -moz-appearance: textfield;
 }
 
-.duration-value::-webkit-outer-spin-button,
-.duration-value::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-.duration-value:focus {
+.duration-input:focus {
   outline: none;
+  background: rgba(212, 175, 55, 0.1);
 }
 
 .duration-unit {
@@ -273,12 +243,11 @@
 
 /* 記録ボタン */
 #save-training-btn {
-  margin-top: var(--spacing-xl);
-  margin-bottom: var(--spacing-xl);
+  margin-top: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
 }
 
 .btn-lg {
-  padding: var(--spacing-lg) var(--spacing-xl);
   font-size: var(--font-lg);
 }
 
@@ -405,7 +374,7 @@
   }
 
   #save-training-btn {
-    margin-top: auto;
+    margin-top: 12px;
     margin-bottom: 0;
   }
 }
