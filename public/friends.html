@@ -45,7 +45,7 @@
             <!-- フレンド追加セクション -->
             <section class="add-friend-section card slide-up">
               <h2 class="card-title">
-                <span>➕</span>
+                <i data-lucide="plus"></i>
                 フレンドを追加
               </h2>
 
@@ -63,7 +63,7 @@
                 </div>
 
                 <button type="submit" class="btn btn-primary btn-full">
-                  <span>👥</span>
+                  <span><i data-lucide="users"></i></span>
                   フレンドを追加
                 </button>
               </form>
@@ -81,14 +81,14 @@
             <!-- 自分のユーザーID -->
             <section class="my-id-section card slide-up">
               <h2 class="card-title">
-                <span>🆔</span>
+                <span><i data-lucide="id-card"></i></span>
                 あなたのユーザーID
               </h2>
 
               <div class="my-id-display">
                 <code id="my-user-id"></code>
                 <button id="copy-id-btn" class="copy-btn" title="コピー">
-                  📋
+                  <i data-lucide="copy"></i>
                 </button>
               </div>
               <p class="id-hint">このIDをフレンドに共有しよう</p>
@@ -100,7 +100,7 @@
             <!-- フレンドリスト -->
             <section class="friends-list-section card slide-up">
               <h2 class="card-title">
-                <span>👥</span>
+                <span><i data-lucide="users"></i></span>
                 フレンドリスト
                 <span id="friend-count" class="friend-count">(0)</span>
               </h2>
@@ -108,7 +108,7 @@
               <div id="friends-list" class="friends-list">
                 <!-- フレンドはJSで動的に追加 -->
                 <div class="empty-state" id="empty-friends">
-                  <div class="empty-state-icon">👥</div>
+                  <div class="empty-state-icon"><i data-lucide="users"></i></div>
                   <p>まだフレンドがいません<br>ユーザーIDを使って追加しよう！</p>
                 </div>
               </div>
@@ -123,25 +123,25 @@
       <ul class="nav-list">
         <li class="nav-item">
           <a href="home.html" class="nav-link">
-            <span class="nav-icon">🏠</span>
+            <span class="nav-icon"><i data-lucide="home"></i></span>
             <span>ホーム</span>
           </a>
         </li>
         <li class="nav-item">
           <a href="training.html" class="nav-link">
-            <span class="nav-icon">💪</span>
+            <span class="nav-icon"><i data-lucide="dumbbell"></i></span>
             <span>記録</span>
           </a>
         </li>
         <li class="nav-item">
           <a href="friends.html" class="nav-link active">
-            <span class="nav-icon">👥</span>
+            <span class="nav-icon"><i data-lucide="users"></i></span>
             <span>フレンド</span>
           </a>
         </li>
         <li class="nav-item">
           <a href="profile.html" class="nav-link">
-            <span class="nav-icon">👤</span>
+            <span class="nav-icon"><i data-lucide="user"></i></span>
             <span>プロフィール</span>
           </a>
         </li>
@@ -172,5 +172,8 @@
   <script src="js/firebase-config.js"></script>
   <script src="js/utils.js"></script>
   <script src="js/friends.js"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>lucide.createIcons();</script>
 </body>
 </html>
