@@ -20,17 +20,53 @@ const TRAINING_CATEGORIES = [
 ];
 
 // トレーニング種目定義
+// { id: '英語名', name: '種目名', category: 'arms' caloriesPerMinute:カロリー },
 // ※メンバーからのデータが入ったらcaloriesPerMinuteを更新
 const TRAINING_TYPES = [
   // 腕
-  { id: 'pushup', name: '腕立て伏せ', category: 'arms', caloriesPerMinute: 7 },
-  { id: 'dumbbell_curl', name: 'ダンベルカール', category: 'arms', caloriesPerMinute: 5 },
-  { id: 'triceps_dip', name: 'トライセプスディップ', category: 'arms', caloriesPerMinute: 6 },
+  { id: 'Arm curl', name: 'アームカール', category: 'arms', caloriesPerMinute: 5 },
+  { id: 'Barbell curl', name: 'バーベルカール', category: 'arms', caloriesPerMinute: 6 },
+  { id: 'Triceps extension', name: 'トライセプスエクステンション', category: 'arms', caloriesPerMinute: 7 },
+  { id: 'Dips', name: 'ディップス', category: 'arms', caloriesPerMinute: 9 },
+  { id: 'Hammer curl', name: 'ハンマーカール', category: 'arms', caloriesPerMinute: 6 },
+  { id: 'Chest press (machine)', name: 'チェストプレス(マシン)', category: 'arms', caloriesPerMinute: 4 },
+  { id: 'Concentration curl', name: 'コンセントレーションカール', category: 'arms', caloriesPerMinute: 5 },
+  { id: 'Cable curl', name: 'ケーブルカール', category: 'arms', caloriesPerMinute: 6 },
+  { id: 'Preacher curl', name: 'プリーチャーカール', category: 'arms', caloriesPerMinute: 5 },
+  { id: 'Triceps kickback', name: 'トライセプスキックバック', category: 'arms', caloriesPerMinute: 5 },
+  { id: 'Overhead triceps extension', name: 'オーバーヘッドトライセプスエクステンション', category: 'arms', caloriesPerMinute: 6 },
+  { id: 'Diamond push-up', name: 'ダイヤモンドプッシュアップ', category: 'arms', caloriesPerMinute: 6 },
+  { id: 'Bench dips', name: 'ベンチディップス', category: 'arms', caloriesPerMinute: 8 },
+  { id: 'Cable pushdown', name: 'ケーブルプッシュダウン', category: 'arms', caloriesPerMinute: 6 }
+
 
   // 足
-  { id: 'squat', name: 'スクワット', category: 'legs', caloriesPerMinute: 8 },
-  { id: 'lunge', name: 'ランジ', category: 'legs', caloriesPerMinute: 7 },
-  { id: 'calf_raise', name: 'カーフレイズ', category: 'legs', caloriesPerMinute: 4 },
+  { id: 'Squat', name: 'スクワット', category: 'legs', caloriesPerMinute: 5 },
+  { id: 'Jump Squat', name: 'ジャンプスクワット', category: 'legs', caloriesPerMinute: 8 },
+  { id: 'Wide Squat', name: 'ワイドスクワット', category: 'legs', caloriesPerMinute: 6 },
+  { id: 'Bulgarian Split Squat', name: 'ブルガリアンスクワット', category: 'legs', caloriesPerMinute: 8 },
+  { id: 'Lunge', name: 'ランジ', category: 'legs', caloriesPerMinute: 5 },
+  { id: 'Walking lunge', name: 'ウォーキングランジ', category: 'legs', caloriesPerMinute: 7 },
+  { id: 'Leg press', name: 'レッグプレス', category: 'legs', caloriesPerMinute: 7 },
+  { id: 'Leg extension', name: 'レッグエクステンション', category: 'legs', caloriesPerMinute: 8 },
+  { id: 'Leg curl', name: 'レッグカール', category: 'legs', caloriesPerMinute: 8 },
+  { id: 'Sissy squat', name: 'シシースクワット', category: 'legs', caloriesPerMinute: 6 },
+  { id: 'Fire hydrant', name: 'ファイアハイドラント', category: 'legs', caloriesPerMinute: 4 },
+  { id: 'Side lunge', name: 'サイドランジ', category: 'legs', caloriesPerMinute: 5 },
+  { id: 'Reverse lunge', name: 'リバースランジ', category: 'legs', caloriesPerMinute: 5 },
+  { id: 'Calf raise', name: 'カーフレイズ(ふくらはぎ)', category: 'legs', caloriesPerMinute: 4 },
+  { id: 'Hip bridge', name: 'ヒップブリッジ', category: 'legs', caloriesPerMinute: 4 },
+  { id: 'Hip thrust', name: 'ヒップスラスト', category: 'legs', caloriesPerMinute: 6 },
+  { id: 'Donkey kick', name: 'ドンキーキック', category: 'legs', caloriesPerMinute: 4 },
+  { id: 'Leg adduction (inner thigh)', name: 'レッグアダクション(内もも)', category: 'legs', caloriesPerMinute: 4 },
+  { id: 'Leg abduction (outer thigh)', name: 'レッグアブダクション(外もも)', category: 'legs', caloriesPerMinute: 4 },
+  { id: 'Good morning', name: 'グッドモーニング', category: 'legs', caloriesPerMinute: 6 },
+  { id: 'Step-up', name: 'ステップアップ', category: 'legs', caloriesPerMinute: 8 },
+  { id: 'Barbell Squat (High Intensity)', name: 'バーベルスクワッド(高強度)', category: 'legs', caloriesPerMinute: 6 },
+  { id: 'Barbell Squat (Medium Intensity)', name: 'バーベルスクワッド(中強度)', category: 'legs', caloriesPerMinute: 8 },
+  { id: 'Barbell Squat (Low Intensity)', name: 'バーベルスクワッド(低強度)', category: 'legs', caloriesPerMinute: 12 },
+  { id: 'Hack Squat', name: 'ハックスクワッド', category: 'legs', caloriesPerMinute: 7 }
+
 
   // 腹筋
   { id: 'crunch', name: 'クランチ', category: 'abs', caloriesPerMinute: 5 },
@@ -38,9 +74,23 @@ const TRAINING_TYPES = [
   { id: 'russian_twist', name: 'ロシアンツイスト', category: 'abs', caloriesPerMinute: 6 },
 
   // 背中
-  { id: 'pullup', name: '懸垂', category: 'back', caloriesPerMinute: 8 },
-  { id: 'back_extension', name: 'バックエクステンション', category: 'back', caloriesPerMinute: 5 },
-  { id: 'rowing', name: 'ローイング', category: 'back', caloriesPerMinute: 7 },
+  { id: 'Deadlift (High Intensity)', name: 'デッドリフト(高強度)', category: 'back', caloriesPerMinute: 6 },
+  { id: 'Deadlift (Medium Intensity)', name: 'デッドリフト(中強度)', category: 'back', caloriesPerMinute: 8 },
+  { id: 'Deadlift (Low Intensity)', name: 'デッドリフト(低強度)', category: 'back', caloriesPerMinute: 10 },
+  { id: 'Lat Pulldown', name: 'ラットプルダウン', category: 'back', caloriesPerMinute: 8 },
+  { id: 'Rowing (moderate)', name: 'ローイング(ほどほど)', category: 'back', caloriesPerMinute: 5 },
+  { id: 'Rowing (intense)', name: 'ローイング(きつい)', category: 'back', caloriesPerMinute: 6 },
+  { id: 'Pull-ups', name: '懸垂(プルアップ)', category: 'back', caloriesPerMinute: 9 },
+  { id: 'Back Extension', name: 'バックエクステンション', category: 'back', caloriesPerMinute: 5 },
+  { id: 'Superman', name: 'スーパーマン', category: 'back', caloriesPerMinute: 4 },
+  { id: 'Bent-Over Row', name: 'ベントオーバーロウ', category: 'back', caloriesPerMinute: 6 },
+  { id: 'One-Arm Row', name: 'ワンハンドロウ', category: 'back', caloriesPerMinute: 6 },
+  { id: 'Seated Row', name: 'シーテッドロウ', category: 'back', caloriesPerMinute: 5 },
+  { id: 'Face Pull', name: 'フェイスプル', category: 'back', caloriesPerMinute: 5 },
+  { id: 'Shrug', name: 'シュラッグ', category: 'back', caloriesPerMinute: 5 },
+  { id: 'Chin-ups', name: '懸垂(チンアップ)', category: 'back', caloriesPerMinute: 9 },
+  { id: 'Incline Pull-ups (Australian Pull-ups)', name: '斜め懸垂(オーストラリアンプルアップ)', category: 'back', caloriesPerMinute: 6 },
+  
 
   // 胸
   { id: 'bench_press', name: 'ベンチプレス', category: 'chest', caloriesPerMinute: 6 },
