@@ -1,6 +1,56 @@
 /* ============================================
    トレーニング記録ページスタイル
    ============================================ */
+/* CSS変数定義 */
+:root {
+  --color-black: #000000;
+  --color-dark-gold: #B8860B;
+  --color-gold: #D4AF37;
+  --color-white: #FFFFFF;
+
+  /* グラデーション */
+  --gradient-gold: linear-gradient(135deg, var(--color-dark-gold), var(--color-gold));
+  --gradient-black: linear-gradient(180deg, #1a1a1a, var(--color-black));
+
+  /* シャドウ */
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.5);
+  --shadow-gold: 0 4px 15px rgba(212, 175, 55, 0.3);
+
+  /* トランジション */
+  --transition-fast: 0.2s ease;
+  --transition-normal: 0.3s ease;
+  --transition-slow: 0.5s ease;
+
+  /* フォントサイズ */
+  --font-xs: 0.75rem;
+  --font-sm: 0.875rem;
+  --font-base: 1rem;
+  --font-lg: 1.125rem;
+  --font-xl: 1.25rem;
+  --font-2xl: 1.5rem;
+  --font-3xl: 2rem;
+
+  /* スペーシング */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 3rem;
+
+  /* ボーダー */
+  --border-radius-sm: 4px;
+  --border-radius-md: 8px;
+  --border-radius-lg: 12px;
+  --border-radius-full: 9999px;
+
+  /* フォント */
+  --font-family-en: 'Poppins', sans-serif;
+  --font-family-ja: 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+  --font-family: 'Poppins', 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+}
 
 /* トレーニングページ専用コンテナ */
 .training-container {
@@ -401,4 +451,66 @@
   .training-types {
     grid-template-columns: repeat(5, 1fr);
   }
+}
+
+/* ============================================
+   成功モーダル拡張
+============================================ */
+
+.encouragement-message {
+  font-size:1.1rem;
+  color: var(--color-gold);
+  margin-bottom: 1rem;
+  text-align: center;
+  font-weight: 500;
+}
+
+.today-toal {
+  background-color: rgba(255,255,255,0.05);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  margin: 1rem 0;
+  text-align: center;
+}
+
+.today-total-label {
+  font-size: 0.8rem;
+  color: var(--text--secondary);
+  margin-bottom: 0.25rem;
+}
+
+.today-total-stats {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--color-gold)
+}
+
+.share-buttons {
+  display: flex;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+
+.share-btn {
+  flex: 1;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.share-btn:hover {
+  opacity: 0.8;
+}
+
+.share-twitter {
+  background: #1DA1F2;
+  color: white;
+}
+
+.share-line {
+  background: #00B900;
+  color: white;
 }

@@ -138,6 +138,10 @@
   <div id="success-modal" class="modal">
     <div class="modal-content success-modal-content">
       <h3 class="success-title">トレーニング完了！</h3>
+
+      <!-- 励ましメッセージ(追加) -->
+       <p id="encouragement-message" class="encouragement-message"></p>
+
       <div class="success-stats">
         <div class="success-stat">
           <span class="success-stat-value" id="modal-calories">0</span>
@@ -148,6 +152,25 @@
           <span class="success-stat-label">pt獲得</span>
         </div>
       </div>
+
+      <!-- 今日の累計 -->
+       <div class="today-total">
+        <p class="today-total-label">今日の累計</p>
+        <div class="today-total-stats">
+          <span id="modal-today-score">0</span>pt
+        </div>
+       </div>
+
+       <!-- シェアボタン -->
+        <div class="shere-buttons">
+          <button id="share-twitter" class="share-btn share-twitter">
+            <i data-lucide="twitter"></i>シェア
+          </button>
+          <button id="share-line" class="share-btn share-line">
+            <i deta-lucide="message-circle"></i> LINE
+          </button>
+        </div>
+        
       <button id="close-success-modal" class="btn btn-primary btn-full">
         ホームに戻る
       </button>
