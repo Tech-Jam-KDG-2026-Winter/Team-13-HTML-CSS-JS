@@ -49,7 +49,7 @@
                 <div class="avatar-wrapper">
                   <img id="profile-avatar" src="" alt="プロフィール画像" class="avatar avatar-lg">
                   <label for="avatar-input" class="avatar-edit-btn" title="画像を変更">
-                    📷
+                    <i data-lucide="camera"></i>  
                   </label>
                   <input type="file" id="avatar-input" accept="image/*" style="display: none;">
                 </div>
@@ -60,7 +60,7 @@
                 <div class="editable-field">
                   <span id="username-display" class="username-display"></span>
                   <button id="edit-username-btn" class="edit-btn" title="編集">
-                    ✏️
+                    <i data-lucide="pencil"></i>
                   </button>
                 </div>
                 <div id="username-edit" class="edit-form" style="display: none;">
@@ -78,7 +78,7 @@
                 <div class="user-id-value">
                   <code id="user-id-code"></code>
                   <button id="copy-id-btn" class="copy-btn" title="コピー">
-                    📋
+                    <i data-lucide="copy"></i>
                   </button>
                 </div>
                 <p class="user-id-hint">このIDをフレンドに共有しよう</p>
@@ -88,7 +88,7 @@
             <!-- スコア統計 -->
             <section class="stats-section card slide-up">
               <h2 class="card-title">
-                <span>📊</span>
+                <span><i data-lucide="bar-chart-3"></i></span>
                 スコア統計
               </h2>
 
@@ -123,14 +123,14 @@
             <!-- トレーニング履歴 -->
             <section class="history-section card slide-up">
               <h2 class="card-title">
-                <span>📝</span>
+                <span><i data-lucide="clipboard-list"></i></span>
                 トレーニング履歴
               </h2>
 
               <div id="training-history" class="history-list">
                 <!-- 履歴はJSで動的に追加 -->
                 <div class="empty-state" id="empty-history">
-                  <div class="empty-state-icon">🏃</div>
+                  <div class="empty-state-icon"><i data-lucide="activity"></i></div>
                   <p>まだトレーニング履歴がありません</p>
                 </div>
               </div>
@@ -149,25 +149,25 @@
       <ul class="nav-list">
         <li class="nav-item">
           <a href="home.html" class="nav-link">
-            <span class="nav-icon">🏠</span>
+            <span class="nav-icon"><i data-lucide="home"></i></span>
             <span>ホーム</span>
           </a>
         </li>
         <li class="nav-item">
           <a href="training.html" class="nav-link">
-            <span class="nav-icon">💪</span>
+            <span class="nav-icon"><i data-lucide="dumbbell"></i></span>
             <span>記録</span>
           </a>
         </li>
         <li class="nav-item">
           <a href="friends.html" class="nav-link">
-            <span class="nav-icon">👥</span>
+            <span class="nav-icon"><i data-lucide="users"></i></span>
             <span>フレンド</span>
           </a>
         </li>
         <li class="nav-item">
           <a href="profile.html" class="nav-link active">
-            <span class="nav-icon">👤</span>
+            <span class="nav-icon"><i data-lucide="user"></i></span>
             <span>プロフィール</span>
           </a>
         </li>
@@ -184,5 +184,8 @@
   <script src="js/firebase-config.js"></script>
   <script src="js/utils.js"></script>
   <script src="js/profile.js"></script>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>lucide.createIcons();</script>
 </body>
 </html>
