@@ -20,6 +20,8 @@ const successModal = document.getElementById('success-modal');
 const modalCalories = document.getElementById('modal-calories');
 const modalScore = document.getElementById('modal-score');
 const closeSuccessModal = document.getElementById('close-success-modal');
+const shareTwitterBtn = document.getElementById('share-twitter');
+const shareLineBtn = document.getElementById('share-line')
 
 // ============================================
 // 初期化処理
