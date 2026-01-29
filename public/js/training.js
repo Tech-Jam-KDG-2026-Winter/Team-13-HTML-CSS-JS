@@ -244,3 +244,62 @@ function showSuccessModal(calories, score) {
   modalScore.textContent = score.toLocaleString();
   successModal.classList.add('active');
 }
+
+
+// ============================================
+// 励ましメッセージを表示
+// ============================================
+
+const ENCOURAGEMENT_MESSAGES = {
+  // 15分以下
+  short: [
+    '短い時間でもコツコツが大事！',
+    'いい運動になりましたね！',
+    '継続は力なりです！'
+  ],
+  // 通常(16~45分)
+  normal: [
+    'ナイストレーニング！',
+    '今日も頑張りましたね！',
+    'その調子！とても良いです！'
+  ],
+  // 長時間(46分以上)
+  long: [
+    '圧巻のトレーニング！',
+    'すごい！本気ですね！',
+    '限界突破！最高です！',
+    'ハードワーク！尊敬します！',
+    '素晴らしい！しっかり休んでください！'
+  ],
+  // if score >= 500
+  highScore: [
+    '驚異的なスコア！',
+    'スコアモンスター！',
+    'ランキング上位間違いなし！',
+  ],
+
+}
+
+/**
+ * 励ましメッセージを取得
+ * @param {number} duration ==  トレーニング時間（分）
+ * @param {number} score == 獲得スコア
+ * @returns {string} 励ましメッセージ
+ */
+
+function getEncouragementMessage(duration,score) {
+  let messagePool;
+  if (score >= 500) {
+    messagePool = ENCOURAGEMENT_MESSAGES.highScore;
+  } else if ( duration <= 15 ) {
+    messagePool = ENCOURAGEMENT_MESSAGES.short;
+  } else if ( duration >= 46 ) {
+    messagePool = ENCOURAGEMENT_MESSAGES.long;
+  } else {
+    messagePool = ENCOURAGEMENT_MESSAGES.normal;
+  }
+
+  //ランダムに1つ選ぶ
+  const randomIndex = Math.floor(Math.random() * messagePool.length); 
+  return messagePool[randomIndex];
+}
