@@ -134,6 +134,24 @@ function setupEventListeners() {
       window.location.href = 'home.html';
     }
   });
+
+  // シェアボタン設定
+  function setupShareButtons() {
+    // Twitter
+    shareTwitterBtn.addEventListener('click', () => {
+      const text = `RIZAP Fitnessでトレーニング完了！\n${modalScore.textContent} pt獲得しました！\n#RIZAPFitness #筋トレ`;
+      const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
+      window.open(url, '_blank', 'width=550,height=420');
+    });
+
+    // LINE
+    shareLineBtn.addEventListener('click', () => {
+      const text = `RIZAP Fitnessでトレーニング完了！\n${modalScore.textContent} pt獲得しました！\n#RIZAPFitness #筋トレ`;
+      const url = `https://social-plugins.line.me/lineit/share?text=${encodeURIComponent(text)}`;
+      window.open(url, '_blank', 'width=550,height=420');
+    });
+  }
+  setupShareButtons();
 }
 
 // ============================================
@@ -287,6 +305,7 @@ const ENCOURAGEMENT_MESSAGES = {
  * @returns {string} 励ましメッセージ
  */
 
+// 時間に応じてメッセージをランダムで表示させる
 function getEncouragementMessage(duration,score) {
   let messagePool;
   if (score >= 500) {
@@ -299,7 +318,6 @@ function getEncouragementMessage(duration,score) {
     messagePool = ENCOURAGEMENT_MESSAGES.normal;
   }
 
-  //ランダムに1つ選ぶ
   const randomIndex = Math.floor(Math.random() * messagePool.length); 
   return messagePool[randomIndex];
 }
