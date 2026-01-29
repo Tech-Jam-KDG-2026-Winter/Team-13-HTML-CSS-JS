@@ -2,6 +2,8 @@
  * フレンドページのJavaScript
  */
 
+
+
 // グローバル変数
 let currentUser = null;
 let currentUserData = null;
@@ -253,7 +255,7 @@ async function loadFriendsList() {
           <span class="friend-score-label">合計pt</span>
         </div>
         <button class="delete-friend-btn" data-friend-id="${friend.id}" data-friend-name="${escapeHtml(friend.username)}" title="削除">
-          🗑️
+          <i data-lucide="trash"></i>  
         </button>
       </div>
     `).join('');
@@ -268,11 +270,13 @@ async function loadFriendsList() {
         openDeleteModal(friendId, friendName);
       });
     });
+
+    // 動的に追加したLucideアイコンを初期化
+    lucide.createIcons();
   } catch (error) {
     console.error('フレンドリスト取得エラー:', error);
   }
 }
-
 // ============================================
 // フレンド削除
 // ============================================
