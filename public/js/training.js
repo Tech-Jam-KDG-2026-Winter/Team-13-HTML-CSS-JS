@@ -20,6 +20,7 @@ const successModal = document.getElementById('success-modal');
 const modalCalories = document.getElementById('modal-calories');
 const modalScore = document.getElementById('modal-score');
 const closeSuccessModal = document.getElementById('close-success-modal');
+const encouragementMessage = document.getElementById('encouragement-message');
 const shareTwitterBtn = document.getElementById('share-twitter');
 const shareLineBtn = document.getElementById('share-line')
 
@@ -262,6 +263,8 @@ async function handleSaveTraining() {
 function showSuccessModal(calories, score) {
   modalCalories.textContent = calories.toLocaleString();
   modalScore.textContent = score.toLocaleString();
+  const message = getEncouragementMessage(duration, score);
+  encouragementMessage.textContent = message
   successModal.classList.add('active');
 }
 
