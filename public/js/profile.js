@@ -33,23 +33,18 @@ const logoutBtn = document.getElementById('logout-btn');
 // ============================================
 
 document.addEventListener('DOMContentLoaded', () => {
-  // 認証チェックとデータ読み込み
   requireAuth(async (user) => {
     currentUser = user;
     toggleLoading(true);
 
     try {
-      // ユーザーデータ取得
       currentUserData = await getUserData(user.uid);
-
-      // プロフィール情報を表示
       displayProfile();
-
-      // 統計情報を読み込み
       await loadStats();
-
-      // トレーニング履歴を読み込み
       await loadTrainingHistory();
+
+      // グラフを読み込み（追加）
+      await renderScoreChart('week');
     } catch (error) {
       console.error('データ読み込みエラー:', error);
     } finally {
@@ -57,7 +52,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // イベントリスナー設定
   setupEventListeners();
 });
 
@@ -82,6 +76,21 @@ function setupEventListeners() {
 
   // ログアウト
   logoutBtn.addEventListener('click', handleLogout);
+
+  // グラフタブ切り替え
+  graphTabs.forEach(tab => {
+    tab.addEventListener('click', async () => {
+      // アクティブ状態を更新
+      graphTabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+
+      // グラフを再描画
+      currentPeriod = tab.dataset.period;
+      toggleLoading(true);
+      await renderScoreChart(currentPeriod);
+      toggleLoading(false);
+    });
+  });
 }
 
 // ============================================
@@ -354,3 +363,182 @@ async function handleLogout() {
     await logout();
   }
 }
+
+// ============================================
+// グラフ関連
+// ============================================
+
+let scoreChart = null;
+let currentPeriod = 'week';
+
+
+// DOM要素の取得に追加
+const graphTabs = document.querySelectorAll('.graph-tab');
+const graphTotalScore = document.getElementById('graph-total-score');
+const graphAvgScore = document.getElementById('graph-avg-score');
+const graphBestDay = document.getElementById('graph-best-day');
+
+/**
+ * 過去N日分の日付配列を生成
+ * @param {number} days - 日数
+ * @returns {Array} 日付配列（YYYY-MM-DD形式）
+ */
+function getPastDates(days) {
+  const dates = [];
+  for (let i = days - 1; i >= 0; i--) {
+    const date = new Date();
+    date.setDate(date.getDate() - i);
+    const dateStr = date.toISOString().split('T')[0];
+    dates.push(dateStr);
+  }
+  return dates;
+}
+
+/**
+ * 日付を短い表示形式に変換
+ * @param {string} dateStr - YYYY-MM-DD形式の日付
+ * @returns {string} M/D形式の日付
+ */
+function formatShortDate(dateStr) {
+  const date = new Date(dateStr);
+  return `${date.getMonth() + 1}/${date.getDate()}`;
+}
+
+/**
+ * 期間内のスコアデータを取得
+ * @param {number} days - 取得する日数
+ * @returns {Promise<Object>} 日付ごとのスコアマップ
+ */
+async function getScoreDataByPeriod(days) {
+  const startDate = new Date();
+  startDate.setDate(startDate.getDate() - days + 1);
+  startDate.setHours(0, 0, 0, 0);
+
+  try {
+    const snapshot = await db.collection('trainings')
+      .where('userId', '==', currentUser.uid)
+      .where('timestamp', '>=', startDate)
+      .orderBy('timestamp', 'asc')
+      .get();
+
+    // 日付ごとにスコアを集計
+    const scoreByDate = {};
+
+    snapshot.forEach((doc) => {
+      const data = doc.data();
+      if (data.timestamp) {
+        const date = data.timestamp.toDate();
+        const dateStr = date.toISOString().split('T')[0];
+
+        if (!scoreByDate[dateStr]) {
+          scoreByDate[dateStr] = 0;
+        }
+        scoreByDate[dateStr] += data.score || 0;
+      }
+    });
+
+    return scoreByDate;
+  } catch (error) {
+    console.error('スコアデータ取得エラー:', error);
+    return {};
+  }
+}
+
+
+/**
+ * スコアグラフを描画
+ * @param {string} period - 'week' または 'month'
+ */
+async function renderScoreChart(period) {
+  const days = period === 'week' ? 7 : 30;
+  const dates = getPastDates(days);
+  const scoreData = await getScoreDataByPeriod(days);
+
+  // ラベルとデータを準備
+  const labels = dates.map(d => formatShortDate(d));
+  const data = dates.map(d => scoreData[d] || 0);
+
+  // 統計を計算
+  const totalScore = data.reduce((sum, val) => sum + val, 0);
+  const avgScore = Math.round(totalScore / days);
+  const maxScore = Math.max(...data);
+  const maxIndex = data.indexOf(maxScore);
+  const bestDay = maxScore > 0 ? formatShortDate(dates[maxIndex]) : '-';
+
+  // 統計を表示
+  graphTotalScore.textContent = `${totalScore.toLocaleString()} pt`;
+  graphAvgScore.textContent = `${avgScore.toLocaleString()} pt`;
+  graphBestDay.textContent = maxScore > 0 ? `${bestDay} (${maxScore}pt)` : '-';
+
+  // 既存のチャートを破棄
+  if (scoreChart) {
+    scoreChart.destroy();
+  }
+
+  // 新しいチャートを作成
+  const ctx = document.getElementById('score-chart').getContext('2d');
+  scoreChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'スコア',
+        data: data,
+        backgroundColor: 'rgba(212, 175, 55, 0.6)',
+        borderColor: 'rgba(212, 175, 55, 1)',
+        borderWidth: 1,
+        borderRadius: 4,
+        maxBarThickness: 40
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          display: false
+        },
+        tooltip: {
+          backgroundColor: 'rgba(0, 0, 0, 0.8)',
+          titleColor: '#D4AF37',
+          bodyColor: '#fff',
+          padding: 12,
+          cornerRadius: 8,
+          callbacks: {
+            label: function(context) {
+              return `${context.parsed.y.toLocaleString()} pt`;
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: {
+            display: false
+          },
+          ticks: {
+            color: '#999',
+            font: {
+              size: period === 'month' ? 10 : 12
+            },
+            maxRotation: period === 'month' ? 45 : 0
+          }
+        },
+        y: {
+          beginAtZero: true,
+          grid: {
+            color: 'rgba(255, 255, 255, 0.1)'
+          },
+          ticks: {
+            color: '#999',
+            callback: function(value) {
+              return value.toLocaleString();
+            }
+          }
+        }
+      }
+    }
+  });
+}
+
+

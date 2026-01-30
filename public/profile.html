@@ -18,6 +18,9 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
   <div class="page-wrapper has-bottom-nav">
@@ -108,6 +111,37 @@
                 <div class="stat-item">
                   <span class="stat-value" id="total-calories">0</span>
                   <span class="stat-label">消費カロリー</span>
+                </div>
+              </div>
+            </section>
+            
+            <!-- スコア推移グラフ -->
+            <section class="graph-section card slide-up">
+              <div class="graph-header">
+                <h2 class="card-title">スコア推移</h2>
+                <div class="graph-tabs">
+                  <button class="graph-tab active" data-period="week">週間</button>
+                  <button class="graph-tab" data-period="month">月間</button>
+                </div>
+              </div>
+
+              <div class="graph-container">
+                <canvas id="score-chart"></canvas>
+              </div>
+
+              <!-- グラフ下の統計サマリー -->
+              <div class="graph-summary">
+                <div class="summary-item">
+                  <span class="summary-label">期間合計</span>
+                  <span id="graph-total-score" class="summary-value">0 pt</span>
+                </div>
+                <div class="summary-item">
+                  <span class="summary-label">1日平均</span>
+                  <span id="graph-avg-score" class="summary-value">0 pt</span>
+                </div>
+                <div class="summary-item">
+                  <span class="summary-label">最高スコア日</span>
+                  <span id="graph-best-day" class="summary-value">-</span>
                 </div>
               </div>
             </section>

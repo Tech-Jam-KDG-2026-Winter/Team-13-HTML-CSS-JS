@@ -307,3 +307,98 @@
     width: 420px;
   }
 }
+
+/* ============================================
+   グラフセクションスタイル
+   ============================================ */
+
+   .graph-section {
+    margin-top: 1.5rem;
+  }
+  
+  .graph-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  
+  .graph-tabs {
+    display: flex;
+    gap: 0.5rem;
+  }
+  
+  .graph-tab {
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-secondary);
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+  }
+  
+  .graph-tab:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+  
+  .graph-tab.active {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--bg-primary);
+    font-weight: 600;
+  }
+  
+  .graph-container {
+    position: relative;
+    height: 250px;
+    margin-bottom: 1rem;
+  }
+  
+  .graph-summary {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+  }
+  
+  .summary-item {
+    text-align: center;
+  }
+  
+  .summary-label {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.25rem;
+  }
+  
+  .summary-value {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+  
+  /* レスポンシブ対応 */
+  @media (max-width: 480px) {
+    .graph-header {
+      flex-direction: column;
+      gap: 0.75rem;
+      align-items: flex-start;
+    }
+  
+    .graph-summary {
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+    }
+  
+    .summary-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      text-align: left;
+    }
+  }
