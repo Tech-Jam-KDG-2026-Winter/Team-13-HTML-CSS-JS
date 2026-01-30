@@ -2,6 +2,8 @@
  * フレンドページのJavaScript
  */
 
+
+
 // グローバル変数
 let currentUser = null;
 let currentUserData = null;
@@ -301,8 +303,8 @@ async function loadFriendsList() {
             <i data-lucide="swords"></i>
           </button>
           <button class="delete-friend-btn" data-friend-id="${friend.id}" data-friend-name="${escapeHtml(friend.username)}" title="削除">
-            <i data-lucide="trash"></i>
-          </button>
+          <i data-lucide="trash"></i>  
+        </button>
         </div>
       </div>
     `).join('');
@@ -325,11 +327,13 @@ async function loadFriendsList() {
         openChallengeModal(friendId, friendName);
       });
     });
+
+    // 動的に追加したLucideアイコンを初期化
+    lucide.createIcons();
   } catch (error) {
     console.error('フレンドリスト取得エラー:', error);
   }
 }
-
 // ============================================
 // フレンド削除
 // ============================================
@@ -408,7 +412,6 @@ function openChallengeModal(friendId, friendName) {
   durationBtns.forEach(btn => {
     btn.classList.toggle('active', btn.dataset.days === '3');
   });
-
   challengeModal.classList.add('active');
 }
 function closeChallengeModal() {
