@@ -113,6 +113,33 @@
                 </div>
               </div>
             </section>
+            <section class="challenge-section card slide-up">
+              <h2 class="card-title">
+                <span><i data-lucide="swords"></i></span>
+                チャレンジ
+              </h2>
+              <!-- 受信したチャレンジ（承認待ち） -->
+              <div id="pending-challenges" class="pending-challenges">
+                <h3 class="subsection-title">届いたチャレンジ</h3>
+                <div id="pending-list" class="challenge-list">
+                  <p class="empty-text" id="empty-pending">届いたチャレンジはありません</p>
+                </div>
+              </div>
+              <!-- 進行中のチャレンジ -->
+              <div id="active-challenges" class="active-challenges">
+                <h3 class="subsection-title">進行中のチャレンジ</h3>
+                <div id="active-list" class="challenge-list">
+                  <p class="empty-text" id="empty-active">進行中のチャレンジはありません</p>
+                </div>
+              </div>
+               <!-- 過去のチャレンジ -->
+              <div id="completed-challenges" class="completed-challenges">
+                <h3 class="subsection-title">過去の結果</h3>
+                <div id="completed-list" class="challenge-list">
+                  <p class="empty-text" id="empty-completed">まだ結果はありません</p>
+                </div>
+              </div>
+            </section>
           </div>
         </div>
       </div>
@@ -159,6 +186,52 @@
       <div class="modal-actions">
         <button id="confirm-delete-btn" class="btn btn-danger">削除</button>
         <button id="cancel-delete-btn" class="btn btn-secondary">キャンセル</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- チャレンジ作成モーダル -->
+  <div id="challenge-modal" class="modal">
+    <div class="modal-content">
+      <h3 class="modal-title"><i data-lucide="swords"></i> チャレンジを送る</h3>
+      <p class="modal-message">
+        <span id="challenge-target-name"></span>さんにチャレンジ！
+      </p>
+
+      <div class="challenge-options">
+        <label class="form-label">期間を選択</label>
+        <div class="duration-options">
+          <button class="duration-btn active" data-days="3">3日間</button>
+          <button class="duration-btn" data-days="7">1週間</button>
+          <button class="duration-btn" data-days="14">2週間</button>
+        </div>
+      </div>
+
+      <p class="challenge-description">
+        期間中のスコアで勝負！<br>
+        相手が承認するとチャレンジ開始
+      </p>
+
+      <div class="modal-actions">
+        <button id="send-challenge-btn" class="btn btn-primary">チャレンジを送る</button>
+        <button id="cancel-challenge-btn" class="btn btn-secondary">キャンセル</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- チャレンジ承認モーダル -->
+  <div id="accept-modal" class="modal">
+    <div class="modal-content">
+      <h3 class="modal-title"><i data-lucide="swords"></i> チャレンジが届きました！</h3>
+      <p class="modal-message">
+        <span id="challenge-target-name"></span>からのチャレンジ
+      </p>
+      <p class="challenge-info">
+        期間： <span id="accept-duration"></span>日間
+      </p>
+      <div class="modal-actions">
+        <button id="confirm-accept-btn" class="btn btn-primary">受ける！</button>
+        <button id="decline-challenge-btn" class="btn btn-danger">断る</button>
       </div>
     </div>
   </div>

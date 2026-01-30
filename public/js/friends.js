@@ -7,6 +7,11 @@ let currentUser = null;
 let currentUserData = null;
 let foundUser = null;
 let deleteTargetId = null;
+// チャレンジ関連の変数
+let challengeTargetId = null;
+let challengeTargetName = null;
+let selectedDuration = 3;
+let pendingChallengeId = null;
 
 // DOM要素の取得
 const addFriendForm = document.getElementById('add-friend-form');
@@ -24,6 +29,18 @@ const deleteModal = document.getElementById('delete-modal');
 const deleteTargetName = document.getElementById('delete-target-name');
 const confirmDeleteBtn = document.getElementById('confirm-delete-btn');
 const cancelDeleteBtn = document.getElementById('cancel-delete-btn');
+// チャレンジDOM要素の追加
+const challengeModal = document.getElementById('challenge-modal');
+const challengeTargetNameEl = document.getElementById('challenge-target-name');
+const durationBtns = document.querySelectorAll('.duration-btn');
+const sendChallengeBtn = document.getElementById('send-challenge-btn');
+const cancelChallengeBtn = document.getElementById('cancel-challenge-btn');
+const acceptModal = document.getElementById('accept-modal');
+const acceptChallengerName = document.getElementById('accept-challenger-name');
+const acceptDuration = document.getElementById('accept-duration');
+const confirmAcceptBtn = document.getElementById('confirm-accept-btn');
+const declineChallengeBtn = document.getElementById('decline-challenge-btn');
+
 
 // ============================================
 // 初期化処理
@@ -44,6 +61,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // フレンドリストを読み込み
       await loadFriendsList();
+      // チャレンジを読み込み
+      await loadChallenges();
     } catch (error) {
       console.error('データ読み込みエラー:', error);
     } finally {
@@ -86,6 +105,31 @@ function setupEventListeners() {
     searchResult.style.display = 'none';
     foundUser = null;
   });
+  // チャレンジイベントリスナー
+  // 期間選択ボタン
+  durationBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      durationBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      selectedDuration = parseInt(btn.dataset.days);
+    });
+  });
+  // チャレンジ送信
+  sendChallengeBtn.addEventListener('click', handleSendChallenge);
+  cancelChallengeBtn.addEventListener('click', closeChallengeModal);
+
+  // チャレンジ承認
+  confirmAcceptBtn.addEventListener('click', handleAcceptChallenge);
+  declineChallengeBtn.addEventListener('click', handleDeclineChallenge);
+
+  // モーダル外クリック
+  challengeModal.addEventListener('click', (e) => {
+    if (e.target === challengeModal) closeChallengeModal();
+  });
+  acceptModal.addEventListener('click', (e) => {
+    if (e.target === acceptModal) closeAcceptModal();
+  });
+
 }
 
 // ============================================
@@ -252,9 +296,14 @@ async function loadFriendsList() {
           <span class="friend-score-value">${friend.totalScore.toLocaleString()}</span>
           <span class="friend-score-label">合計pt</span>
         </div>
-        <button class="delete-friend-btn" data-friend-id="${friend.id}" data-friend-name="${escapeHtml(friend.username)}" title="削除">
-          🗑️
-        </button>
+        <div class="friend-actions">
+          <button class="challenge-btn" data-friend-id="${friend.id}" data-friend-name="${escapeHtml(friend.username)}" title="チャレンジ">
+            <i data-lucide="swords"></i>
+          </button>
+          <button class="delete-friend-btn" data-friend-id="${friend.id}" data-friend-name="${escapeHtml(friend.username)}" title="削除">
+            <i data-lucide="trash"></i>
+          </button>
+        </div>
       </div>
     `).join('');
 
@@ -266,6 +315,14 @@ async function loadFriendsList() {
         const friendId = e.currentTarget.dataset.friendId;
         const friendName = e.currentTarget.dataset.friendName;
         openDeleteModal(friendId, friendName);
+      });
+    });
+    // チャレンジボタンのイベントリスナー
+    document.querySelectorAll('.challenge-btn').forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        const friendId = e.currentTarget.dataset.friendId;
+        const friendName = e.currentTarget.dataset.friendName;
+        openChallengeModal(friendId, friendName);
       });
     });
   } catch (error) {
@@ -335,4 +392,395 @@ function escapeHtml(text) {
   const div = document.createElement('div');
   div.textContent = text;
   return div.innerHTML;
+}
+
+// ============================================
+// チャレンジモーダル
+// ============================================
+
+function openChallengeModal(friendId, friendName) {
+  challengeTargetId = friendId;
+  challengeTargetName = friendName;
+  challengeTargetNameEl.textContent = friendName;
+
+  // デフォルトの期間をリセット
+  selectedDuration = 3;
+  durationBtns.forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.days === '3');
+  });
+
+  challengeModal.classList.add('active');
+}
+function closeChallengeModal() {
+  challengeTargetId = null;
+  challengeTargetName = null;
+  challengeModal.classList.remove('active');
+}
+function closeAcceptModal() {
+  pendingChallengeId = null;
+  acceptModal.classList.remove('active');
+}
+
+// ============================================
+// チャレンジ送信
+// ============================================
+async function handleSendChallenge() {
+  if (!challengeTargetId) return;
+
+  try {
+    toggleLoading(true);
+
+    // 既に進行中のチャレンジがないかチェック
+    const existingChallenge = await db.collection('challenges')
+      .where('status', '==', 'active')
+      .where('creatorId', '==', currentUser.uid)
+      .where('opponentId', '==', challengeTargetId)
+      .get();
+
+    if (!existingChallenge.empty) {
+      showError('この相手とは既にチャレンジ中です');
+      closeChallengeModal();
+      return;
+    }
+
+    // チャレンジを作成
+    await db.collection('challenges').add({
+      creatorId: currentUser.uid,
+      creatorName: currentUserData.username,
+      opponentId: challengeTargetId,
+      opponentName: challengeTargetName,
+      status: 'pending',
+      duration: selectedDuration,
+      startDate: null,
+      endDate: null,
+      creatorScore: 0,
+      opponentScore: 0,
+      winnerId: null,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+
+    closeChallengeModal();
+    showSuccess(`${challengeTargetName}さんにチャレンジを送りました！`);
+
+    // チャレンジリストを更新
+    await loadChallenges();
+  } catch (error) {
+    console.error('チャレンジ送信エラー:', error);
+    showError('チャレンジの送信に失敗しました');
+  } finally {
+    toggleLoading(false);
+  }
+}
+// ============================================
+// チャレンジ承認・拒否
+// ============================================
+function openAcceptModal(challengeId,challengerName, duration){
+  pendingChallengeId = challengeId;
+  acceptChallengerName.textContent = challengerName;
+  acceptDuration.textContent = duration;
+  acceptModal.classList.add('active');
+}
+
+async function handleAcceptChallenge() {
+  if (!pendingChallengeId) return;
+
+  try {
+    toggleLoading(true);
+
+    const now = new Date();
+    const challengeDoc = await db.collection('challenges').doc(pendingChallengeId).get();
+    const challengeData = challengeDoc.data();
+
+    // 終了日を計算
+    const endDate = new Date(now);
+    endDate.setDate(endDate.getDate() + challengeData.duration);
+
+    // チャレンジを開始
+    await db.collection('challenges').doc(pendingChallengeId).update({
+      status: 'active',
+      startDate: firebase.firestore.Timestamp.fromDate(now),
+      endDate: firebase.firestore.Timestamp.fromDate(endDate)
+    });
+
+    closeAcceptModal();
+    showSuccess('チャレンジを受けました！頑張りましょう！');
+
+    await loadChallenges();
+  } catch (error) {
+    console.error('チャレンジ承認エラー:', error);
+    showError('チャレンジの承認に失敗しました');
+  } finally {
+    toggleLoading(false);
+  }
+}
+
+async function handleDeclineChallenge() {
+  if (!pendingChallengeId) return;
+
+  try {
+    toggleLoading(true);
+
+    // チャレンジを削除
+    await db.collection('challenges').doc(pendingChallengeId).delete();
+
+    closeAcceptModal();
+    showSuccess('チャレンジを断りました');
+
+    await loadChallenges();
+  } catch (error) {
+    console.error('チャレンジ拒否エラー:', error);
+    showError('処理に失敗しました');
+  } finally {
+    toggleLoading(false);
+  }
+}
+// ============================================
+// チャレンジ読み込み
+// ============================================
+async function loadChallenges() {
+  try {
+    // 1. チャレンジデータの取得（既存ロジック）
+    const [creatorChallenges, opponentChallenges] = await Promise.all([
+      db.collection('challenges').where('creatorId', '==', currentUser.uid).orderBy('createdAt', 'desc').get(),
+      db.collection('challenges').where('opponentId', '==', currentUser.uid).orderBy('createdAt', 'desc').get()
+    ]);
+
+    let allChallenges = [];
+    creatorChallenges.forEach(doc => allChallenges.push({ id: doc.id, ...doc.data(), isCreator: true }));
+    opponentChallenges.forEach(doc => allChallenges.push({ id: doc.id, ...doc.data(), isCreator: false }));
+
+    // チャレンジのスコアを最新化
+    for (let challenge of allChallenges) {
+      if (challenge.status === 'active') {
+        const cScore = await calculateChallengeScore(challenge.creatorId, challenge.startDate, challenge.endDate);
+        const oScore = await calculateChallengeScore(challenge.opponentId, challenge.startDate, challenge.endDate);
+        
+        // 画面表示用のオブジェクトを更新
+        challenge.creatorScore = cScore;
+        challenge.opponentScore = oScore;
+
+        // DBにも反映させておきたい場合はここでupdate（任意）
+        await db.collection('challenges').doc(challenge.id).update({ creatorScore: cScore, opponentScore: oScore });
+      }
+    }
+
+    // 3. 分類と描画（既存ロジック）
+    const pending = allChallenges.filter(c => c.status === 'pending' && !c.isCreator);
+    const active = allChallenges.filter(c => c.status === 'active');
+    const completed = allChallenges.filter(c => c.status === 'completed');
+
+    renderPendingChallenges(pending);
+    renderActiveChallenges(active);
+    renderCompletedChallenges(completed);
+
+    for (const challenge of active) {
+      await checkChallengeEnd(challenge);
+    }
+  } catch (error) {
+    console.error('チャレンジ読み込みエラー:', error);
+  }
+}
+// ============================================
+// チャレンジ表示
+// ============================================
+function renderPendingChallenges(challenges) {
+  const container = document.getElementById('pending-list');
+  const emptyEl = document.getElementById('empty-pending');
+
+  if (challenges.length === 0) {
+    container.innerHTML = '';
+    container.appendChild(emptyEl);
+    emptyEl.style.display = 'block';
+    return;
+  }
+
+  emptyEl.style.display = 'none';
+
+  const html = challenges.map(c => `
+    <div class="challenge-card">
+      <div class="challenge-header">
+        <div class="challenge-opponent">
+          <span class="challenge-opponent-name">${escapeHtml(c.creatorName)}</span>
+        </div>
+        <span class="challenge-status pending">承認待ち</span>
+      </div>
+      <p class="challenge-info">期間: ${c.duration}日間</p>
+      <div class="challenge-actions">
+        <button class="btn btn-primary accept-challenge-btn"
+                data-id="${c.id}"
+                data-name="${escapeHtml(c.creatorName)}"
+                data-duration="${c.duration}">
+          受ける！
+        </button>
+        <button class="btn btn-danger decline-btn" data-id="${c.id}">断る</button>
+      </div>
+    </div>
+  `).join('');
+
+  container.innerHTML = html;
+
+  // イベントリスナー追加
+  container.querySelectorAll('.accept-challenge-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      openAcceptModal(btn.dataset.id, btn.dataset.name, btn.dataset.duration);
+    });
+  });
+
+  container.querySelectorAll('.decline-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      pendingChallengeId = btn.dataset.id;
+      await handleDeclineChallenge();
+    });
+  });
+}
+
+function renderActiveChallenges(challenges) {
+  const container = document.getElementById('active-list');
+  const emptyEl = document.getElementById('empty-active');
+
+  if (challenges.length === 0) {
+    container.innerHTML = '';
+    container.appendChild(emptyEl);
+    emptyEl.style.display = 'block';
+    return;
+  }
+
+  emptyEl.style.display = 'none';
+
+  const html = challenges.map(c => {
+    const opponentName = c.isCreator ? c.opponentName : c.creatorName;
+    const myScore = c.isCreator ? c.creatorScore : c.opponentScore;
+    const theirScore = c.isCreator ? c.opponentScore : c.creatorScore;
+    const isWinning = myScore > theirScore;
+    const remaining = getRemainingTime(c.endDate);
+
+    return `
+      <div class="challenge-card">
+        <div class="challenge-header">
+          <div class="challenge-opponent">
+            <span class="challenge-opponent-name">vs ${escapeHtml(opponentName)}</span>
+          </div>
+          <span class="challenge-status active">進行中</span>
+        </div>
+        <div class="challenge-scores">
+          <div class="challenge-player">
+            <span class="challenge-player-label">あなた</span>
+            <span class="challenge-player-score ${isWinning ? 'winning' : 'losing'}">${myScore.toLocaleString()}</span>
+          </div>
+          <span class="challenge-vs">VS</span>
+          <div class="challenge-player">
+            <span class="challenge-player-label">${escapeHtml(opponentName)}</span>
+            <span class="challenge-player-score ${!isWinning && myScore !== theirScore ? 'winning' : 'losing'}">${theirScore.toLocaleString()}</span>
+          </div>
+        </div>
+        <p class="challenge-time">残り <span class="challenge-time-value">${remaining}</span></p>
+      </div>
+    `;
+  }).join('');
+
+  container.innerHTML = html;
+}
+
+function renderCompletedChallenges(challenges) {
+  const container = document.getElementById('completed-list');
+  const emptyEl = document.getElementById('empty-completed');
+
+  if (challenges.length === 0) {
+    container.innerHTML = '';
+    container.appendChild(emptyEl);
+    emptyEl.style.display = 'block';
+    return;
+  }
+
+  emptyEl.style.display = 'none';
+
+  const html = challenges.slice(0, 5).map(c => {
+    const opponentName = c.isCreator ? c.opponentName : c.creatorName;
+    const myScore = c.isCreator ? c.creatorScore : c.opponentScore;
+    const theirScore = c.isCreator ? c.opponentScore : c.creatorScore;
+
+    let result, statusClass;
+    if (c.winnerId === currentUser.uid) {
+      result = '勝利！';
+      statusClass = 'won';
+    } else if (c.winnerId === null) {
+      result = '引き分け';
+      statusClass = 'draw';
+    } else {
+      result = '敗北';
+      statusClass = 'lost';
+    }
+
+    return `
+      <div class="challenge-card">
+        <div class="challenge-header">
+          <span class="challenge-opponent-name">vs ${escapeHtml(opponentName)}</span>
+          <span class="challenge-status ${statusClass}">${result}</span>
+        </div>
+        <div class="challenge-scores">
+          <span>${myScore.toLocaleString()} - ${theirScore.toLocaleString()}</span>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  container.innerHTML = html;
+}
+// ============================================
+// ユーティリティ
+// ============================================
+//残り時間を計算
+function getRemainingTime(endDate) {
+  if (!endDate) return '-';
+
+  const end = endDate.toDate ? endDate.toDate() : new Date(endDate);
+  const now = new Date();
+  const diff = end - now;
+
+  if (diff <= 0) return '終了';
+
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+
+  if (days > 0) {
+    return `${days}日${hours}時間`;
+  }
+  return `${hours}時間`;
+}
+
+//チャレンジ終了をチェック
+async function checkChallengeEnd(challenge) {
+  if (!challenge.endDate) return;
+
+  const end = challenge.endDate.toDate ? challenge.endDate.toDate() : new Date(challenge.endDate);
+  const now = new Date();
+
+  if (now >= end && challenge.status === 'active') {
+    // 勝敗を決定
+    let winnerId = null;
+    if (challenge.creatorScore > challenge.opponentScore) {
+      winnerId = challenge.creatorId;
+    } else if (challenge.opponentScore > challenge.creatorScore) {
+      winnerId = challenge.opponentId;
+    }
+    // 同点の場合はnull（引き分け）
+
+    await db.collection('challenges').doc(challenge.id).update({
+      status: 'completed',
+      winnerId: winnerId
+    });
+  }
+}
+async function calculateChallengeScore(userId, startDate, endDate) {
+  const snapshot = await db.collection('trainings')
+    .where('userId', '==', userId)
+    .where('timestamp', '>=', startDate)
+    .where('timestamp', '<=', endDate)
+    .get();
+
+  let total = 0;
+  snapshot.forEach(doc => {
+    total += doc.data().score || 0;
+  });
+  return total;
 }
