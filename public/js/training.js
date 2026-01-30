@@ -17,9 +17,12 @@ const previewCalories = document.getElementById('preview-calories');
 const previewScore = document.getElementById('preview-score');
 const saveTrainingBtn = document.getElementById('save-training-btn');
 const successModal = document.getElementById('success-modal');
+const closeSuccessModal = document.getElementById('close-success-modal');
 const modalCalories = document.getElementById('modal-calories');
 const modalScore = document.getElementById('modal-score');
-const closeSuccessModal = document.getElementById('close-success-modal');
+
+// DOM追加
+const modalTodayScore = document.getElementById('modal-today-score');
 const encouragementMessage = document.getElementById('encouragement-message');
 const shareTwitterBtn = document.getElementById('share-twitter');
 const shareLineBtn = document.getElementById('share-line')
@@ -123,6 +126,9 @@ function setupEventListeners() {
     });
   });
 
+
+  setupShareButtons();
+
   // 記録ボタン
   saveTrainingBtn.addEventListener('click', handleSaveTraining);
 
@@ -154,7 +160,6 @@ function setupEventListeners() {
       window.open(url, '_blank', 'width=550,height=420');
     });
   }
-  setupShareButtons();
 }
 
 // ============================================
@@ -260,11 +265,25 @@ async function handleSaveTraining() {
 // 成功モーダル
 // ============================================
 
-function showSuccessModal(calories, score) {
+async function showSuccessModal(calories, score) {
+  // 基本情報を表示
   modalCalories.textContent = calories.toLocaleString();
   modalScore.textContent = score.toLocaleString();
+
+  // 励ましのメッセージを入れる
   const message = getEncouragementMessage(duration, score);
-  encouragementMessage.textContent = message
+  encouragementMessage.textContent = message;
+  try {
+    const previousTodayScore = await getTodayScore(currentUser, uid);
+    // 今回のスコアを加算して表示
+    const totalTodayScore = previousTodayScore * score
+    modalTodayScore.textContent = totalTodayScore.toLocaleString();
+  } catch (error) {
+    // エラー時は今回のスコアのみ
+    modalTodayScore.textContent = score.toLocaleString();
+  }
+
+  // モーダル表示
   successModal.classList.add('active');
 }
 
