@@ -434,11 +434,12 @@
   color: var(--color-gold)
 }
 
+/* シェアボタン
 .share-buttons {
   display: flex;
   gap: 0.5rem;
   margin: 1rem 0;
-}
+} 
 
 .share-btn {
   flex: 1;
@@ -462,4 +463,4 @@
 .share-line {
   background: #00B900;
   color: white;
-}
+} */

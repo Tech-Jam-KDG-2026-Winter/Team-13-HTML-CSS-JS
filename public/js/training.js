@@ -24,8 +24,11 @@ const modalScore = document.getElementById('modal-score');
 // DOM追加
 const modalTodayScore = document.getElementById('modal-today-score');
 const encouragementMessage = document.getElementById('encouragement-message');
+
+/* シェアボタン
 const shareTwitterBtn = document.getElementById('share-twitter');
 const shareLineBtn = document.getElementById('share-line')
+*/
 
 // ============================================
 // 初期化処理
@@ -127,7 +130,7 @@ function setupEventListeners() {
   });
 
 
-  setupShareButtons();
+  // setupShareButtons();
 
   // 記録ボタン
   saveTrainingBtn.addEventListener('click', handleSaveTraining);
@@ -144,7 +147,7 @@ function setupEventListeners() {
     }
   });
 
-  // シェアボタン設定
+  /* シェアボタン設定
   function setupShareButtons() {
     // Twitter
     shareTwitterBtn.addEventListener('click', () => {
@@ -160,6 +163,7 @@ function setupEventListeners() {
       window.open(url, '_blank', 'width=550,height=420');
     });
   }
+  */
 }
 
 // ============================================
