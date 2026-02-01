@@ -35,14 +35,18 @@ const cancelDeleteBtn = document.getElementById('cancel-delete-btn');
 const challengeModal = document.getElementById('challenge-modal');
 const challengeTargetNameEl = document.getElementById('challenge-target-name');
 const durationBtns = document.querySelectorAll('.duration-btn');
+const durationPresetBtns = document.querySelectorAll('.duration-preset-btn');
 const sendChallengeBtn = document.getElementById('send-challenge-btn');
 const cancelChallengeBtn = document.getElementById('cancel-challenge-btn');
 const acceptModal = document.getElementById('accept-modal');
 const acceptChallengerName = document.getElementById('accept-challenger-name');
+const acceptChallengerAvatar = document.getElementById('accept-challenger-avatar');
 const acceptDuration = document.getElementById('accept-duration');
 const confirmAcceptBtn = document.getElementById('confirm-accept-btn');
 const declineChallengeBtn = document.getElementById('decline-challenge-btn');
 const challengeDurationInput = document.getElementById('challenge-duration-input');
+const challengeMyAvatar = document.getElementById('challenge-my-avatar');
+const challengeOpponentAvatar = document.getElementById('challenge-opponent-avatar');
 
 // ============================================
 // 初期化処理
@@ -101,6 +105,34 @@ function setupEventListeners() {
       if (challengeDurationInput) challengeDurationInput.value = selectedDuration;
     });
   });
+
+  // 新しいプリセットボタン
+  durationPresetBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      durationPresetBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      selectedDuration = parseInt(btn.dataset.days);
+      if (challengeDurationInput) challengeDurationInput.value = selectedDuration;
+    });
+  });
+
+  // 入力欄の変更でプリセットボタンを同期
+  if (challengeDurationInput) {
+    challengeDurationInput.addEventListener('input', () => {
+      const value = parseInt(challengeDurationInput.value);
+      if (!isNaN(value)) {
+        selectedDuration = value;
+        // プリセットボタンの選択を更新
+        durationPresetBtns.forEach(btn => {
+          if (parseInt(btn.dataset.days) === value) {
+            btn.classList.add('active');
+          } else {
+            btn.classList.remove('active');
+          }
+        });
+      }
+    });
+  }
 
   sendChallengeBtn.addEventListener('click', handleSendChallenge);
   cancelChallengeBtn.addEventListener('click', closeChallengeModal);
@@ -278,12 +310,43 @@ async function handleDeleteFriend() {
 // チャレンジロジック（重複制限付き）
 // ============================================
 
-function openChallengeModal(id, name) {
+async function openChallengeModal(id, name) {
   challengeTargetId = id;
   challengeTargetName = name;
   challengeTargetNameEl.textContent = name;
-  if (challengeDurationInput) challengeDurationInput.value = 3;
+
+  // 自分のアバターを設定
+  if (challengeMyAvatar && currentUserData) {
+    challengeMyAvatar.src = getIconUrl(currentUserData.iconURL);
+  }
+
+  // 相手のアバターを設定
+  if (challengeOpponentAvatar) {
+    try {
+      const opponentData = await getUserData(id);
+      if (opponentData) {
+        challengeOpponentAvatar.src = getIconUrl(opponentData.iconURL);
+      }
+    } catch (e) {
+      challengeOpponentAvatar.src = getIconUrl('');
+    }
+  }
+
+  // 期間をデフォルト7日に設定
+  selectedDuration = 7;
+  if (challengeDurationInput) challengeDurationInput.value = 7;
+
+  // プリセットボタンのアクティブ状態をリセット
+  durationPresetBtns.forEach(btn => {
+    if (parseInt(btn.dataset.days) === 7) {
+      btn.classList.add('active');
+    } else {
+      btn.classList.remove('active');
+    }
+  });
+
   challengeModal.classList.add('active');
+  lucide.createIcons();
 }
 function closeChallengeModal() {
   challengeModal.classList.remove('active');
@@ -457,7 +520,7 @@ function renderPendingChallenges(challenges) {
       </div>
       <p class="challenge-info">期間: ${c.duration}日間</p>
       <div class="challenge-actions">
-        <button class="btn btn-primary accept-btn" data-id="${c.id}" data-name="${escapeHtml(c.creatorName)}" data-dur="${c.duration}">受ける</button>
+        <button class="btn btn-primary accept-btn" data-id="${c.id}" data-name="${escapeHtml(c.creatorName)}" data-dur="${c.duration}" data-avatar="${getIconUrl(c.opponentAvatar)}">受ける</button>
         <button class="btn btn-danger decline-btn" data-id="${c.id}">断る</button>
       </div>
     </div>
@@ -468,7 +531,11 @@ function renderPendingChallenges(challenges) {
       pendingChallengeId = btn.dataset.id;
       acceptChallengerName.textContent = btn.dataset.name;
       acceptDuration.textContent = btn.dataset.dur;
+      if (acceptChallengerAvatar) {
+        acceptChallengerAvatar.src = btn.dataset.avatar || getIconUrl('');
+      }
       acceptModal.classList.add('active');
+      lucide.createIcons();
     });
   });
   container.querySelectorAll('.decline-btn').forEach(btn => {

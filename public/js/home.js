@@ -253,7 +253,7 @@ async function loadRecentTrainings() {
     const snapshot = await db.collection('trainings')
       .where('userId', '==', currentUser.uid)
       .orderBy('timestamp', 'desc')
-      .limit(5)
+      .limit(4)
       .get();
 
     if (snapshot.empty) {
