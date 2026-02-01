@@ -188,20 +188,6 @@
   color: var(--white-50);
 }
 
-.delete-friend-btn {
-  background: transparent;
-  border: none;
-  color: var(--white-40);
-  cursor: pointer;
-  font-size: var(--font-lg);
-  padding: var(--spacing-sm);
-  transition: color var(--transition-fast);
-  flex-shrink: 0;
-}
-
-.delete-friend-btn:hover {
-  color: var(--color-danger);
-}
 
 /* モーダル */
 .modal {
@@ -524,24 +510,40 @@
 /* フレンドアクションボタン */
 .friend-actions {
   display: flex;
-  gap: 0.5rem;
+  align-items: center;
+  gap: var(--spacing-xs);
+  flex-shrink: 0;
 }
 
-.challenge-btn {
+.challenge-btn,
+.delete-friend-btn {
   background: transparent;
-  border: 1px solid var(--gold);
-  color: var(--gold);
+  border: 1px solid var(--white-20);
+  color: var(--white-60);
   width: 36px;
   height: 36px;
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s;
-  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.challenge-btn {
+  border-color: var(--color-gold);
+  color: var(--color-gold);
 }
 
 .challenge-btn:hover {
-  background: var(--gold);
-  color: var(--bg-primary);
+  background: var(--color-gold);
+  color: var(--color-black);
+}
+
+.delete-friend-btn:hover {
+  border-color: var(--color-danger);
+  color: var(--color-danger);
 }
 
 /* チャレンジモーダル */
@@ -588,4 +590,438 @@
   text-align: center;
   color: var(--text-secondary);
   margin-bottom: 1rem;
+}
+
+/* ============================================
+   新チャレンジモーダル
+   ============================================ */
+
+.challenge-modal-content {
+  background: linear-gradient(180deg, #1a1a1a 0%, #0d0d0d 100%);
+  border: 2px solid var(--color-gold);
+  border-radius: var(--border-radius-lg);
+  padding: 0;
+  max-width: 420px;
+  width: 100%;
+  overflow: hidden;
+  animation: modalSlideIn 0.3s ease-out;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* モーダルヘッダー */
+.challenge-modal-header {
+  background: linear-gradient(135deg, var(--gold-20), var(--gold-10));
+  padding: var(--spacing-lg);
+  text-align: center;
+  border-bottom: 1px solid var(--gold-30);
+}
+
+.challenge-modal-header.incoming {
+  background: linear-gradient(135deg, var(--gold-30), var(--gold-15));
+}
+
+.challenge-modal-icon {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto var(--spacing-sm);
+  background: var(--gradient-gold);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-black);
+  font-size: 1.5rem;
+}
+
+.challenge-modal-icon.pulse {
+  animation: iconPulse 1.5s infinite;
+}
+
+@keyframes iconPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 var(--gold-50);
+  }
+  50% {
+    box-shadow: 0 0 0 12px transparent;
+  }
+}
+
+.challenge-modal-title {
+  font-size: var(--font-xl);
+  font-weight: 700;
+  color: var(--color-gold);
+  margin: 0;
+}
+
+/* VS表示 */
+.challenge-opponent-display {
+  padding: var(--spacing-lg);
+}
+
+.challenge-vs-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-md);
+}
+
+.challenge-player-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-xs);
+  flex: 1;
+}
+
+.challenge-player-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 3px solid var(--gold-30);
+  object-fit: cover;
+  transition: all 0.3s ease;
+}
+
+.challenge-player-card.you .challenge-player-avatar {
+  border-color: var(--color-gold);
+}
+
+.challenge-player-card.opponent .challenge-player-avatar {
+  border-color: var(--white-40);
+}
+
+.challenge-player-name {
+  font-size: var(--font-sm);
+  font-weight: 600;
+  color: var(--color-white);
+  max-width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.challenge-vs-badge {
+  width: 48px;
+  height: 48px;
+  background: var(--gradient-gold);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.challenge-vs-badge span {
+  font-family: var(--font-family-en);
+  font-size: var(--font-sm);
+  font-weight: 800;
+  color: var(--color-black);
+}
+
+/* 期間選択セクション */
+.challenge-duration-section {
+  padding: 0 var(--spacing-lg);
+  margin-bottom: var(--spacing-md);
+}
+
+.challenge-section-label {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  font-size: var(--font-sm);
+  font-weight: 600;
+  color: var(--white-70);
+  margin-bottom: var(--spacing-sm);
+}
+
+.challenge-section-label i {
+  width: 16px;
+  height: 16px;
+  color: var(--color-gold);
+}
+
+/* プリセットボタン */
+.challenge-duration-presets {
+  display: flex;
+  gap: var(--spacing-xs);
+  flex-wrap: wrap;
+}
+
+.duration-preset-btn {
+  flex: 1;
+  min-width: 60px;
+  padding: var(--spacing-sm) var(--spacing-xs);
+  background: var(--white-05);
+  border: 1px solid var(--white-20);
+  border-radius: var(--border-radius-full);
+  color: var(--white-70);
+  font-size: var(--font-xs);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.duration-preset-btn:hover {
+  background: var(--white-10);
+  border-color: var(--color-gold);
+  color: var(--color-gold);
+}
+
+.duration-preset-btn.active {
+  background: var(--gradient-gold);
+  border-color: var(--color-gold);
+  color: var(--color-black);
+  font-weight: 700;
+}
+
+/* カスタム入力 */
+.challenge-duration-custom {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-md);
+}
+
+.custom-label {
+  font-size: var(--font-xs);
+  color: var(--white-50);
+}
+
+.custom-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  background: var(--white-05);
+  border: 1px solid var(--gold-30);
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-xs) var(--spacing-sm);
+}
+
+.challenge-duration-input {
+  width: 50px;
+  background: transparent;
+  border: none;
+  color: var(--color-gold);
+  font-family: var(--font-family-en);
+  font-size: var(--font-lg);
+  font-weight: 700;
+  text-align: center;
+  -moz-appearance: textfield;
+}
+
+.challenge-duration-input::-webkit-outer-spin-button,
+.challenge-duration-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  appearance: none;
+  margin: 0;
+}
+
+.challenge-duration-input:focus {
+  outline: none;
+}
+
+.custom-unit {
+  font-size: var(--font-sm);
+  color: var(--white-60);
+}
+
+/* ルール説明 */
+.challenge-rules {
+  padding: var(--spacing-md) var(--spacing-lg);
+  background: var(--white-05);
+  margin: 0 var(--spacing-lg) var(--spacing-lg);
+  border-radius: var(--border-radius-md);
+}
+
+.rule-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-xs) 0;
+  font-size: var(--font-xs);
+  color: var(--white-60);
+}
+
+.rule-item i {
+  width: 14px;
+  height: 14px;
+  color: var(--color-gold);
+  flex-shrink: 0;
+}
+
+/* アクションボタン */
+.challenge-modal-actions {
+  padding: var(--spacing-lg);
+  background: var(--white-05);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.btn-gold {
+  background: var(--gradient-gold);
+  border: none;
+  color: var(--color-black);
+  font-weight: 700;
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-radius: var(--border-radius-md);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+}
+
+.btn-gold:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px var(--gold-50);
+}
+
+.btn-gold i {
+  width: 18px;
+  height: 18px;
+}
+
+.btn-ghost {
+  background: transparent;
+  border: 1px solid var(--white-20);
+  color: var(--white-60);
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border-radius: var(--border-radius-md);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-ghost:hover {
+  border-color: var(--white-40);
+  color: var(--white-80);
+}
+
+.btn-challenge-send,
+.btn-challenge-accept {
+  font-size: var(--font-base);
+}
+
+/* 承認モーダル固有スタイル */
+.accept-modal-content {
+  max-width: 380px;
+}
+
+.challenger-display {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-lg);
+  justify-content: center;
+}
+
+.challenger-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  border: 3px solid var(--color-gold);
+  object-fit: cover;
+}
+
+.challenger-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.challenger-label {
+  font-size: var(--font-xs);
+  color: var(--white-50);
+}
+
+.challenger-name {
+  font-size: var(--font-lg);
+  font-weight: 700;
+  color: var(--color-white);
+}
+
+.challenge-accept-info {
+  display: flex;
+  gap: var(--spacing-md);
+  padding: 0 var(--spacing-lg) var(--spacing-md);
+}
+
+.accept-info-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-md);
+  background: var(--white-05);
+  border-radius: var(--border-radius-md);
+  text-align: center;
+}
+
+.accept-info-item i {
+  width: 20px;
+  height: 20px;
+  color: var(--color-gold);
+}
+
+.accept-info-item span {
+  font-size: var(--font-xs);
+  color: var(--white-50);
+}
+
+.accept-info-item strong {
+  font-size: var(--font-sm);
+  color: var(--color-white);
+}
+
+.accept-message {
+  text-align: center;
+  padding: 0 var(--spacing-lg) var(--spacing-md);
+  color: var(--white-70);
+  font-size: var(--font-sm);
+}
+
+.accept-actions {
+  flex-direction: row;
+}
+
+.accept-actions .btn-gold {
+  flex: 2;
+}
+
+.btn-danger-outline {
+  flex: 1;
+  background: transparent;
+  border: 1px solid var(--color-danger);
+  color: var(--color-danger);
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-radius: var(--border-radius-md);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xs);
+}
+
+.btn-danger-outline:hover {
+  background: var(--color-danger-bg);
+}
+
+.btn-danger-outline i {
+  width: 16px;
+  height: 16px;
 }
