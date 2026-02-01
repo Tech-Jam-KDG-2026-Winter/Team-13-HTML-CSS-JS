@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>トレーニング記録 - RIZAP Fitness</title>
+  <title>トレーニング記録 - Fitness</title>
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -57,10 +57,7 @@
               </div>
             </section>
 
-            <!-- 記録ボタン -->
-            <button id="save-training-btn" class="btn btn-primary btn-full btn-lg">
-              トレーニングを記録
-            </button>
+            
           </div>
 
           <!-- 右カラム：時間・プレビュー・ボタン -->
@@ -69,9 +66,15 @@
             <section class="duration-section card slide-up">
               <h2 class="card-title">トレーニング時間</h2>
 
-              <div class="duration-input-wrapper">
-                <input type="number" id="duration-input" class="duration-input" value="30" min="1" max="120">
+              <div class="duration-input-row">
+                <input type="number" id="duration-number" class="duration-number-input" value="30" min="1" max="300">
                 <span class="duration-unit">分</span>
+              </div>
+
+              <div class="duration-slider-wrapper">
+                <span class="slider-label">5</span>
+                <input type="range" id="duration-input" class="duration-slider" value="30" min="5" max="120" step="5">
+                <span class="slider-label">120</span>
               </div>
 
               <div class="quick-duration">
@@ -99,38 +102,26 @@
               </div>
             </section>
           </div>
+          
         </div>
-      </div>
-    </main>
+        <div class="training-action">
+          <button id="save-training-btn" class="btn btn-primary btn-lg">
+            トレーニングを記録
+          </button>
+        </div>
 
-    <!-- ボトムナビゲーション -->
+      </div>
+      
+
     <nav class="nav-bottom">
       <ul class="nav-list">
-        <li class="nav-item">
-          <a href="home.html" class="nav-link">
-            <span class="nav-icon"><i data-lucide="home"></i></span>
-            <span>ホーム</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="training.html" class="nav-link active">
-            <span class="nav-icon"><i data-lucide="dumbbell"></i></span>
-            <span>記録</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="friends.html" class="nav-link">
-            <span class="nav-icon"><i data-lucide="users"></i></span>
-            <span>フレンド</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="profile.html" class="nav-link">
-            <span class="nav-icon"><i data-lucide="user"></i></span>
-            <span>プロフィール</span>
-          </a>
-        </li>
+        <li class="nav-item"><a href="home.html" class="nav-link"><span class="nav-icon"><i data-lucide="home"></i></span><span>ホーム</span></a></li>
+        <li class="nav-item"><a href="ranking.html" class="nav-link"><span class="nav-icon"><i data-lucide="trophy"></i></span><span>ランキング</span></a></li>
+        <li class="nav-item"><a href="training.html" class="nav-link active"><span class="nav-icon"><i data-lucide="dumbbell"></i></span><span>記録</span></a></li>
+        <li class="nav-item"><a href="friends.html" class="nav-link"><span class="nav-icon"><i data-lucide="users"></i></span><span>フレンド</span></a></li>
+        <li class="nav-item"><a href="profile.html" class="nav-link"><span class="nav-icon"><i data-lucide="user"></i></span><span>プロフィール</span></a></li>
       </ul>
+      <button class="nav-logout-btn" id="nav-logout-btn" title="ログアウト"><i data-lucide="log-out"></i></button>
     </nav>
   </div>
 
@@ -138,6 +129,10 @@
   <div id="success-modal" class="modal">
     <div class="modal-content success-modal-content">
       <h3 class="success-title">トレーニング完了！</h3>
+
+      <!-- 励ましメッセージ(追加) -->
+      <p id="encouragement-message" class="encouragement-message"></p>
+
       <div class="success-stats">
         <div class="success-stat">
           <span class="success-stat-value" id="modal-calories">0</span>
@@ -148,6 +143,25 @@
           <span class="success-stat-label">pt獲得</span>
         </div>
       </div>
+
+      <!-- 今日の累計 -->
+       <div class="today-total">
+        <p class="today-total-label">今日の累計</p>
+        <div class="today-total-stats">
+          <span id="modal-today-score">0</span>pt
+        </div>
+       </div>
+
+       <!-- シェアボタン(実装間に合わないのでコメントアウト) -->
+        <!-- <div class="shere-buttons">
+          <button id="share-twitter" class="share-btn share-twitter">
+            <i data-lucide="twitter"></i>シェア
+          </button>
+          <button id="share-line" class="share-btn share-line">
+            <i deta-lucide="message-circle"></i> LINE
+          </button>
+        </div> -->
+        
       <button id="close-success-modal" class="btn btn-primary btn-full">
         ホームに戻る
       </button>

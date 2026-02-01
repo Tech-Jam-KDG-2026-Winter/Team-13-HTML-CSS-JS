@@ -24,6 +24,7 @@
   width: 32px;
   height: 32px;
   background: var(--color-gold);
+  color: var(--color-white);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -60,6 +61,7 @@
   border: none;
   cursor: pointer;
   font-size: var(--font-base);
+  color: var(--color-white);
   transition: transform var(--transition-fast);
 }
 
@@ -90,7 +92,7 @@
 
 /* ユーザーIDセクション */
 .user-id-section {
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--white-05);
   border-radius: var(--border-radius-md);
   padding: var(--spacing-md);
 }
@@ -98,7 +100,7 @@
 .user-id-label {
   display: block;
   font-size: var(--font-sm);
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--white-60);
   margin-bottom: var(--spacing-sm);
 }
 
@@ -121,16 +123,18 @@
   border: none;
   cursor: pointer;
   font-size: var(--font-base);
+  color: var(--color-gold);
   transition: transform var(--transition-fast);
 }
 
 .copy-btn:hover {
   transform: scale(1.2);
+  color: var(--color-dark-gold);
 }
 
 .user-id-hint {
   font-size: var(--font-xs);
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--white-40);
   margin-top: var(--spacing-sm);
 }
 
@@ -152,7 +156,7 @@
 }
 
 .stat-item {
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--white-05);
   border-radius: var(--border-radius-md);
   padding: var(--spacing-md);
   text-align: center;
@@ -169,7 +173,7 @@
 
 .stat-label {
   font-size: var(--font-xs);
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--white-60);
 }
 
 /* トレーニング履歴 */
@@ -187,6 +191,26 @@
   display: flex;
   flex-direction: column;
   gap: var(--spacing-sm);
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.history-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.history-list::-webkit-scrollbar-track {
+  background: var(--white-05);
+  border-radius: 3px;
+}
+
+.history-list::-webkit-scrollbar-thumb {
+  background: var(--gold-30);
+  border-radius: 3px;
+}
+
+.history-list::-webkit-scrollbar-thumb:hover {
+  background: var(--gold-50);
 }
 
 .history-item {
@@ -194,7 +218,7 @@
   justify-content: space-between;
   align-items: center;
   padding: var(--spacing-md);
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--white-05);
   border-radius: var(--border-radius-md);
 }
 
@@ -210,12 +234,12 @@
 
 .history-details {
   font-size: var(--font-xs);
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--white-60);
 }
 
 .history-date {
   font-size: var(--font-xs);
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--white-40);
 }
 
 .history-score {
@@ -230,19 +254,30 @@
 }
 
 /* ============================================
-   レスポンシブ - PC用2カラムレイアウト
+   レスポンシブ - PC用レイアウト
    ============================================ */
 
-/* プロフィールレイアウト */
-.profile-layout {
+/* 上段：プロフィールカード + トレーニング履歴 */
+.profile-top-row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+}
+
+/* 下段：スコア統計 + グラフ */
+.profile-bottom-row {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-lg);
 }
 
-.profile-left,
-.profile-right {
-  width: 100%;
+.profile-bottom-row .stats-section {
+  margin-top: 0;
+}
+
+.profile-bottom-row .graph-section {
+  margin-top: 0;
 }
 
 @media (min-width: 480px) {
@@ -256,31 +291,48 @@
     max-width: 900px;
   }
 
-  .profile-layout {
+  /* 上段：横並び */
+  .profile-top-row {
     flex-direction: row;
-    align-items: flex-start;
+    align-items: stretch;
   }
 
-  .profile-left {
-    width: 360px;
+  .profile-top-row .profile-card {
+    width: 300px;
     flex-shrink: 0;
   }
 
-  .profile-right {
+  .profile-top-row .history-section {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    margin-top: 0;
+  }
+
+  .profile-top-row .history-section .history-list {
+    flex: 1;
+    max-height: 240px;
+  }
+
+  /* 下段：横並び */
+  .profile-bottom-row {
+    flex-direction: row;
+    align-items: stretch;
+  }
+
+  .profile-bottom-row .stats-section {
+    width: 300px;
+    flex-shrink: 0;
+  }
+
+  .profile-bottom-row .graph-section {
     flex: 1;
     min-width: 0;
   }
 
-  .stats-section {
-    margin-top: var(--spacing-lg);
-  }
-
   .stats-grid {
     grid-template-columns: repeat(2, 1fr);
-  }
-
-  .history-section {
-    margin-top: 0;
   }
 
   #logout-btn {
@@ -293,8 +345,12 @@
     max-width: 1100px;
   }
 
-  .profile-left {
-    width: 400px;
+  .profile-top-row .profile-card {
+    width: 340px;
+  }
+
+  .profile-bottom-row .stats-section {
+    width: 340px;
   }
 }
 
@@ -303,7 +359,106 @@
     max-width: 1200px;
   }
 
-  .profile-left {
-    width: 420px;
+  .profile-top-row .profile-card {
+    width: 380px;
+  }
+
+  .profile-bottom-row .stats-section {
+    width: 380px;
   }
 }
+
+/* ============================================
+   グラフセクションスタイル
+   ============================================ */
+
+   .graph-section {
+    margin-top: 1.5rem;
+  }
+  
+  .graph-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  
+  .graph-tabs {
+    display: flex;
+    gap: 0.5rem;
+  }
+  
+  .graph-tab {
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-secondary);
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+  }
+  
+  .graph-tab:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+  
+  .graph-tab.active {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--bg-primary);
+    font-weight: 600;
+  }
+  
+  .graph-container {
+    position: relative;
+    height: 250px;
+    margin-bottom: 1rem;
+  }
+  
+  .graph-summary {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+  }
+  
+  .summary-item {
+    text-align: center;
+  }
+  
+  .summary-label {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.25rem;
+  }
+  
+  .summary-value {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+  
+  /* レスポンシブ対応 */
+  @media (max-width: 480px) {
+    .graph-header {
+      flex-direction: column;
+      gap: 0.75rem;
+      align-items: flex-start;
+    }
+  
+    .graph-summary {
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+    }
+  
+    .summary-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      text-align: left;
+    }
+  }

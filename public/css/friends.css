@@ -11,7 +11,7 @@
 
 .input-hint {
   font-size: var(--font-xs);
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--white-50);
   margin-top: var(--spacing-xs);
 }
 
@@ -19,8 +19,8 @@
 .search-result {
   margin-top: var(--spacing-lg);
   padding: var(--spacing-md);
-  background: rgba(212, 175, 55, 0.1);
-  border: 1px solid rgba(212, 175, 55, 0.3);
+  background: var(--gold-10);
+  border: 1px solid var(--gold-30);
   border-radius: var(--border-radius-md);
   display: flex;
   justify-content: space-between;
@@ -54,7 +54,7 @@
   justify-content: center;
   gap: var(--spacing-sm);
   padding: var(--spacing-md);
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--white-05);
   border-radius: var(--border-radius-md);
 }
 
@@ -70,17 +70,19 @@
   border: none;
   cursor: pointer;
   font-size: var(--font-base);
+  color: var(--color-gold);
   transition: transform var(--transition-fast);
 }
 
 .copy-btn:hover {
   transform: scale(1.2);
+  color: var(--color-dark-gold);
 }
 
 .id-hint {
   text-align: center;
   font-size: var(--font-xs);
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--white-50);
   margin-top: var(--spacing-sm);
 }
 
@@ -98,7 +100,7 @@
 .friend-count {
   font-size: var(--font-sm);
   font-weight: normal;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--white-60);
 }
 
 /* フレンドリスト */
@@ -106,6 +108,26 @@
   display: flex;
   flex-direction: column;
   gap: var(--spacing-sm);
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+.friends-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.friends-list::-webkit-scrollbar-track {
+  background: var(--white-05);
+  border-radius: 3px;
+}
+
+.friends-list::-webkit-scrollbar-thumb {
+  background: var(--gold-30);
+  border-radius: 3px;
+}
+
+.friends-list::-webkit-scrollbar-thumb:hover {
+  background: var(--gold-50);
 }
 
 .friend-item {
@@ -113,13 +135,13 @@
   align-items: center;
   gap: var(--spacing-md);
   padding: var(--spacing-md);
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--white-05);
   border-radius: var(--border-radius-md);
   transition: background var(--transition-fast);
 }
 
 .friend-item:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--white-10);
 }
 
 .friend-avatar {
@@ -145,7 +167,7 @@
 
 .friend-id {
   font-size: var(--font-xs);
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--white-50);
   font-family: monospace;
 }
 
@@ -163,13 +185,13 @@
 
 .friend-score-label {
   font-size: var(--font-xs);
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--white-50);
 }
 
 .delete-friend-btn {
   background: transparent;
   border: none;
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--white-40);
   cursor: pointer;
   font-size: var(--font-lg);
   padding: var(--spacing-sm);
@@ -178,7 +200,7 @@
 }
 
 .delete-friend-btn:hover {
-  color: #dc3545;
+  color: var(--color-danger);
 }
 
 /* モーダル */
@@ -189,7 +211,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.8);
+  background: var(--black-80);
   z-index: 1000;
   justify-content: center;
   align-items: center;
@@ -202,7 +224,7 @@
 
 .modal-content {
   background: #1a1a1a;
-  border: 1px solid rgba(212, 175, 55, 0.3);
+  border: 1px solid var(--gold-30);
   border-radius: var(--border-radius-lg);
   padding: var(--spacing-xl);
   max-width: 400px;
@@ -218,7 +240,7 @@
 
 .modal-message {
   margin-bottom: var(--spacing-xl);
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--white-80);
 }
 
 .modal-actions {
@@ -246,6 +268,19 @@
 .friends-left,
 .friends-right {
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.friends-left .add-friend-section,
+.friends-left .my-id-section {
+  margin-top: 0;
+}
+
+.friends-right .friends-list-section,
+.friends-right .challenge-section {
+  margin-top: 0;
 }
 
 @media (min-width: 768px) {
@@ -254,26 +289,39 @@
   }
 
   .friends-layout {
-    flex-direction: row;
-    align-items: flex-start;
+    display: grid;
+    grid-template-columns: 340px 1fr;
+    grid-template-rows: auto auto;
+    gap: var(--spacing-lg);
+    align-items: stretch;
   }
 
   .friends-left {
-    width: 360px;
-    flex-shrink: 0;
+    display: contents;
   }
 
   .friends-right {
-    flex: 1;
-    min-width: 0;
+    display: contents;
   }
 
-  .my-id-section {
-    margin-top: var(--spacing-lg);
+  .friends-left .add-friend-section {
+    grid-column: 1;
+    grid-row: 1;
   }
 
-  .friends-list-section {
-    margin-top: 0;
+  .friends-right .friends-list-section {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .friends-left .my-id-section {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .friends-right .challenge-section {
+    grid-column: 2;
+    grid-row: 2;
   }
 }
 
@@ -282,8 +330,8 @@
     max-width: 1100px;
   }
 
-  .friends-left {
-    width: 400px;
+  .friends-layout {
+    grid-template-columns: 380px 1fr;
   }
 }
 
@@ -292,7 +340,252 @@
     max-width: 1200px;
   }
 
-  .friends-left {
-    width: 420px;
+  .friends-layout {
+    grid-template-columns: 400px 1fr;
   }
+}
+
+/* ============================================
+   チャレンジセクション
+   ============================================ */
+
+.challenge-section {
+  margin-top: 1.5rem;
+}
+
+.subsection-title {
+  font-size: var(--font-sm);
+  color: var(--color-gold);
+  margin-bottom: var(--spacing-md);
+  padding-bottom: var(--spacing-sm);
+  border-bottom: 1px solid var(--gold-20);
+}
+
+.challenge-list {
+  margin-bottom: 1.5rem;
+}
+
+.empty-text {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  text-align: center;
+  padding: 1rem;
+}
+
+/* チャレンジカード */
+.challenge-card {
+  background: var(--white-05);
+  border: 1px solid var(--gold-20);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-lg);
+  margin-bottom: var(--spacing-md);
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+}
+
+.challenge-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-gold);
+}
+
+.challenge-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.challenge-opponent {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.challenge-vs-label {
+  font-weight: 600;
+  color: var(--white-60);
+  font-size: var(--font-sm);
+}
+
+.challenge-opponent-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--color-gold);
+}
+
+.challenge-opponent-name {
+  font-weight: 500;
+}
+
+.challenge-status {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 12px;
+}
+
+.challenge-status.pending {
+  background: var(--color-warning-bg);
+  color: var(--color-warning);
+}
+
+.challenge-status.active {
+  background: var(--color-active-bg);
+  color: var(--color-active);
+}
+
+.challenge-status.won {
+  background: var(--gold-20);
+  color: var(--color-gold);
+}
+
+.challenge-status.lost {
+  background: var(--color-lost-bg);
+  color: var(--color-lost);
+}
+
+.challenge-status.draw {
+  background: var(--color-draw-bg);
+  color: var(--color-draw);
+}
+
+/* スコア表示 */
+.challenge-scores {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: var(--spacing-md) 0;
+  background: var(--white-05);
+  padding: var(--spacing-md);
+  border-radius: var(--border-radius-md);
+}
+
+.challenge-player {
+  flex: 1;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.challenge-player-label {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.challenge-player-score {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.challenge-player-score.winning {
+  color: var(--gold);
+}
+
+.challenge-player-score.losing {
+  color: var(--text-secondary);
+}
+
+.challenge-vs {
+  font-size: var(--font-lg);
+  font-weight: 800;
+  color: var(--gold-40);
+  padding: 0 var(--spacing-md);
+}
+
+/* 残り時間 */
+.challenge-time {
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.challenge-time-value {
+  color: var(--gold);
+  font-weight: 600;
+}
+
+/* チャレンジアクション */
+.challenge-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.challenge-actions .btn {
+  flex: 1;
+  padding: 0.5rem;
+  font-size: 0.85rem;
+}
+
+/* フレンドアクションボタン */
+.friend-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.challenge-btn {
+  background: transparent;
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 1rem;
+}
+
+.challenge-btn:hover {
+  background: var(--gold);
+  color: var(--bg-primary);
+}
+
+/* チャレンジモーダル */
+.challenge-options {
+  margin: 1.5rem 0;
+}
+
+.duration-options {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.duration-btn {
+  flex: 1;
+  padding: 0.75rem;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.duration-btn:hover {
+  border-color: var(--gold);
+}
+
+.duration-btn.active {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--bg-primary);
+  font-weight: 600;
+}
+
+.challenge-description {
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  margin-bottom: 1rem;
+}
+
+.challenge-info {
+  text-align: center;
+  color: var(--text-secondary);
+  margin-bottom: 1rem;
 }

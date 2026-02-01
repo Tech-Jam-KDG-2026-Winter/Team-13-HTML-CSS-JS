@@ -4,10 +4,56 @@
 
 /* CSS変数定義 */
 :root {
+  /* ベースカラー */
   --color-black: #000000;
   --color-dark-gold: #B8860B;
   --color-gold: #D4AF37;
   --color-white: #FFFFFF;
+
+  /* ゴールド系（透明度別） */
+  --gold-10: rgba(212, 175, 55, 0.1);
+  --gold-15: rgba(212, 175, 55, 0.15);
+  --gold-20: rgba(212, 175, 55, 0.2);
+  --gold-30: rgba(212, 175, 55, 0.3);
+  --gold-40: rgba(212, 175, 55, 0.4);
+  --gold-50: rgba(212, 175, 55, 0.5);
+  --gold-60: rgba(212, 175, 55, 0.6);
+
+  /* ホワイト系（透明度別） */
+  --white-05: rgba(255, 255, 255, 0.05);
+  --white-10: rgba(255, 255, 255, 0.1);
+  --white-20: rgba(255, 255, 255, 0.2);
+  --white-40: rgba(255, 255, 255, 0.4);
+  --white-50: rgba(255, 255, 255, 0.5);
+  --white-60: rgba(255, 255, 255, 0.6);
+  --white-70: rgba(255, 255, 255, 0.7);
+  --white-80: rgba(255, 255, 255, 0.8);
+
+  /* ブラック/オーバーレイ系 */
+  --black-80: rgba(0, 0, 0, 0.8);
+  --black-90: rgba(0, 0, 0, 0.9);
+
+  /* ステータスカラー */
+  --color-danger: #dc3545;
+  --color-danger-hover: #c82333;
+  --color-danger-bg: rgba(220, 53, 69, 0.2);
+  --color-danger-light: #ff6b7a;
+
+  --color-success: #28a745;
+  --color-success-bg: rgba(40, 167, 69, 0.2);
+  --color-success-light: #5dd879;
+
+  --color-warning: #FFC107;
+  --color-warning-bg: rgba(255, 193, 7, 0.2);
+
+  --color-active: #4CAF50;
+  --color-active-bg: rgba(76, 175, 80, 0.2);
+
+  --color-lost: #F44336;
+  --color-lost-bg: rgba(244, 67, 54, 0.2);
+
+  --color-draw: #9E9E9E;
+  --color-draw-bg: rgba(158, 158, 158, 0.2);
 
   /* グラデーション */
   --gradient-gold: linear-gradient(135deg, var(--color-dark-gold), var(--color-gold));
@@ -17,7 +63,9 @@
   --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3);
   --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.4);
   --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.5);
-  --shadow-gold: 0 4px 15px rgba(212, 175, 55, 0.3);
+  --shadow-gold: 0 4px 15px var(--gold-30);
+  --shadow-gold-md: 0 4px 12px var(--gold-40);
+  --shadow-gold-lg: 0 6px 16px var(--gold-60);
 
   /* トランジション */
   --transition-fast: 0.2s ease;
@@ -154,8 +202,8 @@ a:hover {
 
 /* カード */
 .card {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(212, 175, 55, 0.2);
+  background: var(--white-05);
+  border: 1px solid var(--gold-20);
   border-radius: var(--border-radius-lg);
   padding: var(--spacing-lg);
   transition: transform var(--transition-normal), box-shadow var(--transition-normal);
@@ -189,8 +237,8 @@ a:hover {
 .form-input {
   width: 100%;
   padding: var(--spacing-md);
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(212, 175, 55, 0.3);
+  background: var(--white-10);
+  border: 1px solid var(--gold-30);
   border-radius: var(--border-radius-md);
   color: var(--color-white);
   font-size: var(--font-base);
@@ -200,19 +248,19 @@ a:hover {
 .form-input:focus {
   outline: none;
   border-color: var(--color-gold);
-  box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.2);
+  box-shadow: 0 0 0 2px var(--gold-20);
 }
 
 .form-input::placeholder {
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--white-50);
 }
 
 /* セレクトボックス */
 .form-select {
   width: 100%;
   padding: var(--spacing-md);
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(212, 175, 55, 0.3);
+  background: var(--white-10);
+  border: 1px solid var(--gold-30);
   border-radius: var(--border-radius-md);
   color: var(--color-white);
   font-size: var(--font-base);
@@ -250,6 +298,10 @@ a:hover {
   color: var(--color-black);
 }
 
+.btn-primary [data-lucide] {
+  color: var(--color-black);
+}
+
 .btn-primary:hover {
   box-shadow: var(--shadow-gold);
   transform: translateY(-2px);
@@ -266,16 +318,16 @@ a:hover {
 }
 
 .btn-secondary:hover {
-  background: rgba(212, 175, 55, 0.1);
+  background: var(--gold-10);
 }
 
 .btn-danger {
-  background: #dc3545;
+  background: var(--color-danger);
   color: var(--color-white);
 }
 
 .btn-danger:hover {
-  background: #c82333;
+  background: var(--color-danger-hover);
 }
 
 .btn-full {
@@ -296,7 +348,7 @@ a:hover {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.8);
+  background: var(--black-80);
   z-index: 1000;
   justify-content: center;
   align-items: center;
@@ -309,7 +361,7 @@ a:hover {
 .loading-spinner {
   width: 50px;
   height: 50px;
-  border: 3px solid rgba(212, 175, 55, 0.3);
+  border: 3px solid var(--gold-30);
   border-top-color: var(--color-gold);
   border-radius: 50%;
   animation: spin 1s linear infinite;
@@ -323,9 +375,9 @@ a:hover {
 
 /* エラーメッセージ */
 .error-message {
-  background: rgba(220, 53, 69, 0.2);
-  border: 1px solid #dc3545;
-  color: #ff6b7a;
+  background: var(--color-danger-bg);
+  border: 1px solid var(--color-danger);
+  color: var(--color-danger-light);
   padding: var(--spacing-md);
   border-radius: var(--border-radius-md);
   margin-bottom: var(--spacing-md);
@@ -339,9 +391,9 @@ a:hover {
 
 /* 成功メッセージ */
 .success-message {
-  background: rgba(40, 167, 69, 0.2);
-  border: 1px solid #28a745;
-  color: #5dd879;
+  background: var(--color-success-bg);
+  border: 1px solid var(--color-success);
+  color: var(--color-success-light);
   padding: var(--spacing-md);
   border-radius: var(--border-radius-md);
   margin-bottom: var(--spacing-md);
@@ -362,30 +414,68 @@ a:hover {
   background: var(--color-black);
   border-top: 1px solid var(--color-dark-gold);
   padding: var(--spacing-sm) 0;
+  padding-bottom: calc(var(--spacing-sm) + env(safe-area-inset-bottom));
   z-index: 100;
 }
 
 .nav-list {
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
   list-style: none;
   max-width: 480px;
   margin: 0 auto;
+  padding: 0 var(--spacing-sm);
 }
 
 .nav-item {
   flex: 1;
+  max-width: 80px;
+}
+
+/* 真ん中（ランキング）を目立たせる */
+.nav-item:nth-child(3) {
+  position: relative;
+  max-width: 70px;
+}
+
+.nav-item:nth-child(3) .nav-link {
+  position: relative;
+  top: -12px;
+  background: var(--gradient-gold);
+  border-radius: 50%;
+  width: 56px;
+  height: 56px;
+  margin: 0 auto;
+  padding: 0;
+  justify-content: center;
+  color: var(--color-black);
+  box-shadow: var(--shadow-gold-md);
+}
+
+.nav-item:nth-child(3) .nav-link span:last-child {
+  display: none;
+}
+
+.nav-item:nth-child(3) .nav-icon {
+  font-size: var(--font-2xl);
+}
+
+.nav-item:nth-child(3) .nav-link:hover,
+.nav-item:nth-child(3) .nav-link.active {
+  color: var(--color-black);
+  transform: scale(1.05);
+  box-shadow: var(--shadow-gold-lg);
 }
 
 .nav-link {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--spacing-xs);
-  padding: var(--spacing-sm);
-  color: rgba(255, 255, 255, 0.6);
-  font-size: var(--font-xs);
-  transition: color var(--transition-fast);
+  gap: 2px;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  color: var(--white-60);
+  font-size: 10px;
+  transition: all var(--transition-fast);
 }
 
 .nav-link:hover,
@@ -394,7 +484,12 @@ a:hover {
 }
 
 .nav-icon {
-  font-size: var(--font-xl);
+  font-size: var(--font-lg);
+}
+
+/* ナビゲーションログアウトボタン（モバイルでは非表示） */
+.nav-logout-btn {
+  display: none;
 }
 
 /* アバター */
@@ -436,7 +531,7 @@ a:hover {
 
 .score-label {
   font-size: var(--font-sm);
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--white-70);
   text-align: center;
   margin-top: var(--spacing-xs);
 }
@@ -447,14 +542,14 @@ a:hover {
   align-items: center;
   gap: var(--spacing-md);
   padding: var(--spacing-md);
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--white-05);
   border-radius: var(--border-radius-md);
   margin-bottom: var(--spacing-sm);
   transition: background var(--transition-fast);
 }
 
 .list-item:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--white-10);
 }
 
 /* ランキング番号 */
@@ -498,7 +593,7 @@ a:hover {
 .empty-state {
   text-align: center;
   padding: var(--spacing-2xl);
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--white-50);
 }
 
 .empty-state-icon {
@@ -620,7 +715,7 @@ a:hover {
     top: 0;
     bottom: auto;
     border-top: none;
-    border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+    border-bottom: 1px solid var(--gold-30);
     padding: var(--spacing-sm) var(--spacing-lg);
     background: linear-gradient(180deg, rgba(0, 0, 0, 0.98), rgba(0, 0, 0, 0.95));
     backdrop-filter: blur(10px);
@@ -634,6 +729,46 @@ a:hover {
 
   .nav-item {
     flex: none;
+    max-width: none;
+  }
+
+  /* PC版でも真ん中の記録ボタンを目立たせる */
+  .nav-item:nth-child(3) {
+    max-width: none;
+    margin: 0 var(--spacing-md);
+  }
+
+  .nav-item:nth-child(3) .nav-link {
+    position: static;
+    background: var(--gradient-gold);
+    border-radius: var(--border-radius-full);
+    width: auto;
+    height: auto;
+    padding: var(--spacing-sm) var(--spacing-xl);
+    box-shadow: var(--shadow-gold-md);
+    color: var(--color-black);
+  }
+
+  .nav-item:nth-child(3) .nav-link span:last-child {
+    display: inline;
+  }
+
+  .nav-item:nth-child(3) .nav-icon {
+    font-size: var(--font-lg);
+  }
+
+  .nav-item:nth-child(3) .nav-link:hover {
+    background: var(--gradient-gold);
+    color: var(--color-black);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-gold-lg);
+  }
+
+  .nav-item:nth-child(3) .nav-link.active {
+    background: var(--gradient-gold);
+    color: var(--color-black);
+    border: none;
+    box-shadow: var(--shadow-gold-lg);
   }
 
   /* ヘッダー用のナビリンクスタイル */
@@ -648,14 +783,14 @@ a:hover {
   }
 
   .nav-link:hover {
-    background: rgba(212, 175, 55, 0.1);
+    background: var(--gold-10);
     color: var(--color-gold);
   }
 
   .nav-link.active {
-    background: rgba(212, 175, 55, 0.15);
+    background: var(--gold-15);
     color: var(--color-gold);
-    border: 1px solid rgba(212, 175, 55, 0.3);
+    border: 1px solid var(--gold-30);
   }
 
   .nav-icon {
@@ -671,5 +806,30 @@ a:hover {
   /* モバイル専用要素を非表示 */
   .mobile-only {
     display: none !important;
+  }
+
+  /* PC版ナビゲーションログアウトボタン */
+  .nav-logout-btn {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    position: absolute;
+    right: var(--spacing-lg);
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: 1px solid var(--gold-30);
+    color: var(--color-gold);
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--border-radius-md);
+    font-size: var(--font-sm);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .nav-logout-btn:hover {
+    background: var(--color-danger-bg);
+    border-color: var(--color-danger);
+    color: var(--color-danger-light);
   }
 }

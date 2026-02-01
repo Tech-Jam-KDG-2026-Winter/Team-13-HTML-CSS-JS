@@ -3,66 +3,53 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ホーム - RIZAP Fitness</title>
-
-  <!-- Google Fonts -->
+  <title>ホーム - Fitness</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
-  <!-- CSS -->
   <link rel="stylesheet" href="css/common.css">
   <link rel="stylesheet" href="css/home.css">
-
-  <!-- Firebase SDK -->
+  <link rel="stylesheet" href="css/HTMLAnimation.css">
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-
-  
-  
 </head>
 <body>
   <div class="page-wrapper has-bottom-nav">
-    <!-- ヘッダー（モバイル用） -->
     <header class="header mobile-only">
       <div class="header-content">
-        <h1 class="header-title">RIZAP FITNESS</h1>
-        <button id="logout-btn" class="logout-btn" title="ログアウト">
-          
-          <span>⏻</span>
-        </button>
+        <h1 class="header-title">FITNESS</h1>
+        <button id="logout-btn" class="logout-btn" title="ログアウト"><i data-lucide="log-out"></i></button>
       </div>
     </header>
 
     <main class="main-content">
       <div class="container home-container">
         <div class="home-layout">
-          <!-- 左カラム：今日のスコア -->
+          
           <div class="home-left">
-            <!-- 今日のスコアカード -->
             <section class="today-score-card card slide-up">
               <div class="score-header">
                 <span class="score-icon"><i data-lucide="flame"></i></span>
                 <h2>今日のスコア</h2>
               </div>
-              <div class="score-display" id="today-score">0</div>
-              <p class="score-label">ポイント</p>
+              <div class="score-meter-wrapper">
+                <div class="HTMLAnimation-meter HTMLAnimation-valueName=todayScore HTMLAnimation-animationSpeed=0.2 HTMLAnimation-animationMaxSpeed=100">
+                  <div class="percentage">
+                    <div class="score-display HTMLAnimation-view HTMLAnimation-valueName=todayScore HTMLAnimation-animationSpeed=0.2 HTMLAnimation-animationMaxSpeed=100" id="today-score">0</div>
+                    <p class="score-label">ポイント</p>
+                  </div>
+                </div>
+              </div>
+              <input type="number" id="today-score-value" value="0" max="10000" min="0" class="HTMLAnimation-value HTMLAnimation-valueName=todayScore">
               <a href="training.html" class="btn btn-primary btn-full mt-lg">
-                <span><i data-lucide="dumbbell"></i></span>
-                トレーニングを記録
+                <span><i data-lucide="dumbbell"></i></span>トレーニングを記録
               </a>
             </section>
 
-            <!-- 最近のトレーニング（PC時は左に移動） -->
             <section class="recent-section card slide-up">
-              <h2 class="card-title">
-                <span><i data-lucide="clipboard-list"></i></span>
-                最近のトレーニング
-              </h2>
-
+              <h2 class="card-title"><span><i data-lucide="clipboard-list"></i></span>最近のトレーニング</h2>
               <div id="recent-trainings" class="recent-list">
-                <!-- 最近のトレーニングはJSで動的に追加 -->
                 <div class="empty-state" id="empty-trainings">
                   <div class="empty-state-icon"><i data-lucide="activity"></i></div>
                   <p>まだトレーニングを<br>記録していません</p>
@@ -71,76 +58,74 @@
             </section>
           </div>
 
-          <!-- 右カラム：フレンドランキング -->
           <div class="home-right">
-            <!-- フレンドランキング -->
             <section class="ranking-section card slide-up">
               <div class="section-header">
-                <h2 class="card-title">
-                  <span><i data-lucide="trophy"></i></span>
-                  フレンドランキング
-                </h2>
-                <a href="friends.html" class="add-friend-link">
-                  <span>+</span> フレンド追加
-                </a>
+                <h2 class="card-title"><span><i data-lucide="trophy"></i></span>フレンドランキング</h2>
+                <a href="friends.html" class="add-friend-link"><span>+</span> フレンド追加</a>
               </div>
-
               <div id="ranking-list" class="ranking-list">
-                <!-- ランキングアイテムはJSで動的に追加 -->
                 <div class="empty-state" id="empty-ranking">
                   <div class="empty-state-icon"><i data-lucide="users"></i></div>
                   <p>フレンドを追加して<br>ランキングを競い合おう！</p>
                 </div>
               </div>
             </section>
+          
+            <section id="home-challenge-section" class="home-challenge-section slide-up" style="display: none;">
+              <div id="home-pending-challenge" class="home-pending-card card" style="display: none;">
+                <div class="challenge-alert-header">
+                  <span class="alert-icon"><i data-lucide="swords"></i>  </span>
+                  <h3>挑戦状が届いています！</h3>
+                </div>
+                <div id="pending-challenge-content"></div>
+              </div>
+          
+              <div id="home-active-challenges" class="active-challenge-list">
+                <div id="challenge-template" class="active-challenge-card" style="display: none; margin-bottom: 15px;">
+                  <div class="challenge-meta">
+                    <span class="match-label js-opp-name-label"><i data-lucide="swords"></i> 対戦中</span>
+                    <span class="home-challenge-time js-home-timer">--:--:--</span>
+                  </div>
+                  <div class="home-vs-grid">
+                    <div class="vs-unit">
+                      <div class="vs-name">あなた</div>
+                      <div class="vs-score js-my-score">0</div>
+                    </div>
+                    <div class="vs-middle">VS</div>
+                    <div class="vs-unit">
+                      <div class="vs-name js-opp-name">相手</div>
+                      <div class="vs-score js-opp-score">0</div>
+                    </div>
+                  </div>
+                  <a href="friends.html" class="btn btn-sm btn-full btn-outline">対戦詳細へ</a>
+                </div>
+              </div>
+            </section>
           </div>
-        </div>
-      </div>
+
+        </div> </div>
     </main>
 
-    <!-- ボトムナビゲーション -->
     <nav class="nav-bottom">
       <ul class="nav-list">
-        <li class="nav-item">
-          <a href="home.html" class="nav-link active">
-            <span class="nav-icon"><i data-lucide="home"></i></span>
-            <span>ホーム</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="training.html" class="nav-link">
-            <span class="nav-icon"><i data-lucide="dumbbell"></i></span>
-            <span>記録</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="friends.html" class="nav-link">
-            <span class="nav-icon"><i data-lucide="users"></i></span>
-            <span>フレンド</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="profile.html" class="nav-link">
-            <span class="nav-icon"><i data-lucide="user"></i></span>
-            <span>プロフィール</span>
-          </a>
-        </li>
+        <li class="nav-item"><a href="home.html" class="nav-link active"><span class="nav-icon"><i data-lucide="home"></i></span><span>ホーム</span></a></li>
+        <li class="nav-item"><a href="ranking.html" class="nav-link"><span class="nav-icon"><i data-lucide="trophy"></i></span><span>ランキング</span></a></li>
+        <li class="nav-item"><a href="training.html" class="nav-link"><span class="nav-icon"><i data-lucide="dumbbell"></i></span><span>記録</span></a></li>
+        <li class="nav-item"><a href="friends.html" class="nav-link"><span class="nav-icon"><i data-lucide="users"></i></span><span>フレンド</span></a></li>
+        <li class="nav-item"><a href="profile.html" class="nav-link"><span class="nav-icon"><i data-lucide="user"></i></span><span>プロフィール</span></a></li>
       </ul>
+      <button class="nav-logout-btn" id="nav-logout-btn" title="ログアウト"><i data-lucide="log-out"></i></button>
     </nav>
   </div>
 
-  <!-- ローディング -->
-  <div id="loading" class="loading">
-    <div class="loading-spinner"></div>
-  </div>
+  <div id="loading" class="loading"><div class="loading-spinner"></div></div>
 
-  <!-- JavaScript -->
   <script src="js/firebase-config.js"></script>
   <script src="js/utils.js"></script>
   <script src="js/home.js"></script>
+  <script src="js/HTMLAnimation.js"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
-  <script>
-    lucide.createIcons();
-  </script>
+  <script>lucide.createIcons();</script>
 </body>
 </html>

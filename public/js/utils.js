@@ -468,3 +468,17 @@ async function uploadImageToCloudinary(file) {
   const data = await res.json();
   return data.secure_url;
 }
+
+// ============================================
+// ナビゲーションログアウトボタン
+// ============================================
+
+/**
+ * ナビゲーションのログアウトボタンにイベントリスナーを追加
+ */
+document.addEventListener('DOMContentLoaded', () => {
+  const navLogoutBtn = document.getElementById('nav-logout-btn');
+  if (navLogoutBtn) {
+    navLogoutBtn.addEventListener('click', logout);
+  }
+});
