@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ログイン - Fitness</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/login.css">
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+</head>
+<body>
+  <div class="page-wrapper">
+    <main class="main-content">
+      <div class="container">
+        <!-- ロゴ・タイトル -->
+        <div class="login-header">
+          <div class="logo">
+            <span class="logo-icon"><i data-lucide="dumbbell"></i></span>
+          </div>
+          <h1 class="app-title">FITNESS</h1>
+          <p class="app-subtitle">結果にコミットする</p>
+        </div>
+
+        <!-- ログインフォーム -->
+        <div class="login-form-wrapper slide-up">
+          <form id="login-form" class="login-form">
+            <!-- エラーメッセージ -->
+            <div id="error-message" class="error-message"></div>
+
+            <div class="form-group">
+              <label for="email" class="form-label">メールアドレス</label>
+              <input
+                type="email"
+                id="email"
+                class="form-input"
+                placeholder="example@email.com"
+                required
+                autocomplete="email"
+              >
+            </div>
+
+            <div class="form-group">
+              <label for="password" class="form-label">パスワード</label>
+              <input
+                type="password"
+                id="password"
+                class="form-input"
+                placeholder="6文字以上"
+                required
+                autocomplete="current-password"
+              >
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-full">
+              ログイン
+            </button>
+          </form>
+
+          <div class="register-link">
+            <p>アカウントをお持ちでない方は</p>
+            <a href="register.html">新規登録はこちら</a>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- ローディング -->
+  <div id="loading" class="loading">
+    <div class="loading-spinner"></div>
+  </div>
+
+  <!-- JavaScript -->
+  <script src="js/firebase-config.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/login.js"></script>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>lucide.createIcons();</script>
+</body>
+</html>
