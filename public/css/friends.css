@@ -922,49 +922,53 @@
 
 .challenger-display {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: var(--spacing-md);
+  gap: var(--spacing-sm);
   padding: var(--spacing-lg);
-  justify-content: center;
 }
 
 .challenger-avatar {
-  width: 72px;
-  height: 72px;
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
   border: 3px solid var(--color-gold);
   object-fit: cover;
+  box-shadow: 0 4px 16px var(--gold-40);
 }
 
 .challenger-info {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-xs);
+  align-items: center;
+  gap: 4px;
 }
 
 .challenger-label {
   font-size: var(--font-xs);
   color: var(--white-50);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
 }
 
 .challenger-name {
-  font-size: var(--font-lg);
+  font-size: var(--font-xl);
   font-weight: 700;
   color: var(--color-white);
 }
 
 .challenge-accept-info {
-  display: flex;
-  gap: var(--spacing-md);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-sm);
   padding: 0 var(--spacing-lg) var(--spacing-md);
 }
 
 .accept-info-item {
-  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--spacing-xs);
+  gap: 4px;
   padding: var(--spacing-md);
   background: var(--white-05);
   border-radius: var(--border-radius-md);
@@ -975,6 +979,7 @@
   width: 20px;
   height: 20px;
   color: var(--color-gold);
+  margin-bottom: 4px;
 }
 
 .accept-info-item span {
@@ -985,21 +990,28 @@
 .accept-info-item strong {
   font-size: var(--font-sm);
   color: var(--color-white);
+  font-weight: 600;
 }
 
 .accept-message {
   text-align: center;
-  padding: 0 var(--spacing-lg) var(--spacing-md);
+  padding: var(--spacing-sm) var(--spacing-lg) var(--spacing-md);
   color: var(--white-70);
-  font-size: var(--font-sm);
+  font-size: var(--font-base);
+  font-weight: 500;
 }
 
 .accept-actions {
   flex-direction: row;
+  gap: var(--spacing-sm);
 }
 
 .accept-actions .btn-gold {
   flex: 2;
+}
+
+.accept-actions .btn-danger-outline {
+  flex: 1;
 }
 
 .btn-danger-outline {

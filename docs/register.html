@@ -43,6 +43,22 @@
             <!-- エラーメッセージ -->
             <div id="error-message" class="error-message"></div>
 
+            <!-- アイコン設定 -->
+            <div class="form-group avatar-upload-section">
+              <label class="form-label">プロフィールアイコン</label>
+              <div class="avatar-upload-wrapper">
+                <div class="avatar-preview-container">
+                  <img id="avatar-preview" src="https://api.dicebear.com/7.x/adventurer/svg?seed=default" alt="アイコンプレビュー" class="avatar-preview">
+                  <div class="avatar-upload-overlay" id="avatar-upload-trigger">
+                    <i data-lucide="camera"></i>
+                    <span>変更</span>
+                  </div>
+                </div>
+                <input type="file" id="avatar-input" accept="image/*" hidden>
+              </div>
+              <p class="input-hint">タップして画像を選択（任意）</p>
+            </div>
+
             <div class="form-group">
               <label for="username" class="form-label">ユーザーネーム</label>
               <input
@@ -117,7 +133,8 @@
   <script src="js/firebase-config.js"></script>
   <script src="js/utils.js"></script>
   <script src="js/register.js"></script>
-
-  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>lucide.createIcons();</script>
 </body>
 </html>

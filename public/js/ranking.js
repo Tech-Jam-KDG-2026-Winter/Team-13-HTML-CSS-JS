@@ -220,11 +220,11 @@ function renderTopThree(topUsers) {
     const scoreEl = document.getElementById(`top-${pos}-score`);
 
     if (user) {
-      avatarEl.src = getIconUrl(user.iconURL);
+      avatarEl.src = getIconUrl(user.iconURL, user.username);
       nameEl.textContent = user.username + (user.isMe ? ' (あなた)' : '');
       scoreEl.textContent = `${user.score.toLocaleString()} pt`;
     } else {
-      avatarEl.src = getIconUrl('');
+      avatarEl.src = getIconUrl('', 'empty');
       nameEl.textContent = '-';
       scoreEl.textContent = '0 pt';
     }
@@ -242,7 +242,7 @@ function renderEmptyTopThree() {
     const nameEl = document.getElementById(`top-${pos}-name`);
     const scoreEl = document.getElementById(`top-${pos}-score`);
 
-    avatarEl.src = getIconUrl('');
+    avatarEl.src = getIconUrl('', 'empty');
     nameEl.textContent = '-';
     scoreEl.textContent = '0 pt';
   });
@@ -265,7 +265,7 @@ function renderRankingList(users) {
       <div class="ranking-item ${user.isMe ? 'is-me' : ''}">
         <div class="rank-badge ${rankClass}">${rank}</div>
         <div class="ranking-user-info">
-          <img src="${getIconUrl(user.iconURL)}" alt="" class="ranking-avatar">
+          <img src="${getIconUrl(user.iconURL, user.username)}" alt="" class="ranking-avatar">
           <span class="ranking-username">${escapeHtml(user.username)}${user.isMe ? ' (あなた)' : ''}</span>
         </div>
         <span class="ranking-score">${user.score.toLocaleString()} pt</span>

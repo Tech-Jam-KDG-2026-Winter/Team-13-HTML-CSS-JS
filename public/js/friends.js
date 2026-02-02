@@ -182,7 +182,7 @@ async function handleSearchFriend(e) {
       return;
     }
     foundUser = user;
-    resultAvatar.src = getIconUrl(user.iconURL);
+    resultAvatar.src = getIconUrl(user.iconURL, user.username);
     resultUsername.textContent = user.username;
     searchResult.style.display = 'flex';
     hideError();
@@ -243,7 +243,7 @@ async function loadFriendsList() {
 
     const html = friendsData.map(f => `
       <div class="friend-item">
-        <img src="${getIconUrl(f.iconURL)}" alt="" class="friend-avatar">
+        <img src="${getIconUrl(f.iconURL, f.username)}" alt="" class="friend-avatar">
         <div class="friend-info">
           <span class="friend-name">${escapeHtml(f.username)}</span>
           <span class="friend-id">${f.userID}</span>
@@ -317,7 +317,7 @@ async function openChallengeModal(id, name) {
 
   // 自分のアバターを設定
   if (challengeMyAvatar && currentUserData) {
-    challengeMyAvatar.src = getIconUrl(currentUserData.iconURL);
+    challengeMyAvatar.src = getIconUrl(currentUserData.iconURL, currentUserData.username);
   }
 
   // 相手のアバターを設定
@@ -325,10 +325,10 @@ async function openChallengeModal(id, name) {
     try {
       const opponentData = await getUserData(id);
       if (opponentData) {
-        challengeOpponentAvatar.src = getIconUrl(opponentData.iconURL);
+        challengeOpponentAvatar.src = getIconUrl(opponentData.iconURL, opponentData.username);
       }
     } catch (e) {
-      challengeOpponentAvatar.src = getIconUrl('');
+      challengeOpponentAvatar.src = getIconUrl('', name);
     }
   }
 
@@ -513,14 +513,14 @@ function renderPendingChallenges(challenges) {
       <div class="challenge-header">
         <div class="challenge-opponent">
           <span class="challenge-vs-label">vs</span>
-          <img src="${getIconUrl(c.opponentAvatar)}" alt="" class="challenge-opponent-avatar">
+          <img src="${getIconUrl(c.opponentAvatar, c.creatorName)}" alt="" class="challenge-opponent-avatar">
           <span class="challenge-opponent-name">${escapeHtml(c.creatorName)}</span>
         </div>
         <span class="challenge-status pending">承認待ち</span>
       </div>
       <p class="challenge-info">期間: ${c.duration}日間</p>
       <div class="challenge-actions">
-        <button class="btn btn-primary accept-btn" data-id="${c.id}" data-name="${escapeHtml(c.creatorName)}" data-dur="${c.duration}" data-avatar="${getIconUrl(c.opponentAvatar)}">受ける</button>
+        <button class="btn btn-primary accept-btn" data-id="${c.id}" data-name="${escapeHtml(c.creatorName)}" data-dur="${c.duration}" data-avatar="${getIconUrl(c.opponentAvatar, c.creatorName)}">受ける</button>
         <button class="btn btn-danger decline-btn" data-id="${c.id}">断る</button>
       </div>
     </div>
@@ -532,7 +532,7 @@ function renderPendingChallenges(challenges) {
       acceptChallengerName.textContent = btn.dataset.name;
       acceptDuration.textContent = btn.dataset.dur;
       if (acceptChallengerAvatar) {
-        acceptChallengerAvatar.src = btn.dataset.avatar || getIconUrl('');
+        acceptChallengerAvatar.src = btn.dataset.avatar || getIconUrl('', btn.dataset.name);
       }
       acceptModal.classList.add('active');
       lucide.createIcons();
@@ -572,7 +572,7 @@ function renderActiveChallenges(challenges) {
         <div class="challenge-header">
           <div class="challenge-opponent">
             <span class="challenge-vs-label">vs</span>
-            <img src="${getIconUrl(c.opponentAvatar)}" alt="" class="challenge-opponent-avatar">
+            <img src="${getIconUrl(c.opponentAvatar, oppName)}" alt="" class="challenge-opponent-avatar">
             <span class="challenge-opponent-name">${escapeHtml(oppName)}</span>
           </div>
           <span class="challenge-status active">対戦中</span>
@@ -621,7 +621,7 @@ function renderCompletedChallenges(challenges) {
         <div class="challenge-header">
           <div class="challenge-opponent">
             <span class="challenge-vs-label">vs</span>
-            <img src="${getIconUrl(c.opponentAvatar)}" alt="" class="challenge-opponent-avatar">
+            <img src="${getIconUrl(c.opponentAvatar, oppName)}" alt="" class="challenge-opponent-avatar">
             <span class="challenge-opponent-name">${escapeHtml(oppName)}</span>
           </div>
           <span class="challenge-status ${cls}">${res}</span>

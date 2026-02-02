@@ -8,6 +8,12 @@ const usernameInput = document.getElementById('username');
 const emailInput = document.getElementById('email');
 const passwordInput = document.getElementById('password');
 const passwordConfirmInput = document.getElementById('password-confirm');
+const avatarInput = document.getElementById('avatar-input');
+const avatarPreview = document.getElementById('avatar-preview');
+const avatarUploadTrigger = document.getElementById('avatar-upload-trigger');
+
+// アップロードされた画像URL
+let uploadedAvatarUrl = '';
 
 // ============================================
 // 初期化処理
@@ -36,6 +42,60 @@ function setupFormListeners() {
   inputs.forEach((input) => {
     input.addEventListener('input', hideError);
   });
+
+  // アイコンアップロード
+  if (avatarUploadTrigger) {
+    avatarUploadTrigger.addEventListener('click', () => {
+      avatarInput.click();
+    });
+  }
+
+  if (avatarPreview) {
+    avatarPreview.addEventListener('click', () => {
+      avatarInput.click();
+    });
+  }
+
+  if (avatarInput) {
+    avatarInput.addEventListener('change', handleAvatarSelect);
+  }
+}
+
+// アイコン選択処理
+async function handleAvatarSelect(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  // ファイルサイズチェック（5MB以下）
+  if (file.size > 5 * 1024 * 1024) {
+    showError('画像サイズは5MB以下にしてください');
+    return;
+  }
+
+  // 画像タイプチェック
+  if (!file.type.startsWith('image/')) {
+    showError('画像ファイルを選択してください');
+    return;
+  }
+
+  try {
+    // プレビュー表示
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      avatarPreview.src = event.target.result;
+    };
+    reader.readAsDataURL(file);
+
+    // Cloudinaryにアップロード
+    toggleLoading(true);
+    uploadedAvatarUrl = await uploadImageToCloudinary(file);
+    console.log('アイコンアップロード完了:', uploadedAvatarUrl);
+  } catch (error) {
+    console.error('アイコンアップロードエラー:', error);
+    showError('画像のアップロードに失敗しました');
+  } finally {
+    toggleLoading(false);
+  }
 }
 
 // ============================================
@@ -70,7 +130,7 @@ async function handleRegister(e) {
       username: username,
       email: email,
       userID: userID,
-      iconURL: '',
+      iconURL: uploadedAvatarUrl || '',
       totalScore: 0,
       friends: [],
       createdAt: firebase.firestore.FieldValue.serverTimestamp()

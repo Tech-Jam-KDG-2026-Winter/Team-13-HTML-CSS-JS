@@ -101,7 +101,7 @@ function setupEventListeners() {
 
 function displayProfile() {
   // アバター
-  profileAvatar.src = getIconUrl(currentUserData?.iconURL);
+  profileAvatar.src = getIconUrl(currentUserData?.iconURL, currentUserData?.username);
 
   // ユーザーネーム
   usernameDisplay.textContent = currentUserData?.username || 'ユーザー';

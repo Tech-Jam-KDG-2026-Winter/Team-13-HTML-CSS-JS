@@ -238,7 +238,7 @@ function renderRanking(rankingData) {
       <div class="ranking-item ${user.isMe ? 'is-me' : ''}">
         <div class="rank-badge ${rankClass}">${rank}</div>
         <div class="ranking-user-info">
-          <img src="${getIconUrl(user.iconURL)}" alt="" class="ranking-avatar">
+          <img src="${getIconUrl(user.iconURL, user.username)}" alt="" class="ranking-avatar">
           <span class="ranking-username">${escapeHtml(user.username)}${user.isMe ? ' (あなた)' : ''}</span>
         </div>
         <span class="ranking-score">${user.score.toLocaleString()} pt</span>

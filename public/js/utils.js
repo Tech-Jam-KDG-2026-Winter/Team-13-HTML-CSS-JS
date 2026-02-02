@@ -426,17 +426,22 @@ async function getTodayScore(userId) {
 // ============================================
 
 /**
- * デフォルトのアイコンURL（SVGデータURI）
+ * DiceBear APIを使用してデフォルトアイコンURLを生成
+ * @param {string} seed - シード値（ユーザー名など）
+ * @returns {string} DiceBearアイコンURL
  */
-const DEFAULT_ICON_URL = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='50' fill='%23333'/%3E%3Ccircle cx='50' cy='40' r='18' fill='%23666'/%3E%3Cellipse cx='50' cy='85' rx='28' ry='22' fill='%23666'/%3E%3C/svg%3E";
+function getDiceBearIconUrl(seed = 'default') {
+  return `https://api.dicebear.com/7.x/adventurer/svg?seed=${encodeURIComponent(seed)}`;
+}
 
 /**
- * アイコンURLを取得（未設定の場合はデフォルトを返す）
+ * アイコンURLを取得（未設定の場合はDiceBearでデフォルトを返す）
  * @param {string} iconURL - アイコンURL
+ * @param {string} username - ユーザー名（デフォルトアイコン生成用）
  * @returns {string} アイコンURL
  */
-function getIconUrl(iconURL) {
-  return iconURL || DEFAULT_ICON_URL;
+function getIconUrl(iconURL, username = 'default') {
+  return iconURL || getDiceBearIconUrl(username);
 }
 
 // ============================================
