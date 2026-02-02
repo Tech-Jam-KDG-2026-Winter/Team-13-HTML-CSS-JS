@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ランキング - Fitness</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/ranking.css">
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+</head>
+<body>
+  <div class="page-wrapper has-bottom-nav">
+    <header class="header mobile-only">
+      <div class="header-content">
+        <a href="home.html" class="back-button">
+          <span>←</span>
+          <span>ホーム</span>
+        </a>
+        <h1 class="header-title">ランキング</h1>
+        <div style="width: 60px;"></div>
+      </div>
+    </header>
+
+    <main class="main-content">
+      <div class="container ranking-container">
+        <!-- 期間切り替えタブ -->
+        <div class="period-tabs card slide-up">
+          <button class="period-tab active" data-period="today">今日</button>
+          <button class="period-tab" data-period="weekly">週間</button>
+          <button class="period-tab" data-period="monthly">月間</button>
+          <button class="period-tab" data-period="total">合計</button>
+        </div>
+
+        <div class="ranking-layout">
+          <!-- 左カラム -->
+          <div class="ranking-left">
+            <!-- 自分の順位カード -->
+            <section class="my-rank-card card slide-up">
+              <div class="my-rank-header">
+                <span class="my-rank-label">あなたの順位</span>
+                <span class="my-rank-period" id="my-rank-period">今日</span>
+              </div>
+              <div class="my-rank-content">
+                <div class="my-rank-position">
+                  <span class="my-rank-number" id="my-rank-number">-</span>
+                  <span class="my-rank-suffix">位</span>
+                </div>
+                <div class="my-rank-score">
+                  <span class="my-rank-score-value" id="my-rank-score">0</span>
+                  <span class="my-rank-score-label">pt</span>
+                </div>
+              </div>
+              <p class="my-rank-total" id="my-rank-total">/ - 人中</p>
+            </section>
+
+            <!-- トップ3 -->
+            <section class="top-three-section card slide-up">
+              <h2 class="section-title">トップ3</h2>
+              <div class="top-three" id="top-three">
+                <!-- 2位 -->
+                <div class="top-user second" id="top-2">
+                  <div class="top-rank">2</div>
+                  <div class="top-avatar-wrapper">
+                    <img src="" alt="" class="top-avatar" id="top-2-avatar">
+                  </div>
+                  <span class="top-name" id="top-2-name">-</span>
+                  <span class="top-score" id="top-2-score">0 pt</span>
+                </div>
+                <!-- 1位 -->
+                <div class="top-user first" id="top-1">
+                  <div class="top-rank">1</div>
+                  <div class="top-avatar-wrapper crown">
+                    <img src="" alt="" class="top-avatar" id="top-1-avatar">
+                  </div>
+                  <span class="top-name" id="top-1-name">-</span>
+                  <span class="top-score" id="top-1-score">0 pt</span>
+                </div>
+                <!-- 3位 -->
+                <div class="top-user third" id="top-3">
+                  <div class="top-rank">3</div>
+                  <div class="top-avatar-wrapper">
+                    <img src="" alt="" class="top-avatar" id="top-3-avatar">
+                  </div>
+                  <span class="top-name" id="top-3-name">-</span>
+                  <span class="top-score" id="top-3-score">0 pt</span>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <!-- 右カラム -->
+          <div class="ranking-right">
+            <!-- フレンドランキング -->
+            <section class="ranking-list-section card slide-up">
+              <h2 class="section-title"><i data-lucide="users"></i> フレンドランキング</h2>
+              <div class="ranking-list-wrapper">
+                <div class="ranking-list" id="ranking-list">
+                  <!-- ランキングアイテムはJSで動的に追加 -->
+                </div>
+              </div>
+              <div class="empty-state" id="empty-ranking">
+                <div class="empty-state-icon"><i data-lucide="users"></i></div>
+                <p>フレンドを追加して<br>ランキングを競い合おう！</p>
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <nav class="nav-bottom">
+      <ul class="nav-list">
+        <li class="nav-item"><a href="home.html" class="nav-link"><span class="nav-icon"><i data-lucide="home"></i></span><span>ホーム</span></a></li>
+        <li class="nav-item"><a href="ranking.html" class="nav-link active"><span class="nav-icon"><i data-lucide="trophy"></i></span><span>ランキング</span></a></li>
+        <li class="nav-item"><a href="training.html" class="nav-link"><span class="nav-icon"><i data-lucide="dumbbell"></i></span><span>記録</span></a></li>
+        <li class="nav-item"><a href="friends.html" class="nav-link"><span class="nav-icon"><i data-lucide="users"></i></span><span>フレンド</span></a></li>
+        <li class="nav-item"><a href="profile.html" class="nav-link"><span class="nav-icon"><i data-lucide="user"></i></span><span>プロフィール</span></a></li>
+      </ul>
+      <button class="nav-logout-btn" id="nav-logout-btn" title="ログアウト"><i data-lucide="log-out"></i></button>
+    </nav>
+  </div>
+
+  <!-- ローディング -->
+  <div id="loading" class="loading">
+    <div class="loading-spinner"></div>
+  </div>
+
+  <!-- JavaScript -->
+  <script src="js/firebase-config.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/ranking.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    lucide.createIcons();
+  </script>
+</body>
+</html>

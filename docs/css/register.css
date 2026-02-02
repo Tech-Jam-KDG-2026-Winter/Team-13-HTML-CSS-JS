@@ -1,0 +1,80 @@
+/* ============================================
+   新規登録ページスタイル
+   ============================================ */
+
+.main-content {
+  min-height: 100vh;
+  padding: var(--spacing-lg);
+}
+
+/* ヘッダー */
+.register-header {
+  margin-bottom: var(--spacing-xl);
+}
+
+/* タイトルセクション */
+.title-section {
+  text-align: center;
+  margin-bottom: var(--spacing-xl);
+}
+
+.page-title {
+  font-size: var(--font-2xl);
+  font-weight: 700;
+  background: var(--gradient-gold);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: var(--spacing-sm);
+}
+
+.page-subtitle {
+  color: var(--white-70);
+  font-size: var(--font-sm);
+}
+
+/* 登録フォームラッパー */
+.register-form-wrapper {
+  background: var(--white-05);
+  border: 1px solid var(--gold-20);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-xl);
+}
+
+/* 入力ヒント */
+.input-hint {
+  font-size: var(--font-xs);
+  color: var(--white-50);
+  margin-top: var(--spacing-xs);
+}
+
+/* ログインリンク */
+.login-link {
+  text-align: center;
+  padding-top: var(--spacing-lg);
+  border-top: 1px solid var(--white-10);
+  margin-top: var(--spacing-lg);
+}
+
+.login-link p {
+  color: var(--white-60);
+  font-size: var(--font-sm);
+  margin-bottom: var(--spacing-sm);
+}
+
+.login-link a {
+  color: var(--color-gold);
+  font-weight: 600;
+  transition: color var(--transition-fast);
+}
+
+.login-link a:hover {
+  color: var(--color-dark-gold);
+}
+
+/* レスポンシブ */
+@media (min-width: 480px) {
+  .register-form-wrapper {
+    padding: var(--spacing-2xl);
+  }
+}
