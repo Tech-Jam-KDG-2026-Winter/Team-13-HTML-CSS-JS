@@ -480,19 +480,12 @@ async function loadChallenges() {
       }
     }
 
-    const activeChallenges = all.filter(c => c.status === 'active');
-
     renderPendingChallenges(all.filter(c => c.status === 'pending' && !c.isCreator));
-    renderActiveChallenges(activeChallenges);
+    renderActiveChallenges(all.filter(c => c.status === 'active'));
     renderCompletedChallenges(all.filter(c => c.status === 'completed'));
 
-    // アクティブチャレンジのスコア監視を開始
-    if (activeChallenges.length > 0) {
-      startScoreWatcher(activeChallenges, currentUser.uid);
-    }
-
     startCountdown();
-    for (const c of activeChallenges) {
+    for (const c of all.filter(c => c.status === 'active')) {
       await checkChallengeEnd(c);
     }
   } catch (error) {
