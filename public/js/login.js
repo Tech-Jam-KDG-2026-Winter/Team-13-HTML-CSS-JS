@@ -33,6 +33,32 @@ function setupFormListeners() {
   // 入力時にエラーメッセージをクリア
   emailInput.addEventListener('input', hideError);
   passwordInput.addEventListener('input', hideError);
+
+  // パスワード表示トグル
+  setupPasswordToggle();
+}
+
+function setupPasswordToggle() {
+  const toggleButtons = document.querySelectorAll('.password-toggle');
+  toggleButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const targetId = btn.dataset.target;
+      const input = document.getElementById(targetId);
+      if (!input) return;
+
+      const isPassword = input.type === 'password';
+      input.type = isPassword ? 'text' : 'password';
+
+      // アイコンを切り替え
+      const icon = btn.querySelector('svg');
+      if (icon) {
+        icon.outerHTML = isPassword
+          ? '<i data-lucide="eye-off"></i>'
+          : '<i data-lucide="eye"></i>';
+        lucide.createIcons();
+      }
+    });
+  });
 }
 
 // ============================================

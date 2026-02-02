@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>新規登録 - Fitness</title>
+  <title>新規登録 - FITNESS</title>
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,6 +12,7 @@
 
   <!-- CSS -->
   <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/login.css">
   <link rel="stylesheet" href="css/register.css">
 
   <!-- Firebase SDK -->
@@ -20,35 +21,74 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 </head>
 <body>
-  <div class="page-wrapper">
-    <main class="main-content">
-      <div class="container">
-        <!-- ヘッダー -->
-        <div class="register-header">
-          <a href="login.html" class="back-button">
-            <span>←</span>
-            <span>ログインに戻る</span>
-          </a>
+  <div class="auth-page">
+    <!-- 左側：ブランドエリア（デスクトップのみ） -->
+    <div class="auth-brand">
+      <div class="brand-content">
+        <div class="brand-logo">
+          <div class="brand-logo-icon">
+            <i data-lucide="dumbbell"></i>
+          </div>
+          <span class="brand-logo-text">FITNESS</span>
         </div>
 
-        <!-- タイトル -->
-        <div class="title-section">
-          <h1 class="page-title">アカウント作成</h1>
-          <p class="page-subtitle">新しい挑戦を始めよう</p>
+        <h1 class="brand-headline">
+          フィットネスの<br>
+          <span>旅を始めよう</span>
+        </h1>
+
+        <p class="brand-description">
+          多くのフィットネス仲間が待っています。目標を設定し、進捗を記録し、仲間と競い合おう。
+        </p>
+
+        <div class="brand-features">
+          <div class="brand-feature">
+            <i data-lucide="users"></i>
+            <span>フィットネス仲間とつながる</span>
+          </div>
+          <div class="brand-feature">
+            <i data-lucide="target"></i>
+            <span>目標を設定して達成する</span>
+          </div>
+          <div class="brand-feature">
+            <i data-lucide="medal"></i>
+            <span>報酬を獲得してランキングを上げる</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 右側：フォームエリア -->
+    <div class="auth-form-section">
+      <div class="auth-form-container">
+        <!-- モバイル用ロゴ -->
+        <div class="mobile-logo">
+          <div class="mobile-logo-icon">
+            <i data-lucide="dumbbell"></i>
+          </div>
+          <span class="mobile-logo-text">FITNESS</span>
         </div>
 
-        <!-- 登録フォーム -->
-        <div class="register-form-wrapper slide-up">
-          <form id="register-form" class="register-form">
-            <!-- エラーメッセージ -->
-            <div id="error-message" class="error-message"></div>
+        <!-- フォームヘッダー -->
+        <div class="auth-header">
+          <h2 class="auth-title">アカウント作成</h2>
+          <p class="auth-subtitle">今日から変わろう</p>
+        </div>
 
-            <!-- アイコン設定 -->
-            <div class="form-group avatar-upload-section">
-              <label class="form-label">プロフィールアイコン</label>
+        <!-- フォームカード -->
+        <div class="auth-card">
+          <!-- エラーメッセージ -->
+          <div id="error-message" class="auth-error">
+            <i data-lucide="alert-circle"></i>
+            <span></span>
+          </div>
+
+          <form id="register-form">
+            <!-- アバターアップロード -->
+            <div class="avatar-upload-section">
               <div class="avatar-upload-wrapper">
                 <div class="avatar-preview-container">
-                  <img id="avatar-preview" src="https://api.dicebear.com/7.x/adventurer/svg?seed=default" alt="アイコンプレビュー" class="avatar-preview">
+                  <img id="avatar-preview" src="" alt="アバター" class="avatar-preview">
                   <div class="avatar-upload-overlay" id="avatar-upload-trigger">
                     <i data-lucide="camera"></i>
                     <span>変更</span>
@@ -56,72 +96,89 @@
                 </div>
                 <input type="file" id="avatar-input" accept="image/*" hidden>
               </div>
-              <p class="input-hint">タップして画像を選択（任意）</p>
+              <p class="avatar-hint">タップして写真をアップロード（任意）</p>
             </div>
 
-            <div class="form-group">
-              <label for="username" class="form-label">ユーザーネーム</label>
-              <input
-                type="text"
-                id="username"
-                class="form-input"
-                placeholder="1〜20文字"
-                required
-                maxlength="20"
-                autocomplete="username"
-              >
-              <p class="input-hint">他のユーザーに表示される名前です</p>
+            <div class="auth-input-group">
+              <label for="username">ユーザーネーム</label>
+              <div class="auth-input-wrapper">
+                <i data-lucide="user"></i>
+                <input
+                  type="text"
+                  id="username"
+                  class="auth-input"
+                  placeholder="1〜20文字"
+                  required
+                  maxlength="20"
+                  autocomplete="username"
+                >
+              </div>
             </div>
 
-            <div class="form-group">
-              <label for="email" class="form-label">メールアドレス</label>
-              <input
-                type="email"
-                id="email"
-                class="form-input"
-                placeholder="example@email.com"
-                required
-                autocomplete="email"
-              >
+            <div class="auth-input-group">
+              <label for="email">メールアドレス</label>
+              <div class="auth-input-wrapper">
+                <i data-lucide="mail"></i>
+                <input
+                  type="email"
+                  id="email"
+                  class="auth-input"
+                  placeholder="example@email.com"
+                  required
+                  autocomplete="email"
+                >
+              </div>
             </div>
 
-            <div class="form-group">
-              <label for="password" class="form-label">パスワード</label>
-              <input
-                type="password"
-                id="password"
-                class="form-input"
-                placeholder="6文字以上"
-                required
-                minlength="6"
-                autocomplete="new-password"
-              >
+            <div class="auth-input-group">
+              <label for="password">パスワード</label>
+              <div class="auth-input-wrapper">
+                <i data-lucide="lock"></i>
+                <input
+                  type="password"
+                  id="password"
+                  class="auth-input has-toggle"
+                  placeholder="6文字以上"
+                  required
+                  minlength="6"
+                  autocomplete="new-password"
+                >
+                <button type="button" class="password-toggle" data-target="password">
+                  <i data-lucide="eye"></i>
+                </button>
+              </div>
             </div>
 
-            <div class="form-group">
-              <label for="password-confirm" class="form-label">パスワード（確認）</label>
-              <input
-                type="password"
-                id="password-confirm"
-                class="form-input"
-                placeholder="パスワードを再入力"
-                required
-                autocomplete="new-password"
-              >
+            <div class="auth-input-group">
+              <label for="password-confirm">パスワード（確認）</label>
+              <div class="auth-input-wrapper">
+                <i data-lucide="lock"></i>
+                <input
+                  type="password"
+                  id="password-confirm"
+                  class="auth-input has-toggle"
+                  placeholder="パスワードを再入力"
+                  required
+                  autocomplete="new-password"
+                >
+                <button type="button" class="password-toggle" data-target="password-confirm">
+                  <i data-lucide="eye"></i>
+                </button>
+              </div>
             </div>
 
-            <button type="submit" class="btn btn-primary btn-full">
-              アカウントを作成
+            <button type="submit" class="auth-submit-btn">
+              アカウント作成
             </button>
           </form>
+        </div>
 
-          <div class="login-link">
-            <p>既にアカウントをお持ちの方は</p>
-            <a href="login.html">ログインはこちら</a>
-          </div>
+        <!-- フッター -->
+        <div class="auth-footer">
+          <p>既にアカウントをお持ちの方は <a href="login.html">ログイン</a></p>
         </div>
       </div>
-    </main>
+    </div>
   </div>
 
   <!-- ローディング -->

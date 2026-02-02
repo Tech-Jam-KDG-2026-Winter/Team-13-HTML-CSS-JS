@@ -163,7 +163,13 @@ function toggleLoading(show) {
 function showError(message) {
   const errorElement = document.getElementById('error-message');
   if (errorElement) {
-    errorElement.textContent = message;
+    // 新しいHTML構造（spanがある場合）に対応
+    const spanElement = errorElement.querySelector('span');
+    if (spanElement) {
+      spanElement.textContent = message;
+    } else {
+      errorElement.textContent = message;
+    }
     errorElement.classList.add('active');
 
     // 5秒後に自動で非表示

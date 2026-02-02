@@ -363,6 +363,41 @@
   color: var(--color-gold);
 }
 
+/* チャレンジヘッダー（相手アイコン付き） */
+.active-challenge-card .challenge-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-md);
+}
+
+.challenge-opponent-info {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.challenge-opponent-info .challenge-vs-label {
+  font-size: var(--font-xs);
+  font-weight: 700;
+  color: var(--color-gold);
+  text-transform: uppercase;
+}
+
+.challenge-opponent-info .challenge-opponent-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid var(--color-gold);
+  object-fit: cover;
+}
+
+.challenge-opponent-info .challenge-opponent-name {
+  font-weight: 600;
+  color: var(--color-white);
+  font-size: var(--font-md);
+}
+
 /* VSグリッド（あなた vs 相手） */
 .home-vs-grid {
   display: flex;

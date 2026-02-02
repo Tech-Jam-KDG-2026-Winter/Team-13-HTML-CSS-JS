@@ -14,12 +14,21 @@ const avatarUploadTrigger = document.getElementById('avatar-upload-trigger');
 
 // アップロードされた画像URL
 let uploadedAvatarUrl = '';
+// ランダムなデフォルトアイコンURL
+let defaultAvatarUrl = '';
 
 // ============================================
 // 初期化処理
 // ============================================
 
 document.addEventListener('DOMContentLoaded', () => {
+  // ランダムなデフォルトアイコンを設定
+  if (avatarPreview) {
+    const randomSeed = Math.random().toString(36).substring(2, 10);
+    defaultAvatarUrl = `https://api.dicebear.com/7.x/adventurer/svg?seed=${randomSeed}`;
+    avatarPreview.src = defaultAvatarUrl;
+  }
+
   // ログイン済みの場合はホームへリダイレクト
   redirectIfLoggedIn(() => {
     console.log('新規登録ページ準備完了');
@@ -42,6 +51,9 @@ function setupFormListeners() {
   inputs.forEach((input) => {
     input.addEventListener('input', hideError);
   });
+
+  // パスワード表示トグル
+  setupPasswordToggle();
 
   // アイコンアップロード
   if (avatarUploadTrigger) {
@@ -130,7 +142,7 @@ async function handleRegister(e) {
       username: username,
       email: email,
       userID: userID,
-      iconURL: uploadedAvatarUrl || '',
+      iconURL: uploadedAvatarUrl || defaultAvatarUrl,
       totalScore: 0,
       friends: [],
       createdAt: firebase.firestore.FieldValue.serverTimestamp()
@@ -225,4 +237,31 @@ function handleRegisterError(error) {
   }
 
   showError(message);
+}
+
+// ============================================
+// パスワード表示トグル
+// ============================================
+
+function setupPasswordToggle() {
+  const toggleButtons = document.querySelectorAll('.password-toggle');
+  toggleButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const targetId = btn.dataset.target;
+      const input = document.getElementById(targetId);
+      if (!input) return;
+
+      const isPassword = input.type === 'password';
+      input.type = isPassword ? 'text' : 'password';
+
+      // アイコンを切り替え
+      const icon = btn.querySelector('svg');
+      if (icon) {
+        icon.outerHTML = isPassword
+          ? '<i data-lucide="eye-off"></i>'
+          : '<i data-lucide="eye"></i>';
+        lucide.createIcons();
+      }
+    });
+  });
 }

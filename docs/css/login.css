@@ -1,101 +1,500 @@
 /* ============================================
-   ログインページスタイル
+   ログインページスタイル - Modern International Design
    ============================================ */
 
-.main-content {
+/* ページ全体 */
+.auth-page {
+  min-height: 100vh;
+  display: flex;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 背景のアニメーショングラデーション */
+.auth-page::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background:
+    radial-gradient(circle at 20% 80%, rgba(212, 175, 55, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(212, 175, 55, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(255, 255, 255, 0.03) 0%, transparent 30%);
+  animation: bgMove 20s ease-in-out infinite;
+  z-index: 0;
+}
+
+@keyframes bgMove {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  25% { transform: translate(2%, 2%) rotate(1deg); }
+  50% { transform: translate(0, 4%) rotate(0deg); }
+  75% { transform: translate(-2%, 2%) rotate(-1deg); }
+}
+
+/* 左側：ブランドエリア */
+.auth-brand {
+  display: none;
+  flex: 1;
+  background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);
+  position: relative;
+  overflow: hidden;
+  padding: var(--spacing-2xl);
+}
+
+.auth-brand::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23d4af37' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  opacity: 0.5;
+}
+
+.brand-content {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.brand-logo {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-2xl);
+}
+
+.brand-logo-icon {
+  width: 60px;
+  height: 60px;
+  background: var(--gradient-gold);
+  border-radius: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
-  padding: var(--spacing-xl);
 }
 
-/* ログインヘッダー */
-.login-header {
+.brand-logo-icon i {
+  width: 32px;
+  height: 32px;
+  color: #000;
+}
+
+.brand-logo-text {
+  font-family: var(--font-family-en);
+  font-size: 2rem;
+  font-weight: 800;
+  background: var(--gradient-gold);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: 0.05em;
+}
+
+.brand-headline {
+  font-size: 3rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: var(--spacing-lg);
+  color: #fff;
+}
+
+.brand-headline span {
+  background: var(--gradient-gold);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.brand-description {
+  font-size: var(--font-lg);
+  color: var(--white-60);
+  line-height: 1.6;
+  max-width: 400px;
+}
+
+.brand-features {
+  margin-top: var(--spacing-2xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.brand-feature {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  color: var(--white-70);
+}
+
+.brand-feature i {
+  width: 24px;
+  height: 24px;
+  color: var(--color-gold);
+}
+
+/* 右側：フォームエリア */
+.auth-form-section {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-xl);
+  position: relative;
+  z-index: 1;
+}
+
+.auth-form-container {
+  width: 100%;
+  max-width: 420px;
+}
+
+/* モバイル用ロゴ */
+.mobile-logo {
   text-align: center;
   margin-bottom: var(--spacing-2xl);
 }
 
-.logo {
-  margin-bottom: var(--spacing-lg);
+.mobile-logo-icon {
+  width: 70px;
+  height: 70px;
+  background: var(--gradient-gold);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto var(--spacing-md);
+  box-shadow: 0 10px 40px rgba(212, 175, 55, 0.3);
 }
 
-.logo-icon {
-  font-size: 4rem;
-  display: block;
-  animation: pulse 2s infinite;
+.mobile-logo-icon i {
+  width: 36px;
+  height: 36px;
+  color: #000;
 }
 
-@keyframes pulse {
-  0%, 100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.1);
-  }
-}
-
-.app-title {
+.mobile-logo-text {
   font-family: var(--font-family-en);
-  font-size: var(--font-3xl);
+  font-size: 1.75rem;
   font-weight: 800;
   background: var(--gradient-gold);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   letter-spacing: 0.1em;
-  margin-bottom: var(--spacing-sm);
 }
 
-.app-subtitle {
-  color: var(--white-70);
-  font-size: var(--font-sm);
-  letter-spacing: 0.2em;
+/* フォームヘッダー */
+.auth-header {
+  margin-bottom: var(--spacing-xl);
 }
 
-/* ログインフォームラッパー */
-.login-form-wrapper {
-  background: var(--white-05);
-  border: 1px solid var(--gold-20);
-  border-radius: var(--border-radius-lg);
+.auth-title {
+  font-size: var(--font-2xl);
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: var(--spacing-xs);
+}
+
+.auth-subtitle {
+  color: var(--white-60);
+  font-size: var(--font-md);
+}
+
+/* フォームカード */
+.auth-card {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 24px;
   padding: var(--spacing-xl);
+  box-shadow:
+    0 4px 24px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
-/* ログインフォーム */
-.login-form {
+/* 入力フィールド */
+.auth-input-group {
   margin-bottom: var(--spacing-lg);
 }
 
-/* 登録リンク */
-.register-link {
-  text-align: center;
-  padding-top: var(--spacing-lg);
-  border-top: 1px solid var(--white-10);
-}
-
-.register-link p {
-  color: var(--white-60);
+.auth-input-group label {
+  display: block;
   font-size: var(--font-sm);
+  font-weight: 500;
+  color: var(--white-70);
   margin-bottom: var(--spacing-sm);
 }
 
-.register-link a {
+.auth-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.auth-input-wrapper > svg,
+.auth-input-wrapper > i {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  color: var(--white-40);
+  transition: color 0.3s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.auth-input {
+  width: 100%;
+  padding: 16px 16px 16px 52px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  color: #fff;
+  font-size: var(--font-md);
+  transition: all 0.3s ease;
+}
+
+.auth-input::placeholder {
+  color: var(--white-40);
+}
+
+.auth-input:focus {
+  outline: none;
+  border-color: var(--color-gold);
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.1);
+}
+
+.auth-input-wrapper:focus-within > svg,
+.auth-input-wrapper:focus-within > i {
+  color: var(--color-gold);
+}
+
+/* パスワード表示トグルボタン */
+.password-toggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  color: var(--white-40);
+  transition: color 0.3s ease;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.password-toggle:hover {
+  color: var(--white-70);
+}
+
+.password-toggle svg {
+  width: 20px;
+  height: 20px;
+  pointer-events: none;
+}
+
+.auth-input-wrapper:focus-within .password-toggle {
+  color: var(--white-60);
+}
+
+/* パスワード入力欄の右パディングを調整 */
+.auth-input.has-toggle {
+  padding-right: 48px;
+}
+
+/* ログインボタン */
+.auth-submit-btn {
+  width: 100%;
+  padding: 16px 24px;
+  background: var(--gradient-gold);
+  border: none;
+  border-radius: 12px;
+  color: #000;
+  font-size: var(--font-md);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.auth-submit-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s ease;
+}
+
+.auth-submit-btn:hover::before {
+  left: 100%;
+}
+
+.auth-submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(212, 175, 55, 0.4);
+}
+
+.auth-submit-btn:active {
+  transform: translateY(0);
+}
+
+/* 区切り線 */
+.auth-divider {
+  display: flex;
+  align-items: center;
+  margin: var(--spacing-xl) 0;
+  gap: var(--spacing-md);
+}
+
+.auth-divider::before,
+.auth-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.auth-divider span {
+  color: var(--white-40);
+  font-size: var(--font-sm);
+}
+
+/* ソーシャルログイン */
+.social-login {
+  display: flex;
+  gap: var(--spacing-md);
+}
+
+.social-btn {
+  flex: 1;
+  padding: 14px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  color: #fff;
+  font-size: var(--font-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+}
+
+.social-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.social-btn i {
+  width: 20px;
+  height: 20px;
+}
+
+/* フッターリンク */
+.auth-footer {
+  margin-top: var(--spacing-xl);
+  text-align: center;
+}
+
+.auth-footer p {
+  color: var(--white-50);
+  font-size: var(--font-sm);
+}
+
+.auth-footer a {
   color: var(--color-gold);
   font-weight: 600;
-  transition: color var(--transition-fast);
+  text-decoration: none;
+  transition: color 0.3s ease;
 }
 
-.register-link a:hover {
+.auth-footer a:hover {
   color: var(--color-dark-gold);
+  text-decoration: underline;
 }
 
-/* レスポンシブ */
-@media (min-width: 480px) {
-  .login-form-wrapper {
-    padding: var(--spacing-2xl);
+/* エラーメッセージ */
+.auth-error {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 12px;
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+  color: #f87171;
+  font-size: var(--font-sm);
+  display: none;
+}
+
+.auth-error.active {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.auth-error i {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+/* アニメーション */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.auth-form-container {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+/* デスクトップ */
+@media (min-width: 1024px) {
+  .auth-brand {
+    display: flex;
   }
 
-  .app-title {
-    font-size: 2.5rem;
+  .mobile-logo {
+    display: none;
+  }
+
+  .auth-form-section {
+    flex: 0 0 50%;
+    max-width: 50%;
+  }
+
+  .auth-card {
+    padding: var(--spacing-2xl);
+  }
+}
+
+@media (min-width: 768px) {
+  .auth-card {
+    padding: var(--spacing-xl) var(--spacing-2xl);
   }
 }

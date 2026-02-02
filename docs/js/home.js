@@ -63,6 +63,19 @@ async function loadHomeChallenges() {
     q1.forEach(doc => challenges.push({ id: doc.id, ...doc.data(), isCreator: true }));
     q2.forEach(doc => challenges.push({ id: doc.id, ...doc.data(), isCreator: false }));
 
+    // 相手のアイコンを取得
+    for (let c of challenges) {
+      const oppId = c.isCreator ? c.opponentId : c.creatorId;
+      try {
+        const oppDoc = await db.collection('users').doc(oppId).get();
+        if (oppDoc.exists) {
+          c.opponentAvatar = oppDoc.data().iconURL || '';
+        }
+      } catch (e) {
+        c.opponentAvatar = '';
+      }
+    }
+
     const pending = challenges.filter(c => c.status === 'pending' && !c.isCreator);
     const active = challenges.filter(c => c.status === 'active');
 
@@ -119,8 +132,9 @@ async function loadHomeChallenges() {
         card.style.display = 'block'; // 表示状態にする
 
         // データを流し込む (クラス名で指定)
-        card.querySelector('.js-opp-name-label').innerHTML = `<i data-lucide="swords"></i> vs ${oppName}`;
+        card.querySelector('.js-opp-avatar').src = getIconUrl(a.opponentAvatar, oppName);
         card.querySelector('.js-opp-name').textContent = oppName;
+        card.querySelector('.js-opp-name-2').textContent = oppName;
         card.querySelector('.js-my-score').textContent = myScore.toLocaleString();
         card.querySelector('.js-opp-score').textContent = oppScore.toLocaleString();
         
