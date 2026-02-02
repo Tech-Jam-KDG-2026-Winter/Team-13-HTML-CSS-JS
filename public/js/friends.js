@@ -59,6 +59,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     try {
       currentUserData = await getUserData(user.uid);
+
+      // リアルタイムリスナーを開始
+      startRealtimeListeners(user.uid);
+
       displayMyUserId();
       await loadFriendsList();
       await loadChallenges();
@@ -476,12 +480,19 @@ async function loadChallenges() {
       }
     }
 
+    const activeChallenges = all.filter(c => c.status === 'active');
+
     renderPendingChallenges(all.filter(c => c.status === 'pending' && !c.isCreator));
-    renderActiveChallenges(all.filter(c => c.status === 'active'));
+    renderActiveChallenges(activeChallenges);
     renderCompletedChallenges(all.filter(c => c.status === 'completed'));
 
+    // アクティブチャレンジのスコア監視を開始
+    if (activeChallenges.length > 0) {
+      startScoreWatcher(activeChallenges, currentUser.uid);
+    }
+
     startCountdown();
-    for (const c of all.filter(c => c.status === 'active')) {
+    for (const c of activeChallenges) {
       await checkChallengeEnd(c);
     }
   } catch (error) {

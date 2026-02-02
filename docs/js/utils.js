@@ -492,4 +492,280 @@ document.addEventListener('DOMContentLoaded', () => {
   if (navLogoutBtn) {
     navLogoutBtn.addEventListener('click', logout);
   }
+
+  // トースト通知コンテナを作成
+  if (!document.querySelector('.toast-container')) {
+    const container = document.createElement('div');
+    container.className = 'toast-container';
+    document.body.appendChild(container);
+  }
 });
+
+// ============================================
+// トースト通知システム
+// ============================================
+
+/**
+ * トースト通知を表示
+ * @param {Object} options - 通知オプション
+ * @param {string} options.title - タイトル
+ * @param {string} options.message - メッセージ
+ * @param {string} options.type - タイプ (challenge, friend, milestone, score)
+ * @param {number} options.duration - 表示時間（ミリ秒）デフォルト5000
+ */
+function showToast({ title, message, type = 'challenge', duration = 5000 }) {
+  const container = document.querySelector('.toast-container');
+  if (!container) return;
+
+  const toast = document.createElement('div');
+  toast.className = 'toast';
+
+  const iconMap = {
+    challenge: 'swords',
+    friend: 'user-plus',
+    milestone: 'trophy',
+    score: 'flame'
+  };
+
+  toast.innerHTML = `
+    <div class="toast-icon toast-icon-${type}">
+      <i data-lucide="${iconMap[type] || 'bell'}"></i>
+    </div>
+    <div class="toast-content">
+      <div class="toast-title">${title}</div>
+      <div class="toast-message">${message}</div>
+    </div>
+    <button class="toast-close">
+      <i data-lucide="x"></i>
+    </button>
+  `;
+
+  container.appendChild(toast);
+
+  // Lucideアイコンを初期化
+  if (typeof lucide !== 'undefined') {
+    lucide.createIcons();
+  }
+
+  // 閉じるボタン
+  const closeBtn = toast.querySelector('.toast-close');
+  closeBtn.addEventListener('click', () => closeToast(toast));
+
+  // 自動で閉じる
+  setTimeout(() => closeToast(toast), duration);
+}
+
+/**
+ * トーストを閉じる
+ */
+function closeToast(toast) {
+  if (!toast || toast.classList.contains('toast-hide')) return;
+  toast.classList.add('toast-hide');
+  setTimeout(() => toast.remove(), 300);
+}
+
+// ============================================
+// リアルタイムリスナー
+// ============================================
+
+// 現在のリスナー解除関数を保持
+let unsubscribeChallenges = null;
+let unsubscribeFriends = null;
+let previousChallenges = null;
+let previousFriends = null;
+let previousScores = {};
+
+/**
+ * リアルタイムリスナーを開始
+ * @param {string} userId - 現在のユーザーID
+ */
+function startRealtimeListeners(userId) {
+  if (!userId) return;
+
+  // チャレンジのリアルタイムリスナー
+  startChallengeListener(userId);
+
+  // フレンドのリアルタイムリスナー
+  startFriendListener(userId);
+}
+
+/**
+ * チャレンジのリアルタイムリスナー
+ */
+function startChallengeListener(userId) {
+  // 自分が関わるチャレンジを監視
+  const q1 = db.collection('challenges').where('opponentId', '==', userId);
+
+  unsubscribeChallenges = q1.onSnapshot(snapshot => {
+    if (previousChallenges === null) {
+      // 初回読み込み時は通知しない
+      previousChallenges = snapshot.docs.map(doc => doc.id);
+      return;
+    }
+
+    snapshot.docChanges().forEach(change => {
+      if (change.type === 'added') {
+        const data = change.doc.data();
+        if (data.status === 'pending') {
+          showToast({
+            title: '対戦申請が届きました！',
+            message: `${data.creatorName}さんから${data.duration}日間の対戦申請`,
+            type: 'challenge'
+          });
+        }
+      }
+    });
+
+    previousChallenges = snapshot.docs.map(doc => doc.id);
+  });
+}
+
+/**
+ * フレンドのリアルタイムリスナー
+ */
+function startFriendListener(userId) {
+  const userRef = db.collection('users').doc(userId);
+
+  unsubscribeFriends = userRef.onSnapshot(async snapshot => {
+    if (!snapshot.exists) return;
+
+    const data = snapshot.data();
+    const currentFriends = data.friends || [];
+
+    if (previousFriends === null) {
+      // 初回読み込み時は通知しない
+      previousFriends = [...currentFriends];
+      return;
+    }
+
+    // 新しく追加されたフレンドを検出
+    const newFriends = currentFriends.filter(f => !previousFriends.includes(f));
+
+    for (const friendId of newFriends) {
+      try {
+        const friendDoc = await db.collection('users').doc(friendId).get();
+        if (friendDoc.exists) {
+          const friendData = friendDoc.data();
+          showToast({
+            title: 'フレンド追加！',
+            message: `${friendData.username}さんとフレンドになりました`,
+            type: 'friend'
+          });
+        }
+      } catch (e) {
+        console.error('フレンド情報取得エラー:', e);
+      }
+    }
+
+    previousFriends = [...currentFriends];
+  });
+}
+
+/**
+ * 通知済みマイルストーンをlocalStorageから取得
+ */
+function getNotifiedMilestones(challengeId) {
+  try {
+    const stored = localStorage.getItem(`milestones_${challengeId}`);
+    return stored ? JSON.parse(stored) : { my: [], opp: [] };
+  } catch (e) {
+    return { my: [], opp: [] };
+  }
+}
+
+/**
+ * 通知済みマイルストーンをlocalStorageに保存
+ */
+function saveNotifiedMilestone(challengeId, type, milestone) {
+  try {
+    const notified = getNotifiedMilestones(challengeId);
+    if (!notified[type].includes(milestone)) {
+      notified[type].push(milestone);
+      localStorage.setItem(`milestones_${challengeId}`, JSON.stringify(notified));
+    }
+  } catch (e) {
+    console.error('マイルストーン保存エラー:', e);
+  }
+}
+
+/**
+ * アクティブチャレンジのスコア監視を開始
+ */
+function startScoreWatcher(challenges, currentUserId) {
+  challenges.forEach(challenge => {
+    const docRef = db.collection('challenges').doc(challenge.id);
+    let isFirstSnapshot = true;
+
+    docRef.onSnapshot(snapshot => {
+      if (!snapshot.exists) return;
+      const data = snapshot.data();
+
+      const isCreator = data.creatorId === currentUserId;
+      const myScore = isCreator ? data.creatorScore : data.opponentScore;
+      const oppScore = isCreator ? data.opponentScore : data.creatorScore;
+      const oppName = isCreator ? data.opponentName : data.creatorName;
+      const myName = isCreator ? data.creatorName : data.opponentName;
+
+      const key = challenge.id;
+
+      // 初回スナップショットはスコアを記録するだけ（通知しない）
+      if (isFirstSnapshot) {
+        previousScores[key] = { myScore, oppScore };
+        isFirstSnapshot = false;
+        return;
+      }
+
+      const prevMyScore = previousScores[key]?.myScore || 0;
+      const prevOppScore = previousScores[key]?.oppScore || 0;
+      const notified = getNotifiedMilestones(key);
+
+      // マイルストーンをチェック
+      const milestones = [1000, 2000, 3000, 5000, 10000];
+
+      milestones.forEach(milestone => {
+        // 相手がマイルストーン到達（未通知の場合のみ）
+        if (oppScore >= milestone && !notified.opp.includes(milestone)) {
+          if (prevOppScore < milestone) {
+            showToast({
+              title: 'マイルストーン達成！',
+              message: `${oppName}さんが${milestone.toLocaleString()}ポイントに到達！`,
+              type: 'milestone'
+            });
+          }
+          saveNotifiedMilestone(key, 'opp', milestone);
+        }
+
+        // 自分がマイルストーン到達（未通知の場合のみ）
+        if (myScore >= milestone && !notified.my.includes(milestone)) {
+          if (prevMyScore < milestone) {
+            showToast({
+              title: 'マイルストーン達成！',
+              message: `あなたが${milestone.toLocaleString()}ポイントに到達！`,
+              type: 'milestone'
+            });
+          }
+          saveNotifiedMilestone(key, 'my', milestone);
+        }
+      });
+
+      previousScores[key] = { myScore, oppScore };
+    });
+  });
+}
+
+/**
+ * リアルタイムリスナーを停止
+ */
+function stopRealtimeListeners() {
+  if (unsubscribeChallenges) {
+    unsubscribeChallenges();
+    unsubscribeChallenges = null;
+  }
+  if (unsubscribeFriends) {
+    unsubscribeFriends();
+    unsubscribeFriends = null;
+  }
+  previousChallenges = null;
+  previousFriends = null;
+  previousScores = {};
+}

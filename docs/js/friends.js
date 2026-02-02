@@ -59,6 +59,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     try {
       currentUserData = await getUserData(user.uid);
+
+      // リアルタイムリスナーを開始
+      startRealtimeListeners(user.uid);
+
       displayMyUserId();
       await loadFriendsList();
       await loadChallenges();

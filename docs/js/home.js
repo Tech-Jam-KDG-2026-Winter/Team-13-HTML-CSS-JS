@@ -31,6 +31,9 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       currentUserData = await getUserData(user.uid);
 
+      // リアルタイムリスナーを開始
+      startRealtimeListeners(user.uid);
+
       // チャレンジデータを含むすべてのデータを読み込み
       await Promise.all([
         loadTodayScore(),
@@ -145,6 +148,9 @@ async function loadHomeChallenges() {
       });
       startHomeCountdown();
       if (typeof lucide !== 'undefined') lucide.createIcons();
+
+      // アクティブチャレンジのスコア監視を開始
+      startScoreWatcher(active, currentUser.uid);
     }
   } catch (error) {
     console.error("Home Challenge Error:", error);
