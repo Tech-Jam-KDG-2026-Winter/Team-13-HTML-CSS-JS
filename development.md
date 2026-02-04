@@ -485,9 +485,5 @@ console.log(localStorage.getItem('milestones_CHALLENGE_ID'));
 ---
 
 ## 今後の改善点
-
-- [ ] PWA対応（オフライン機能）
-- [ ] プッシュ通知（Service Worker）
-- [ ] トレーニングリマインダー
-- [ ] ソーシャルシェア機能
-- [ ] 詳細な統計分析
+言語変更
+楽しさの追求
