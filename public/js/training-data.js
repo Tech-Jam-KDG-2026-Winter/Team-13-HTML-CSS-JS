@@ -72,6 +72,13 @@ const TRAINING_TYPES = [
   { id: 'crunch', name: 'クランチ', category: 'abs', caloriesPerMinute: 5 },
   { id: 'leg_raise', name: 'レッグレイズ', category: 'abs', caloriesPerMinute: 5 },
   { id: 'russian_twist', name: 'ロシアンツイスト', category: 'abs', caloriesPerMinute: 6 },
+  { id: 'sit_up', name: 'シットアップ', category: 'abs', caloriesPerMinute: 5 },
+  { id: 'bicycle_crunch', name: 'バイシクルクランチ', category: 'abs', caloriesPerMinute: 6 },
+  { id: 'mountain_climber', name: 'マウンテンクライマー', category: 'abs', caloriesPerMinute: 8 },
+  { id: 'v_up', name: 'Vシットアップ', category: 'abs', caloriesPerMinute: 6 },
+  { id: 'heel_touch', name: 'ヒールタッチ', category: 'abs', caloriesPerMinute: 4 },
+  { id: 'dead_bug', name: 'デッドバグ', category: 'abs', caloriesPerMinute: 4 },
+  { id: 'reverse_crunch', name: 'リバースクランチ', category: 'abs', caloriesPerMinute: 5 },
 
   // 背中
   { id: 'Deadlift (High Intensity)', name: 'デッドリフト(高強度)', category: 'back', caloriesPerMinute: 6 },
@@ -96,11 +103,23 @@ const TRAINING_TYPES = [
   { id: 'bench_press', name: 'ベンチプレス', category: 'chest', caloriesPerMinute: 6 },
   { id: 'chest_fly', name: 'チェストフライ', category: 'chest', caloriesPerMinute: 5 },
   { id: 'incline_press', name: 'インクラインプレス', category: 'chest', caloriesPerMinute: 6 },
+  { id: 'push_up', name: 'プッシュアップ(腕立て伏せ)', category: 'chest', caloriesPerMinute: 7 },
+  { id: 'decline_press', name: 'デクラインプレス', category: 'chest', caloriesPerMinute: 6 },
+  { id: 'cable_crossover', name: 'ケーブルクロスオーバー', category: 'chest', caloriesPerMinute: 5 },
+  { id: 'dumbbell_press', name: 'ダンベルプレス', category: 'chest', caloriesPerMinute: 6 },
+  { id: 'incline_push_up', name: 'インクラインプッシュアップ', category: 'chest', caloriesPerMinute: 5 },
+  { id: 'decline_push_up', name: 'デクラインプッシュアップ', category: 'chest', caloriesPerMinute: 7 },
 
   // 全身
   { id: 'burpee', name: 'バーピー', category: 'fullbody', caloriesPerMinute: 10 },
   { id: 'deadlift', name: 'デッドリフト', category: 'fullbody', caloriesPerMinute: 8 },
   { id: 'kettlebell', name: 'ケトルベル', category: 'fullbody', caloriesPerMinute: 9 },
+  { id: 'clean_and_jerk', name: 'クリーン&ジャーク', category: 'fullbody', caloriesPerMinute: 10 },
+  { id: 'snatch', name: 'スナッチ', category: 'fullbody', caloriesPerMinute: 10 },
+  { id: 'turkish_getup', name: 'ターキッシュゲットアップ', category: 'fullbody', caloriesPerMinute: 7 },
+  { id: 'battle_rope', name: 'バトルロープ', category: 'fullbody', caloriesPerMinute: 11 },
+  { id: 'medicine_ball_slam', name: 'メディシンボールスラム', category: 'fullbody', caloriesPerMinute: 9 },
+  { id: 'thruster', name: 'スラスター', category: 'fullbody', caloriesPerMinute: 10 },
 
   // 有酸素・HIIT
   { id: 'running', name: 'ランニング', category: 'cardio', caloriesPerMinute: 10 },
