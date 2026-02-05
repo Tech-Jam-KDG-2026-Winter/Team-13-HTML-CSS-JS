@@ -419,7 +419,8 @@ async function handleAcceptChallenge() {
     const data = doc.data();
     const now = new Date();
     const endDate = new Date(now);
-    endDate.setDate(endDate.getDate() + data.duration);
+    // endDate.setDate(endDate.getDate() + data.duration); // 本番用
+    endDate.setSeconds(endDate.getSeconds() + 10); // テスト用: 10秒
 
     await db.collection('challenges').doc(pendingChallengeId).update({
       status: 'active',

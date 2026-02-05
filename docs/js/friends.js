@@ -419,7 +419,8 @@ async function handleAcceptChallenge() {
     const data = doc.data();
     const now = new Date();
     const endDate = new Date(now);
-    endDate.setDate(endDate.getDate() + data.duration);
+    // endDate.setDate(endDate.getDate() + data.duration); // 本番用
+    endDate.setSeconds(endDate.getSeconds() + 10); // テスト用: 10秒
 
     await db.collection('challenges').doc(pendingChallengeId).update({
       status: 'active',
@@ -480,12 +481,19 @@ async function loadChallenges() {
       }
     }
 
+    const activeChallenges = all.filter(c => c.status === 'active');
+
     renderPendingChallenges(all.filter(c => c.status === 'pending' && !c.isCreator));
-    renderActiveChallenges(all.filter(c => c.status === 'active'));
+    renderActiveChallenges(activeChallenges);
     renderCompletedChallenges(all.filter(c => c.status === 'completed'));
 
+    // アクティブチャレンジのスコア監視を開始
+    if (activeChallenges.length > 0) {
+      startScoreWatcher(activeChallenges, currentUser.uid);
+    }
+
     startCountdown();
-    for (const c of all.filter(c => c.status === 'active')) {
+    for (const c of activeChallenges) {
       await checkChallengeEnd(c);
     }
   } catch (error) {

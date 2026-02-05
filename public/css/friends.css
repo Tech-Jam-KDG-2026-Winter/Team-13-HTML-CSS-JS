@@ -131,13 +131,15 @@
 }
 
 .friend-item {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-md);
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  grid-template-rows: auto auto;
+  gap: var(--spacing-xs) var(--spacing-sm);
   padding: var(--spacing-md);
   background: var(--white-05);
   border-radius: var(--border-radius-md);
   transition: background var(--transition-fast);
+  align-items: center;
 }
 
 .friend-item:hover {
@@ -145,47 +147,117 @@
 }
 
 .friend-avatar {
-  width: 48px;
-  height: 48px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   border: 2px solid var(--color-gold);
   object-fit: cover;
   flex-shrink: 0;
+  grid-row: span 2;
 }
 
 .friend-info {
-  flex: 1;
   min-width: 0;
+  grid-column: 2;
+  grid-row: 1;
 }
 
 .friend-name {
   font-weight: 500;
+  font-size: var(--font-sm);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  display: block;
 }
 
 .friend-id {
-  font-size: var(--font-xs);
+  font-size: 10px;
   color: var(--white-50);
   font-family: monospace;
+  display: block;
 }
 
 .friend-score {
-  text-align: right;
-  flex-shrink: 0;
+  grid-column: 2;
+  grid-row: 2;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
 }
 
 .friend-score-value {
-  display: block;
   font-family: var(--font-family-en);
   font-weight: 700;
+  font-size: var(--font-sm);
   color: var(--color-gold);
 }
 
 .friend-score-label {
-  font-size: var(--font-xs);
+  font-size: 10px;
   color: var(--white-50);
+}
+
+/* フレンドアクションボタン - 小さい画面 */
+.friend-actions {
+  grid-column: 3;
+  grid-row: span 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+/* 中サイズ以上の画面ではより広いレイアウト */
+@media (min-width: 400px) {
+  .friend-item {
+    grid-template-columns: auto 1fr auto auto;
+    grid-template-rows: auto;
+    gap: var(--spacing-md);
+  }
+
+  .friend-avatar {
+    width: 48px;
+    height: 48px;
+    grid-row: 1;
+  }
+
+  .friend-info {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .friend-name {
+    font-size: var(--font-base);
+  }
+
+  .friend-id {
+    font-size: var(--font-xs);
+  }
+
+  .friend-score {
+    grid-column: 3;
+    grid-row: 1;
+    flex-direction: column;
+    align-items: flex-end;
+    text-align: right;
+  }
+
+  .friend-score-value {
+    font-size: var(--font-base);
+  }
+
+  .friend-score-label {
+    font-size: var(--font-xs);
+  }
+
+  .friend-actions {
+    grid-column: 4;
+    grid-row: 1;
+    flex-direction: row;
+    gap: var(--spacing-xs);
+  }
 }
 
 
@@ -384,12 +456,15 @@
   display: flex;
   align-items: center;
   gap: var(--spacing-sm);
+  min-width: 0;
+  flex: 1;
 }
 
 .challenge-vs-label {
   font-weight: 600;
   color: var(--white-60);
   font-size: var(--font-sm);
+  flex-shrink: 0;
 }
 
 .challenge-opponent-avatar {
@@ -398,10 +473,21 @@
   border-radius: 50%;
   object-fit: cover;
   border: 2px solid var(--color-gold);
+  flex-shrink: 0;
 }
 
 .challenge-opponent-name {
   font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100px;
+}
+
+@media (min-width: 400px) {
+  .challenge-opponent-name {
+    max-width: 150px;
+  }
 }
 
 .challenge-status {
@@ -444,6 +530,7 @@
   background: var(--white-05);
   padding: var(--spacing-md);
   border-radius: var(--border-radius-md);
+  overflow: hidden;
 }
 
 .challenge-player {
@@ -453,6 +540,18 @@
   flex-direction: column;
   align-items: center;
   gap: var(--spacing-xs);
+  min-width: 0;
+  overflow: hidden;
+}
+
+.challenge-player > span:first-child {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  display: block;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .challenge-player-label {
@@ -460,11 +559,23 @@
   color: var(--text-secondary);
   display: block;
   margin-bottom: 0.25rem;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .challenge-player-score {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: 700;
+}
+
+.challenge-vs {
+  font-size: var(--font-base);
+  font-weight: 800;
+  color: var(--gold-40);
+  padding: 0 var(--spacing-sm);
+  flex-shrink: 0;
 }
 
 .challenge-player-score.winning {
@@ -473,13 +584,6 @@
 
 .challenge-player-score.losing {
   color: var(--text-secondary);
-}
-
-.challenge-vs {
-  font-size: var(--font-lg);
-  font-weight: 800;
-  color: var(--gold-40);
-  padding: 0 var(--spacing-md);
 }
 
 /* 残り時間 */
@@ -507,14 +611,7 @@
   font-size: 0.85rem;
 }
 
-/* フレンドアクションボタン */
-.friend-actions {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-xs);
-  flex-shrink: 0;
-}
-
+/* チャレンジ・削除ボタン */
 .challenge-btn,
 .delete-friend-btn {
   background: transparent;
@@ -955,6 +1052,10 @@
   font-size: var(--font-xl);
   font-weight: 700;
   color: var(--color-white);
+  max-width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .challenge-accept-info {
