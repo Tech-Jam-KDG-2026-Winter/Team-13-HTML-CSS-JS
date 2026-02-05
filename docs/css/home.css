@@ -96,26 +96,48 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: var(--spacing-md);
+  gap: var(--spacing-sm);
 }
 
 .section-header .card-title {
   margin-bottom: 0;
   display: flex;
   align-items: center;
-  gap: var(--spacing-sm);
+  gap: var(--spacing-xs);
+  font-size: var(--font-sm);
+  min-width: 0;
+  flex-shrink: 1;
+}
+
+.section-header .card-title span {
+  flex-shrink: 0;
 }
 
 .add-friend-link {
-  font-size: var(--font-sm);
+  font-size: var(--font-xs);
   color: var(--color-gold);
   display: flex;
   align-items: center;
-  gap: var(--spacing-xs);
+  gap: 2px;
   transition: opacity var(--transition-fast);
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .add-friend-link:hover {
   opacity: 0.8;
+}
+
+@media (min-width: 360px) {
+  .section-header .card-title {
+    font-size: var(--font-base);
+    gap: var(--spacing-sm);
+  }
+
+  .add-friend-link {
+    font-size: var(--font-sm);
+    gap: var(--spacing-xs);
+  }
 }
 
 /* ランキングリスト */
