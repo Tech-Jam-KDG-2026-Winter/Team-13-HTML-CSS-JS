@@ -41,6 +41,9 @@
 
         <!-- カテゴリタブ -->
         <section class="category-section slide-up">
+          <div class="category-tabs" id="style-tabs">
+            <!-- スタイルタブはJSで動的に生成 -->
+          </div>
           <div class="category-tabs" id="category-tabs">
             <!-- カテゴリタブはJSで動的に生成 -->
           </div>
@@ -68,7 +71,9 @@
             <!-- 時間入力 -->
             <section class="duration-section card slide-up">
               <h2 class="card-title">トレーニング時間</h2>
-
+              <div id="training-input-area">
+                
+              </div>
               <div class="duration-input-wrapper">
                 <input type="number" id="duration-input" class="duration-input" value="30" min="1" max="120">
                 <span class="duration-unit">分</span>

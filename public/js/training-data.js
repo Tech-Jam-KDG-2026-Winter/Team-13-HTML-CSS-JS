@@ -4,6 +4,13 @@
  */
 
 // カテゴリ定義
+const TRAINING_STYLES = [
+  { id: 'all', name: 'すべて' },
+  { id: 'aerobic', name: '有酸素・スポーツ' },
+  { id: 'bodyweight', name: '自重トレ' },
+  { id: 'gym', name: 'ジム（ウェイト）' }
+];
+
 const TRAINING_CATEGORIES = [
   { id: 'all', name: 'すべて' },
   { id: 'arms', name: '腕' },
@@ -19,10 +26,170 @@ const TRAINING_CATEGORIES = [
   { id: 'sports', name: 'スポーツ' }
 ];
 
+const TRAINING = {
+  TIME: 'time',
+  COUNT: 'count',
+  WEIGHT: 'weight'
+};
+
 // トレーニング種目定義
-// { id: '英語名', name: '種目名', category: 'arms' caloriesPerMinute:カロリー },
+// { id: '英語名', name: '種目名', category: 'arms' caloriesPerMinute:カロリー, trainingStyle: '', format:''},
 // ※メンバーからのデータが入ったらcaloriesPerMinuteを更新
+// trainingstyleを有酸素かスポーツの時はaerobic、ジムで行える種目の場合はgym、自重で行える種目の場合はbodyweightの3つに分類
+// formatで時間入力なのか、回数入力なのか、重量+回数入力なのかを分岐させる。
+
 const TRAINING_TYPES = [
+  
+  // 腕
+  { id: 'Arm curl', name: 'アームカール', category: 'arms', caloriesPerMinute: 5, trainingStyle: 'gym', format: 'weight' },
+  { id: 'Barbell curl', name: 'バーベルカール', category: 'arms', caloriesPerMinute: 6, trainingStyle: 'gym', format: 'weight' },
+  { id: 'Dips', name: 'ディップス', category: 'arms', caloriesPerMinute: 9, trainingStyle: 'bodyweight', format: 'count' },
+  { id: 'Hammer curl', name: 'ハンマーカール', category: 'arms', caloriesPerMinute: 6, trainingStyle: 'gym', format: 'weight' },
+  { id: 'Concentration curl', name: 'コンセントレーションカール', category: 'arms', caloriesPerMinute: 5, trainingStyle: 'gym', format: 'weight' },
+  { id: 'Triceps extension', name: 'トライセプスエクステンション', category: 'arms', caloriesPerMinute: 7, trainingStyle: 'gym', format: 'weight' },
+  { id: 'Cable curl', name: 'ケーブルカール', category: 'arms', caloriesPerMinute: 6, trainingStyle: 'gym', format: 'weight' },
+  { id: 'Preacher curl', name: 'プリーチャーカール', category: 'arms', caloriesPerMinute: 5, trainingStyle: 'gym', format: 'weight' },
+  { id: 'Triceps kickback', name: 'トライセプスキックバック', category: 'arms', caloriesPerMinute: 5, trainingStyle: 'gym', format: 'weight' },
+  { id: 'Overhead triceps extension', name: 'オーバーヘッドトライセプスエクステンション', category: 'arms', caloriesPerMinute: 6, trainingStyle: 'gym', format: 'weight' },
+  { id: 'Diamond push-up', name: 'ダイヤモンドプッシュアップ', category: 'arms', caloriesPerMinute: 6, trainingStyle: 'bodyweight', format: 'count' },
+  { id: 'Bench dips', name: 'ベンチディップス', category: 'arms', caloriesPerMinute: 8, trainingStyle: 'bodyweight', format: 'count' },
+  { id: 'Cable pushdown', name: 'ケーブルプッシュダウン', category: 'arms', caloriesPerMinute: 6, trainingStyle: 'gym', format: 'weight' },
+  { id: 'Close-grip bench press', name: 'クローズグリップ・ベンチプレス', category: 'arms', caloriesPerMinute: 8, trainingStyle: 'gym', format: 'weight' },
+  { id: 'Incline dumbbell curl', name: 'インクラインダンベルカール', category: 'arms', caloriesPerMinute: 6, trainingStyle: 'gym', format: 'count' },
+  { id: 'Reverse curl', name: 'リバースカール', category: 'arms', caloriesPerMinute: 6, trainingStyle: 'gym', format: 'weight' },
+  { id: 'Skull crusher', name: 'スカルクラッシャー', category: 'arms', caloriesPerMinute: 7, trainingStyle: 'gym', format: 'weight' },
+  { id: 'Chin-up (narrow)', name: 'チンニング（ナロー）', category: 'arms', caloriesPerMinute: 9, trainingStyle: 'bodyweight', format: 'count' },
+  
+  // 足
+  { id: 'Barbell Squat', name: 'バーベルスクワット', category: 'legs', caloriesPerMinute: 6, trainingStyle: 'gym', format: 'weight' },
+  { id: 'Squat', name: 'スクワット', category: 'legs', caloriesPerMinute: 5, trainingStyle: 'bodyweight', format: 'count' },
+  { id: 'Jump Squat', name: 'ジャンプスクワット', category: 'legs', caloriesPerMinute: 8, trainingStyle: 'bodyweight', format: 'count' },
+  { id: 'Wide Squat', name: 'ワイドスクワット', category: 'legs', caloriesPerMinute: 6, trainingStyle: 'bodyweight', format: 'count' },
+  { id: 'Bulgarian Split Squat', name: 'ブルガリアンスクワット', category: 'legs', caloriesPerMinute: 8, trainingStyle: 'bodyweight', format: 'count' },
+  { id: 'Lunge', name: 'ランジ', category: 'legs', caloriesPerMinute: 5, trainingStyle: 'bodyweight', format: 'count' },
+  { id: 'Walking lunge', name: 'ウォーキングランジ', category: 'legs', caloriesPerMinute: 7, trainingStyle: 'bodyweight', format: 'count' },
+  { id: 'Leg press', name: 'レッグプレス', category: 'legs', caloriesPerMinute: 7, trainingStyle: 'gym', format: 'weight' },
+  { id: 'Leg extension', name: 'レッグエクステンション', category: 'legs', caloriesPerMinute: 8, trainingStyle: 'gym', format: 'weight' },
+  { id: 'Leg curl', name: 'レッグカール', category: 'legs', caloriesPerMinute: 8, trainingStyle: 'gym', format: 'weight' },
+  { id: 'Sissy squat', name: 'シシースクワット', category: 'legs', caloriesPerMinute: 6, trainingStyle: 'bodyweight', format: 'count' },
+  { id: 'Fire hydrant', name: 'ファイアハイドラント', category: 'legs', caloriesPerMinute: 4, trainingStyle: 'bodyweight', format: 'count' },
+  { id: 'Side lunge', name: 'サイドランジ', category: 'legs', caloriesPerMinute: 5, trainingStyle: 'bodyweight', format: 'count' },
+  { id: 'Reverse lunge', name: 'リバースランジ', category: 'legs', caloriesPerMinute: 5, trainingStyle: 'bodyweight', format: 'count' },
+  { id: 'Calf raise', name: 'カーフレイズ(ふくらはぎ)', category: 'legs', caloriesPerMinute: 4, trainingStyle: 'bodyweight', format: 'count' },
+  { id: 'Calf raise(gym)', name: 'カーフレイズ(マシンorダンベル)', category: 'legs', caloriesPerMinute: 4, trainingStyle: 'gym', format: 'weight' },
+  { id: 'Hip bridge', name: 'ヒップブリッジ', category: 'legs', caloriesPerMinute: 4, trainingStyle: 'bodyweight', format: 'count' },
+  { id: 'Hip thrust', name: 'ヒップスラスト', category: 'legs', caloriesPerMinute: 6, trainingStyle: 'gym', format: 'weight' },
+  { id: 'Donkey kick', name: 'ドンキーキック', category: 'legs', caloriesPerMinute: 4, trainingStyle: 'bodyweight', format: 'count' },
+  { id: 'Leg adduction (inner thigh)', name: 'レッグアダクション(内もも)', category: 'legs', caloriesPerMinute: 4, trainingStyle: 'gym', format: 'weight' },
+  { id: 'Leg abduction (outer thigh)', name: 'レッグアブダクション(外もも)', category: 'legs', caloriesPerMinute: 4, trainingStyle: 'gym', format: 'weight' },
+  { id: 'Good morning', name: 'グッドモーニング', category: 'legs', caloriesPerMinute: 6, trainingStyle: 'gym', format: 'weight' },
+  { id: 'Step-up', name: 'ステップアップ', category: 'legs', caloriesPerMinute: 8, trainingStyle: 'bodyweight', format: 'count' },
+  { id: 'Hack Squat', name: 'ハックスクワット', category: 'legs', caloriesPerMinute: 7, trainingStyle: 'gym', format: 'weight' },
+  
+  // 腹筋
+  { id: 'Crunch', name: 'クランチ', category: 'abs', caloriesPerMinute: 3, trainingStyle: 'bodyweight', format: 'count' },
+  { id: 'Plank', name: 'プランク', category: 'abs', caloriesPerMinute: 3, trainingStyle: 'bodyweight', format: 'time' },
+  { id: 'Leg Raise', name: 'レッグレイズ', category: 'abs', caloriesPerMinute: 4, trainingStyle: 'bodyweight', format: 'count' },
+  { id: 'Russian Twist', name: 'ロシアンツイスト', category: 'abs', caloriesPerMinute: 5, trainingStyle: 'bodyweight', format: 'count' },
+  { id: 'Sit-up', name: 'シットアップ', category: 'abs', caloriesPerMinute: 8, trainingStyle: 'bodyweight', format: 'count' },
+  { id: 'Bicycle Crunch', name: 'バイシクルクランチ', category: 'abs', caloriesPerMinute: 6, trainingStyle: 'bodyweight', format: 'count' },
+  { id: 'Reverse Crunch', name: 'リバースクランチ', category: 'abs', caloriesPerMinute: 5, trainingStyle: 'bodyweight', format: 'count' },
+  { id: 'Torch Touch', name: 'トーチタッチ', category: 'abs', caloriesPerMinute: 5, trainingStyle: 'bodyweight', format: 'count' },
+  { id: 'Hanging Leg Raise', name: 'ハンギングレッグレイズ', category: 'abs', caloriesPerMinute: 7, trainingStyle: 'bodyweight', format: 'count' },
+  { id: 'Knee Raise', name: 'ニーレイズ', category: 'abs', caloriesPerMinute: 5, trainingStyle: 'bodyweight', format: 'count' },
+  { id: 'Side Plank', name: 'サイドプランク', category: 'abs', caloriesPerMinute: 3, trainingStyle: 'bodyweight', format: 'time' },
+  { id: 'Flutter Kick', name: 'フラッターキック', category: 'abs', caloriesPerMinute: 6, trainingStyle: 'bodyweight', format: 'count' },
+  { id: 'Mountain Climber', name: 'マウンテンクライマー', category: 'abs', caloriesPerMinute: 8, trainingStyle: 'bodyweight', format: 'count' },
+  { id: 'Plank (Dynamic)', name: 'プランク(ダイナミック)', category: 'abs', caloriesPerMinute: 6, trainingStyle: 'bodyweight', format: 'count' },
+  { id: 'Dragon Flag', name: 'ドラゴンフラッグ', category: 'abs', caloriesPerMinute: 8, trainingStyle: 'bodyweight', format: 'count' },
+  { id: 'Ab Roller', name: 'アブローラー', category: 'abs', caloriesPerMinute: 7, trainingStyle: 'bodyweight', format: 'count' },
+  { id: 'Dead Bug', name: 'デッドバグ', category: 'abs', caloriesPerMinute: 4, trainingStyle: 'bodyweight', format: 'count' },
+
+  
+  // 背中
+  { id: 'Deadlift', name: 'デッドリフト', category: 'back', caloriesPerMinute: 6, trainingStyle: 'gym', format: 'weight' },
+  { id: 'Lat Pulldown', name: 'ラットプルダウン', category: 'back', caloriesPerMinute: 8, trainingStyle: 'gym', format: 'weight' },
+  { id: 'Rowing', name: 'ローイング', category: 'back', caloriesPerMinute: 5, trainingStyle: 'gym', format: 'weight' },
+  { id: 'Pull-ups', name: '懸垂(プルアップ)', category: 'back', caloriesPerMinute: 9, trainingStyle: 'bodyweight', format: 'count' },
+  { id: 'Back Extension', name: 'バックエクステンション', category: 'back', caloriesPerMinute: 5, trainingStyle: 'gym', format: 'count' },
+  { id: 'Superman', name: 'スーパーマン', category: 'back', caloriesPerMinute: 4, trainingStyle: 'bodyweight', format: 'count' },
+  { id: 'Bent-Over Row', name: 'ベントオーバーロウ', category: 'back', caloriesPerMinute: 6, trainingStyle: 'gym', format: 'count' },
+  { id: 'One-Arm Row', name: 'ワンハンドロウ', category: 'back', caloriesPerMinute: 6, trainingStyle: 'gym', format: 'count' },
+  { id: 'Seated Row', name: 'シーテッドロウ', category: 'back', caloriesPerMinute: 5, trainingStyle: 'gym', format: 'count' },
+  { id: 'Face Pull', name: 'フェイスプル', category: 'back', caloriesPerMinute: 5, trainingStyle: 'gym', format: 'count' },
+  { id: 'Shrug', name: 'シュラッグ', category: 'back', caloriesPerMinute: 5, trainingStyle: 'gym', format: 'count' },
+  { id: 'Chin-ups', name: '懸垂(チンアップ)', category: 'back', caloriesPerMinute: 9, trainingStyle: 'bodyweight', format: 'count' },
+  { id: 'Incline Pull-ups (Australian Pull-ups)', name: '斜め懸垂(オーストラリアンプルアップ)', category: 'back', caloriesPerMinute: 6, trainingStyle: 'bodyweight', format: 'count' },
+
+  // 胸
+  { id: 'Bench Press', name: 'ベンチプレス', category: 'chest', caloriesPerMinute: 5, trainingStyle: 'gym', format: 'weight' },
+  { id: 'Dumbbell Fly', name: 'ダンベルフライ', category: 'chest', caloriesPerMinute: 6, trainingStyle: 'gym', format: 'weight' },
+  { id: 'Push-ups (Standard)', name: '腕立て伏せ(普通)', category: 'chest', caloriesPerMinute: 4, trainingStyle: 'bodyweight', format: 'count' },
+  { id: 'Push-ups (Hard)', name: '腕立て伏せ(きつい)', category: 'chest', caloriesPerMinute: 8, trainingStyle: 'bodyweight', format: 'count' },
+  { id: 'Chest Press (Machine)', name: 'チェストプレス(マシン)', category: 'chest', caloriesPerMinute: 4, trainingStyle: 'gym', format: 'weight' },
+  { id: 'Pec Fly (Machine)', name: 'ペックフライ（マシン）', category: 'chest', caloriesPerMinute: 6, trainingStyle: 'gym', format: 'weight' },
+  { id: 'Incline Press (Dumbbell)', name: 'インクラインプレス（ダンベル）', category: 'chest', caloriesPerMinute: 10, trainingStyle: 'gym', format: 'weight' },
+  { id: 'Diamond Push-ups', name: 'ダイヤモンドプッシュアップ', category: 'chest', caloriesPerMinute: 6, trainingStyle: 'bodyweight', format: 'count' },
+  { id: 'Wide Push-ups', name: 'ワイドプッシュアップ', category: 'chest', caloriesPerMinute: 5, trainingStyle: 'bodyweight', format: 'count' },
+  { id: 'Decline Push-ups', name: 'デクラインプッシュアップ', category: 'chest', caloriesPerMinute: 6, trainingStyle: 'bodyweight', format: 'count' },
+  { id: 'Incline Push-ups', name: 'インクラインプッシュアップ', category: 'chest', caloriesPerMinute: 4, trainingStyle: 'bodyweight', format: 'count' },
+  { id: 'Cable Crossovers', name: 'ケーブルクロスオーバー', category: 'chest', caloriesPerMinute: 5, trainingStyle: 'gym', format: 'weight' },
+  { id: 'Dips (Chest Focus)', name: 'ディップス(胸重視)', category: 'chest', caloriesPerMinute: 9, trainingStyle: 'gym', format: 'count' },
+  { id: 'Push-up Bars', name: 'プッシュアップバー', category: 'chest', caloriesPerMinute: 6, trainingStyle: 'bodyweight', format: 'count' },
+
+  // 全身
+  { id: 'Burpee', name: 'バーピー', category: 'fullbody', caloriesPerMinute: 10, trainingStyle: 'bodyweight', format: 'count' },
+  { id: 'Jumping Jack', name: 'ジャンピングジャック', category: 'fullbody', caloriesPerMinute: 8, trainingStyle: 'bodyweight', format: 'count' },
+  { id: 'High Knees', name: 'ハイニー(もも上げ)', category: 'fullbody', caloriesPerMinute: 9, trainingStyle: 'bodyweight', format: 'count' },
+  { id: 'Butt Kicks', name: 'バットキック', category: 'fullbody', caloriesPerMinute: 9, trainingStyle: 'bodyweight', format: 'count' },
+  { id: 'Inchworm', name: 'インチワーム', category: 'fullbody', caloriesPerMinute: 6, trainingStyle: 'bodyweight', format: 'count' },
+  { id: 'Bear Crawl', name: 'ベアクロール', category: 'fullbody', caloriesPerMinute: 8, trainingStyle: 'bodyweight', format: 'count' },
+  { id: 'Crab Walk', name: 'クラブウォーク', category: 'fullbody', caloriesPerMinute: 7, trainingStyle: 'bodyweight', format: 'count' },
+
+
+  // 有酸素・HIIT
+  { id: 'Walking (Normal)', name: 'ウォーキング(普通)', category: 'cardio', caloriesPerMinute: 4, trainingStyle: 'aerobic', format: 'time' },
+  { id: 'Walking (Fast)', name: 'ウォーキング(速い)', category: 'cardio', caloriesPerMinute: 5, trainingStyle: 'aerobic', format: 'time' },
+  { id: 'Running (all-out)', name: 'ランニング(全力)', category: 'cardio', caloriesPerMinute: 14, trainingStyle: 'aerobic', format: 'time' },
+  { id: 'Running (moderate)', name: 'ランニング(そこそこ)', category: 'cardio', caloriesPerMinute: 10, trainingStyle: 'aerobic', format: 'time' },
+  { id: 'Running (slow)', name: 'ランニング(ゆっくり)', category: 'cardio', caloriesPerMinute: 7, trainingStyle: 'aerobic', format: 'time' },
+  { id: 'Skater', name: 'スケーター', category: 'cardio', caloriesPerMinute: 9, trainingStyle: 'aerobic', format: 'time' },
+
+  // 格闘技
+  { id: 'Shadow boxing', name: 'シャドーボクシング', category: 'martial', caloriesPerMinute: 6, trainingStyle: 'aerobic', format: 'time' },
+  { id: 'Kickboxing', name: 'キックボクシング', category: 'martial', caloriesPerMinute: 11, trainingStyle: 'aerobic', format: 'time' },
+  { id: 'Punching the heavy bag', name: 'サンドバッグ打ち', category: 'martial', caloriesPerMinute: 6, trainingStyle: 'aerobic', format: 'time' },
+  { id: 'Air kicks', name: 'エアキック', category: 'martial', caloriesPerMinute: 8, trainingStyle: 'aerobic', format: 'time' },
+
+  // 柔軟・体幹
+  { id: 'Yoga (Light)', name: 'ヨガ(軽い)', category: 'flexibility', caloriesPerMinute: 2, trainingStyle: 'bodyweight', format: 'time' },
+  { id: 'Yoga (Power Yoga)', name: 'ヨガ(パワーヨガ)', category: 'flexibility', caloriesPerMinute: 4, trainingStyle: 'bodyweight', format: 'time' },
+  { id: 'Pilates', name: 'ピラティス', category: 'flexibility', caloriesPerMinute: 3, trainingStyle: 'bodyweight', format: 'time' },
+  { id: 'Stretching', name: 'ストレッチ', category: 'flexibility', caloriesPerMinute: 2, trainingStyle: 'bodyweight', format: 'time' },
+  { id: 'Gymnastics (Light)', name: '体操(軽い)', category: 'flexibility', caloriesPerMinute: 4, trainingStyle: 'bodyweight', format: 'time' },
+  { id: 'Tai Chi', name: '太極拳', category: 'flexibility', caloriesPerMinute: 4, trainingStyle: 'bodyweight', format: 'time' },
+
+  // 水中運動
+  { id: 'Swimming (Freestyle, slow)', name: '水泳(クロール・ゆっくり)', category: 'water', caloriesPerMinute: 6, trainingStyle: 'aerobic', format: 'time' },
+  { id: 'Swimming (Freestyle, fast)', name: '水泳(クロール・速い)', category: 'water', caloriesPerMinute: 11, trainingStyle: 'aerobic', format: 'time' },
+  { id: 'Swimming (Breaststroke)', name: '水泳(平泳ぎ)', category: 'water', caloriesPerMinute: 8, trainingStyle: 'aerobic', format: 'time' },
+  { id: 'Swimming (Backstroke)', name: '水泳(背泳ぎ)', category: 'water', caloriesPerMinute: 7, trainingStyle: 'aerobic', format: 'time' },
+  { id: 'Swimming (Butterfly)', name: '水泳(バタフライ)', category: 'water', caloriesPerMinute: 12, trainingStyle: 'aerobic', format: 'time' },
+  { id: 'Aqua Walking', name: '水中ウォーキング', category: 'water', caloriesPerMinute: 4, trainingStyle: 'aerobic', format: 'time' },
+  { id: 'Aqua Aerobics', name: '水中エアロビクス', category: 'water', caloriesPerMinute: 5, trainingStyle: 'aerobic', format: 'time' },
+
+  // スポーツ
+  { id: 'Tennis (Singles)', name: 'テニス(シングルス)', category: 'sports', caloriesPerMinute: 8, trainingStyle: 'aerobic', format: 'time' },
+  { id: 'Tennis (Doubles)', name: 'テニス(ダブルス)', category: 'sports', caloriesPerMinute: 6, trainingStyle: 'aerobic', format: 'time' },
+  { id: 'Badminton', name: 'バドミントン', category: 'sports', caloriesPerMinute: 6, trainingStyle: 'aerobic', format: 'time' },
+  { id: 'Table Tennis', name: '卓球', category: 'sports', caloriesPerMinute: 4, trainingStyle: 'aerobic', format: 'time' },
+  { id: 'Basketball', name: 'バスケットボール', category: 'sports', caloriesPerMinute: 7, trainingStyle: 'aerobic', format: 'time' },
+  { id: 'Soccer', name: 'サッカー', category: 'sports', caloriesPerMinute: 9, trainingStyle: 'aerobic', format: 'time' },
+  { id: 'Volleyball', name: 'バレーボール', category: 'sports', caloriesPerMinute: 6, trainingStyle: 'aerobic', format: 'time' },
+  { id: 'Baseball', name: '野球', category: 'sports', caloriesPerMinute: 5, trainingStyle: 'aerobic', format: 'time' },
+  { id: 'Bowling', name: 'ボウリング', category: 'sports', caloriesPerMinute: 3, trainingStyle: 'aerobic', format: 'time' },
+
+  /*
   // 腕
   { id: 'Arm curl', name: 'アームカール', category: 'arms', caloriesPerMinute: 5 },
   { id: 'Barbell curl', name: 'バーベルカール', category: 'arms', caloriesPerMinute: 6 },
@@ -178,20 +345,37 @@ const TRAINING_TYPES = [
   { id: 'Bowling', name: 'ボウリング', category: 'sports', caloriesPerMinute: 3 },
 
   // その他
-  { id: 'other', name: 'その他', category: 'all', caloriesPerMinute: 5 }
+  { id: 'other', name: 'その他', category: 'all', caloriesPerMinute: 5 },
+  */
 ];
+
+
+/**
+ * カテゴリIDとスタイルIDからトレーニング種目を取得
+ * @param {string} categoryId - カテゴリID（'all'の場合は全種目）
+ * @param {string} styleId - スタイルID（'all'の場合は全種目）
+ * @returns {Array} トレーニング種目の配列
+ */
+function getTrainingsByCategoryAndStyle(categoryId, styleId) {
+  return TRAINING_TYPES.filter(t => {
+    const matchCategory = categoryId === 'all' || t.category === categoryId;
+    const matchStyle = styleId === 'all' || t.trainingStyle === styleId;
+    return matchCategory && matchStyle;
+  });
+}
 
 /**
  * カテゴリIDからトレーニング種目を取得
  * @param {string} categoryId - カテゴリID（'all'の場合は全種目）
  * @returns {Array} トレーニング種目の配列
- */
+
 function getTrainingsByCategory(categoryId) {
   if (categoryId === 'all') {
     return TRAINING_TYPES;
   }
   return TRAINING_TYPES.filter(t => t.category === categoryId);
-}
+}*/
+
 
 /**
  * トレーニングIDから種目データを取得
