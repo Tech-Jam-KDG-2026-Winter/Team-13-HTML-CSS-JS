@@ -464,7 +464,7 @@ async function showSuccessModal(calories, score) {
   modalScore.textContent = score.toLocaleString();
 
   // 2. 励ましのメッセージ
-  encouragementMessage.textContent = getEncouragementMessage(duration, score);
+  encouragementMessage.textContent = getEncouragementMessage(score);
 
   try {
     // 今日の累計スコア取得 (引数を currentUser.uid に修正)
@@ -508,16 +508,17 @@ const ENCOURAGEMENT_MESSAGES = {
   ],
 };
 
-function getEncouragementMessage(duration, score) {
+function getEncouragementMessage(score) {
   let messagePool;
+
   if (score >= 500) {
-    messagePool = ENCOURAGEMENT_MESSAGES.highScore;
-  } else if (duration <= 15) {
-    messagePool = ENCOURAGEMENT_MESSAGES.short;
-  } else if (duration >= 46) {
-    messagePool = ENCOURAGEMENT_MESSAGES.long;
+    messagePool = ENCOURAGEMENT_MESSAGES.highScore;  // 500以上
+  } else if (score <= 100) {
+    messagePool = ENCOURAGEMENT_MESSAGES.short;      // 100以下
+  } else if (score >= 250) {
+    messagePool = ENCOURAGEMENT_MESSAGES.long;       // 250以上（ただし500未満）
   } else {
-    messagePool = ENCOURAGEMENT_MESSAGES.normal;
+    messagePool = ENCOURAGEMENT_MESSAGES.normal;     // 上記以外
   }
 
   const randomIndex = Math.floor(Math.random() * messagePool.length);
