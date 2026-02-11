@@ -55,7 +55,6 @@ const inputContainer = document.getElementById("input-container");
 // ============================================
 // 初期化処理
 // ============================================
-
 document.addEventListener("DOMContentLoaded", () => {
   requireAuth((user) => {
     currentUser = user;
@@ -67,11 +66,17 @@ document.addEventListener("DOMContentLoaded", () => {
   renderTrainingTypes();
   setupEventListeners();
   updatePreview();
+
   // 初期表示を設定
   if (durationNumberInput) {
     durationNumberInput.value = duration;
   }
-  updateSliderProgress();
+
+  // 初期スライダー進捗（もしスライダーが存在すれば）
+  const durationSlider = document.getElementById("duration-input");
+  if (durationSlider) {
+    updateSliderProgress(durationSlider);
+  }
 });
 
 // ============================================
@@ -159,14 +164,11 @@ function resetFilters() {
 function renderTrainingTypes() {
   const types = getTrainings(selectedCategory, selectedStyle);
 
-  // 👇 ここが追加ポイント
   if (types.length === 0) {
     trainingTypes.innerHTML = `
-      <div class="empty-state">
         <p class="empty-title">該当するトレーニングがありません</p>
         <p class="empty-sub">カテゴリやスタイルを変更してみてください</p>
-        <button class="reset-filter-btn">絞り込みをリセット</button>
-      </div>
+        <button class="reset-filter-btn ">絞り込みをリセット</button>
     `;
     const resetBtn = document.querySelector(".reset-filter-btn");
     resetBtn.addEventListener("click", resetFilters);
@@ -178,16 +180,11 @@ function renderTrainingTypes() {
       (t) => `
     <button class="type-btn ${selectedType === t.id ? "selected" : ""}" data-type="${t.id}">
         <span class="type-name">${t.name}</span>
-        <span class="type-stats">
-        <span class="type-cal">${t.caloriesPerMinute} kcal/分</span>
-        <span class="type-pt">${Math.round(
-          t.caloriesPerMinute * 1.5
-        )} pt/分</span>
-      </span>
     </button>
   `
     )
     .join("");
+
   trainingTypes.innerHTML = typesHTML;
 }
 
@@ -257,7 +254,7 @@ function setDuration(value, source = "both") {
   // スライダーを更新（スライダーは5-120の範囲）
   if (source !== "slider") {
     const sliderValue = Math.max(5, Math.min(120, duration));
-    durationInput.value = sliderValue;
+    if (durationInput) durationInput.value = sliderValue;
   }
 
   // 数値入力欄を更新
@@ -266,29 +263,45 @@ function setDuration(value, source = "both") {
   }
 
   // スライダーの進捗バーを更新
-  updateSliderProgress();
+  if (durationInput) updateSliderProgress(durationInput);
+
   updatePreview();
 }
 
-function updateSliderProgress() {
+function updateSliderProgress(slider) {
+  if (!slider) return;
+  const min = parseInt(slider.min) || 0;
+  const max = parseInt(slider.max) || 100;
+  const value = parseInt(slider.value) || min;
+
+  const clampedValue = Math.max(min, Math.min(max, value));
+  const progress = ((clampedValue - min) / (max - min)) * 100;
+  slider.style.setProperty("--progress", `${progress}%`);
+}
+
+function updateDurationProgress() {
+  const durationInput = document.getElementById("duration-input");
+  const value = parseInt(durationInput.value);
   const min = parseInt(durationInput.min) || 5;
   const max = parseInt(durationInput.max) || 120;
-  // スライダー範囲内でクランプして進捗を計算
-  const clampedValue = Math.max(min, Math.min(max, duration));
+
+  const clampedValue = Math.max(min, Math.min(max, value));
   const progress = ((clampedValue - min) / (max - min)) * 100;
   durationInput.style.setProperty("--progress", `${progress}%`);
 }
 
-// function updatePreview() {
-//   const typeId = selectedType || 'other';
-//   const calories = calculateCaloriesNew(typeId, duration);
-//   const score = calculateScoreNew(calories);
-//   previewCalories.textContent = calories.toLocaleString();
-//   previewScore.textContent = score.toLocaleString();
-// }
+function updateRepsProgress() {
+  const repsInput = document.getElementById("reps-input");
+  const value = parseInt(repsInput.value);
+  const min = parseInt(repsInput.min) || 1;
+  const max = parseInt(repsInput.max) || 100;
+
+  const clampedValue = Math.max(min, Math.min(max, value));
+  const progress = ((clampedValue - min) / (max - min)) * 100;
+  repsInput.style.setProperty("--progress", `${progress}%`);
+}
 
 function updatePreview() {
-  console.log("updatePreview 呼ばれた");
   // 種目が未選択、または入力値が未定義なら初期表示
   if (!selectedType || typeof inputValues === "undefined") {
     previewCalories.textContent = "0";
@@ -348,8 +361,10 @@ function updatePreview() {
 // ============================================
 // トレーニング保存
 // ============================================
+// ============================================
+// トレーニング保存（バリデーション追加版）
+// ============================================
 async function handleSaveTraining() {
-  console.log("記録ボタン押された");
   if (!selectedType) {
     showError("トレーニング種目を選択してください");
     return;
@@ -358,6 +373,39 @@ async function handleSaveTraining() {
   const type = getTrainingById(selectedType);
   if (!type) return;
 
+  // --------------------------
+  // バリデーション
+  // --------------------------
+  switch (type.format) {
+    case "time":
+      if (!inputValues.duration || inputValues.duration <= 0) {
+        showError("トレーニング時間を入力してください");
+        return;
+      }
+      break;
+
+    case "reps":
+      if (!inputValues.reps || inputValues.reps <= 0) {
+        showError("回数は1回以上にしてください");
+        return;
+      }
+      break;
+
+    case "weight_reps":
+      if (!inputValues.weight || inputValues.weight <= 0) {
+        showError("重量は0kgより大きい値を入力してください");
+        return;
+      }
+      if (!inputValues.reps || inputValues.reps <= 0) {
+        showError("回数は1回以上にしてください");
+        return;
+      }
+      break;
+  }
+
+  // --------------------------
+  // カロリーとスコア計算
+  // --------------------------
   let calories = 0;
   switch (type.format) {
     case "time":
@@ -388,8 +436,12 @@ async function handleSaveTraining() {
 
   const score = calculateScoreNew(calories);
 
+  // --------------------------
+  // データベース保存
+  // --------------------------
   try {
     toggleLoading(true);
+
     await db.collection("trainings").add({
       userId: currentUser.uid,
       type: selectedType,
@@ -416,44 +468,6 @@ async function handleSaveTraining() {
   }
 }
 
-// async function handleSaveTraining() {
-//   if (!selectedType) {
-//     showError('トレーニング種目を選択してください');
-//     return;
-//   }
-//   if (duration < 1) {
-//     showError('トレーニング時間を入力してください');
-//     return;
-//   }
-
-//   const calories = calculateCaloriesNew(selectedType, duration);
-//   const score = calculateScoreNew(calories);
-
-//   try {
-//     toggleLoading(true);
-//     await db.collection('trainings').add({
-//       userId: currentUser.uid,
-//       type: selectedType,
-//       duration: duration,
-//       calories: calories,
-//       score: score,
-//       timestamp: firebase.firestore.FieldValue.serverTimestamp()
-//     });
-
-//     await db.collection('users').doc(currentUser.uid).update({
-//       totalScore: firebase.firestore.FieldValue.increment(score)
-//     });
-
-//     // 成功モーダルを表示
-//     await showSuccessModal(calories, score);
-//   } catch (error) {
-//     console.error('トレーニング保存エラー:', error);
-//     showError('トレーニングの保存に失敗しました');
-//   } finally {
-//     toggleLoading(false);
-//   }
-// }
-
 // ============================================
 // 成功モーダル (二重定義を削除し、整理しました)
 // ============================================
@@ -477,7 +491,6 @@ async function showSuccessModal(calories, score) {
 
   // 3. モーダルをアクティブにする
   successModal.classList.add("active");
-  console.log("モーダル表示", calories, score);
 }
 
 // ============================================
@@ -512,19 +525,18 @@ function getEncouragementMessage(score) {
   let messagePool;
 
   if (score >= 500) {
-    messagePool = ENCOURAGEMENT_MESSAGES.highScore;  // 500以上
+    messagePool = ENCOURAGEMENT_MESSAGES.highScore; // 500以上
   } else if (score <= 100) {
-    messagePool = ENCOURAGEMENT_MESSAGES.short;      // 100以下
+    messagePool = ENCOURAGEMENT_MESSAGES.short; // 100以下
   } else if (score >= 250) {
-    messagePool = ENCOURAGEMENT_MESSAGES.long;       // 250以上（ただし500未満）
+    messagePool = ENCOURAGEMENT_MESSAGES.long; // 250以上（ただし500未満）
   } else {
-    messagePool = ENCOURAGEMENT_MESSAGES.normal;     // 上記以外
+    messagePool = ENCOURAGEMENT_MESSAGES.normal; // 上記以外
   }
 
   const randomIndex = Math.floor(Math.random() * messagePool.length);
   return messagePool[randomIndex];
 }
-
 
 function renderInputUI(type) {
   if (!type) return;
@@ -583,8 +595,8 @@ function renderInputUI(type) {
 
         <!-- 重量 -->
         <div class="weight-input-row">
-          <input type="number" id="weight-number" value="20" min="0" max="500">
-          <span>kg</span>
+          <input type="number" class="weight-number-input" id="weight-number" value="20" min="0" max="500">
+          <span class="weight-unit">kg</span>
         </div>
 
         <div class="quick-weight">
@@ -598,21 +610,14 @@ function renderInputUI(type) {
 
         <!-- 回数（repsと共通） -->
         <div class="reps-input-row">
-          <input type="number" id="reps-number" value="8" min="1" max="100">
-          <span>回</span>
+          <input type="number" class="reps-number-input" id="reps-number" value="${inputValues.reps}" min="1" max="100">
+          <span class="reps-unit">回</span>
         </div>
         
         <!-- 回数スライダー（repsと共通） -->
         <div class="reps-slider-wrapper">
           <span class="slider-label">1</span>
-          <input
-            type="range"
-            id="reps-input"
-            min="1"
-            max="100"
-            step="1"
-            value="8"
-          >
+          <input class="reps-slider" type="range" id="reps-input" min="1" max="100" step="1" value="${inputValues.reps}">
           <span class="slider-label">100</span>
         </div>
 
@@ -643,15 +648,19 @@ function setupInputEvents(format) {
     const durationNumberEl = document.getElementById("duration-number");
     const quickBtnsEl = document.querySelectorAll(".quick-duration .quick-btn");
 
+    if (durationInputEl) updateSliderProgress(durationInputEl);
+
     durationInputEl.addEventListener("input", () => {
       inputValues.duration = parseInt(durationInputEl.value, 10) || 0;
       durationNumberEl.value = inputValues.duration;
+      updateSliderProgress(durationInputEl);
       updatePreview();
     });
 
     durationNumberEl.addEventListener("input", () => {
       inputValues.duration = parseInt(durationNumberEl.value, 10) || 0;
       durationInputEl.value = inputValues.duration;
+      updateSliderProgress(durationInputEl);
       updatePreview();
     });
 
@@ -660,6 +669,7 @@ function setupInputEvents(format) {
         inputValues.duration = parseInt(btn.dataset.value, 10);
         durationInputEl.value = inputValues.duration;
         durationNumberEl.value = inputValues.duration;
+        updateSliderProgress(durationInputEl);
         updatePreview();
       });
     });
@@ -668,15 +678,19 @@ function setupInputEvents(format) {
     const repsNumberEl = document.getElementById("reps-number");
     const quickBtnsEl = document.querySelectorAll(".quick-reps .quick-btn");
 
+    if (repsInputEl) updateSliderProgress(repsInputEl);
+
     repsInputEl.addEventListener("input", () => {
       inputValues.reps = parseInt(repsInputEl.value, 10) || 0;
       repsNumberEl.value = inputValues.reps;
+      updateSliderProgress(repsInputEl);
       updatePreview();
     });
 
     repsNumberEl.addEventListener("input", () => {
       inputValues.reps = parseInt(repsNumberEl.value, 10) || 0;
       repsInputEl.value = inputValues.reps;
+      updateSliderProgress(repsInputEl);
       updatePreview();
     });
 
@@ -685,52 +699,56 @@ function setupInputEvents(format) {
         inputValues.reps = parseInt(btn.dataset.value, 10);
         repsInputEl.value = inputValues.reps;
         repsNumberEl.value = inputValues.reps;
+        updateSliderProgress(repsInputEl);
         updatePreview();
       });
     });
   } else if (format === "weight_reps") {
-    const weightEl = document.getElementById("weight-number");
-    const repsEl = document.getElementById("reps-number");
     const repsInputEl = document.getElementById("reps-input");
+    const repsNumberEl = document.getElementById("reps-number");
+    const weightInputEl = document.getElementById("weight-number");
 
-    const weightBtns = document.querySelectorAll(".quick-weight .quick-btn");
-    const repsBtns = document.querySelectorAll(".quick-reps .quick-btn");
+    if (repsInputEl) updateSliderProgress(repsInputEl);
 
-    weightEl.addEventListener("input", () => {
-      inputValues.weight = Math.max(0, parseInt(weightEl.value, 10) || 0);
-      updatePreview();
-    });
-
-    repsEl.addEventListener("input", () => {
-      inputValues.reps = Math.max(1, parseInt(repsEl.value, 10) || 1);
-      repsInputEl.value = inputValues.reps;
-      updatePreview();
-    });
-
+    // reps 入力
     repsInputEl.addEventListener("input", () => {
       inputValues.reps = parseInt(repsInputEl.value, 10) || 1;
-      repsEl.value = inputValues.reps;
+      repsNumberEl.value = inputValues.reps;
+      updateSliderProgress(repsInputEl);
       updatePreview();
     });
 
-    // 重量クイック
-    weightBtns.forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const delta = parseInt(btn.dataset.delta, 10);
-        inputValues.weight = Math.max(0, inputValues.weight + delta);
-        weightEl.value = inputValues.weight;
-        updatePreview();
-      });
+    repsNumberEl.addEventListener("input", () => {
+      inputValues.reps = parseInt(repsNumberEl.value, 10) || 1;
+      repsInputEl.value = inputValues.reps;
+      updateSliderProgress(repsInputEl);
+      updatePreview();
     });
 
-    // 回数クイック（repsと共通）
+    const repsBtns = document.querySelectorAll(".quick-reps .quick-btn");
     repsBtns.forEach((btn) => {
       btn.addEventListener("click", () => {
         inputValues.reps = parseInt(btn.dataset.value, 10);
-        repsEl.value = inputValues.reps;
+        repsNumberEl.value = inputValues.reps;
         repsInputEl.value = inputValues.reps;
+        updateSliderProgress(repsInputEl);
         updatePreview();
       });
     });
+
+    // weight クイックボタン
+    const weightBtns = document.querySelectorAll(".quick-weight .quick-btn");
+    if (weightBtns.length > 0 && weightInputEl) {
+      weightBtns.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const delta = parseInt(btn.dataset.delta, 10) || 0;
+          inputValues.weight = (inputValues.weight || 0) + delta;
+          // 最小0kg、最大500kgで制限
+          inputValues.weight = Math.max(0, Math.min(500, inputValues.weight));
+          weightInputEl.value = inputValues.weight;
+          updatePreview();
+        });
+      });
+    }
   }
 }
