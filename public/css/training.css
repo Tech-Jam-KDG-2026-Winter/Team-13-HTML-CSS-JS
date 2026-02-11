@@ -588,3 +588,37 @@
   background: #00B900;
   color: white;
 } */
+
+/* 追加部分 仮実装 */
+/* 絞り込み結果のテキスト部分 */
+.empty-state {
+  padding: 32px 16px;
+  text-align: center;
+  color: #777;
+}
+
+.empty-title {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.empty-sub {
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+.reset-filter-btn {
+  margin-top: 16px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: none;
+  background: #4f46e5;
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.reset-filter-btn:hover {
+  opacity: 0.9;
+}

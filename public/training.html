@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,6 +20,7 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 </head>
+
 <body>
   <div class="page-wrapper has-bottom-nav">
     <!-- ヘッダー（モバイル用） -->
@@ -38,7 +40,12 @@
         <!-- メッセージ表示 -->
         <div id="error-message" class="error-message"></div>
         <div id="success-message" class="success-message"></div>
-
+        <!-- スタイルタブ -->
+         <section class="style-section slide-up">
+          <div class="style-tabs" id="style-tabs">
+            <!-- スタイルタブはJSで動的に生成 -->
+          </div>
+         </section>
         <!-- カテゴリタブ -->
         <section class="category-section slide-up">
           <div class="category-tabs" id="category-tabs">
@@ -57,32 +64,16 @@
               </div>
             </section>
 
-            
+
           </div>
 
           <!-- 右カラム：時間・プレビュー・ボタン -->
           <div class="training-right">
-            <!-- 時間入力 -->
-            <section class="duration-section card slide-up">
-              <h2 class="card-title">トレーニング時間</h2>
-
-              <div class="duration-input-row">
-                <input type="number" id="duration-number" class="duration-number-input" value="30" min="1" max="300">
-                <span class="duration-unit">分</span>
-              </div>
-
-              <div class="duration-slider-wrapper">
-                <span class="slider-label">5</span>
-                <input type="range" id="duration-input" class="duration-slider" value="30" min="5" max="120" step="5">
-                <span class="slider-label">120</span>
-              </div>
-
-              <div class="quick-duration">
-                <button class="quick-btn" data-duration="10">10分</button>
-                <button class="quick-btn" data-duration="20">20分</button>
-                <button class="quick-btn" data-duration="30">30分</button>
-                <button class="quick-btn" data-duration="45">45分</button>
-                <button class="quick-btn" data-duration="60">60分</button>
+            <!-- 時間・回数・重量入力 -->
+            <section class="input-section card slide-up">
+              <h2 class="card-title" id="input-title">トレーニング入力</h2>
+              <div id="input-container">
+                <!-- JSで format に応じてここに入力UIを生成 -->
               </div>
             </section>
 
@@ -102,7 +93,7 @@
               </div>
             </section>
           </div>
-          
+
         </div>
         <div class="training-action">
           <button id="save-training-btn" class="btn btn-primary btn-lg">
@@ -111,18 +102,23 @@
         </div>
 
       </div>
-      
 
-    <nav class="nav-bottom">
-      <ul class="nav-list">
-        <li class="nav-item"><a href="home.html" class="nav-link"><span class="nav-icon"><i data-lucide="home"></i></span><span>ホーム</span></a></li>
-        <li class="nav-item"><a href="ranking.html" class="nav-link"><span class="nav-icon"><i data-lucide="trophy"></i></span><span>ランキング</span></a></li>
-        <li class="nav-item"><a href="training.html" class="nav-link active"><span class="nav-icon"><i data-lucide="dumbbell"></i></span><span>記録</span></a></li>
-        <li class="nav-item"><a href="friends.html" class="nav-link"><span class="nav-icon"><i data-lucide="users"></i></span><span>フレンド</span></a></li>
-        <li class="nav-item"><a href="profile.html" class="nav-link"><span class="nav-icon"><i data-lucide="user"></i></span><span>プロフィール</span></a></li>
-      </ul>
-      <button class="nav-logout-btn" id="nav-logout-btn" title="ログアウト"><i data-lucide="log-out"></i></button>
-    </nav>
+
+      <nav class="nav-bottom">
+        <ul class="nav-list">
+          <li class="nav-item"><a href="home.html" class="nav-link"><span class="nav-icon"><i
+                  data-lucide="home"></i></span><span>ホーム</span></a></li>
+          <li class="nav-item"><a href="ranking.html" class="nav-link"><span class="nav-icon"><i
+                  data-lucide="trophy"></i></span><span>ランキング</span></a></li>
+          <li class="nav-item"><a href="training.html" class="nav-link active"><span class="nav-icon"><i
+                  data-lucide="dumbbell"></i></span><span>記録</span></a></li>
+          <li class="nav-item"><a href="friends.html" class="nav-link"><span class="nav-icon"><i
+                  data-lucide="users"></i></span><span>フレンド</span></a></li>
+          <li class="nav-item"><a href="profile.html" class="nav-link"><span class="nav-icon"><i
+                  data-lucide="user"></i></span><span>プロフィール</span></a></li>
+        </ul>
+        <button class="nav-logout-btn" id="nav-logout-btn" title="ログアウト"><i data-lucide="log-out"></i></button>
+      </nav>
   </div>
 
   <!-- 成功モーダル -->
@@ -145,15 +141,15 @@
       </div>
 
       <!-- 今日の累計 -->
-       <div class="today-total">
+      <div class="today-total">
         <p class="today-total-label">今日の累計</p>
         <div class="today-total-stats">
           <span id="modal-today-score">0</span>pt
         </div>
-       </div>
+      </div>
 
-       <!-- シェアボタン(実装間に合わないのでコメントアウト) -->
-        <!-- <div class="shere-buttons">
+      <!-- シェアボタン(実装間に合わないのでコメントアウト) -->
+      <!-- <div class="shere-buttons">
           <button id="share-twitter" class="share-btn share-twitter">
             <i data-lucide="twitter"></i>シェア
           </button>
@@ -161,7 +157,7 @@
             <i deta-lucide="message-circle"></i> LINE
           </button>
         </div> -->
-        
+
       <button id="close-success-modal" class="btn btn-primary btn-full">
         ホームに戻る
       </button>
@@ -182,4 +178,5 @@
   <script src="https://unpkg.com/lucide@latest"></script>
   <script>lucide.createIcons();</script>
 </body>
+
 </html>
