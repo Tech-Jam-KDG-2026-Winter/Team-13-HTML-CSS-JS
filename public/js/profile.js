@@ -350,7 +350,7 @@ function createHistoryItemHTML(data) {
     <div class="history-item">
       <div class="history-info">
         <span class="history-type">${getTrainingTypeName(data.type)}</span>
-        <span class="history-details">${data.duration}分 / ${data.calories}kcal</span>
+        <span class="history-details">${data.calories}kcal</span>
         <span class="history-date">${formatTimestamp(data.timestamp)}</span>
       </div>
       <span class="history-score">+${data.score} pt</span>

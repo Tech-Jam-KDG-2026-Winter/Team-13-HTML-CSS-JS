@@ -287,7 +287,7 @@ async function loadRecentTrainings() {
         <div class="recent-item">
           <div class="recent-info">
             <span class="recent-type">${getTrainingTypeName(data.type)}</span>
-            <span class="recent-details">${data.duration}分 / ${data.calories}kcal</span>
+            <span class="recent-details">${data.calories}kcal</span>
           </div>
           <span class="recent-score">+${data.score} pt</span>
         </div>
