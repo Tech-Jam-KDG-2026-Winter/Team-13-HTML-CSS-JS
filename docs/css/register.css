@@ -4,22 +4,51 @@
 
 /* login.cssと共通スタイルを使用 */
 
+/* 登録ページ専用：フォームエリアをスクロール可能に */
+.auth-page:has(.avatar-upload-section) .auth-form-section {
+  align-items: flex-start;
+  overflow-y: auto;
+  padding-top: var(--spacing-lg);
+  padding-bottom: var(--spacing-lg);
+}
+
+/* 登録ページ専用：コンパクトなスペーシング */
+.auth-page:has(.avatar-upload-section) .mobile-logo {
+  margin-bottom: var(--spacing-lg);
+}
+
+.auth-page:has(.avatar-upload-section) .auth-header {
+  margin-bottom: var(--spacing-md);
+}
+
+.auth-page:has(.avatar-upload-section) .auth-card {
+  padding: var(--spacing-lg);
+}
+
+.auth-page:has(.avatar-upload-section) .auth-input-group {
+  margin-bottom: var(--spacing-md);
+}
+
+.auth-page:has(.avatar-upload-section) .auth-footer {
+  margin-top: var(--spacing-md);
+}
+
 /* アバターアップロードセクション */
 .avatar-upload-section {
   text-align: center;
-  margin-bottom: var(--spacing-xl);
+  margin-bottom: var(--spacing-md);
 }
 
 .avatar-upload-wrapper {
   display: flex;
   justify-content: center;
-  margin-bottom: var(--spacing-sm);
+  margin-bottom: var(--spacing-xs);
 }
 
 .avatar-preview-container {
   position: relative;
-  width: 100px;
-  height: 100px;
+  width: 80px;
+  height: 80px;
   cursor: pointer;
 }
 
