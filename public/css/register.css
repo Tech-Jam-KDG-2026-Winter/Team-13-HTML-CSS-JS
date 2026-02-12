@@ -1,0 +1,217 @@
+/* ============================================
+   新規登録ページスタイル - Modern International Design
+   ============================================ */
+
+/* login.cssと共通スタイルを使用 */
+
+/* アバターアップロードセクション */
+.avatar-upload-section {
+  text-align: center;
+  margin-bottom: var(--spacing-xl);
+}
+
+.avatar-upload-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: var(--spacing-sm);
+}
+
+.avatar-preview-container {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  cursor: pointer;
+}
+
+.avatar-preview {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 3px solid var(--color-gold);
+  object-fit: cover;
+  background: rgba(255, 255, 255, 0.05);
+  transition: all 0.3s ease;
+}
+
+.avatar-preview-container:hover .avatar-preview {
+  opacity: 0.7;
+  border-color: var(--color-dark-gold);
+}
+
+.avatar-upload-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  top: 0;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  cursor: pointer;
+}
+
+.avatar-preview-container:hover .avatar-upload-overlay {
+  opacity: 1;
+}
+
+.avatar-upload-overlay i {
+  width: 24px;
+  height: 24px;
+  color: var(--color-gold);
+}
+
+.avatar-upload-overlay span {
+  font-size: var(--font-xs);
+  color: var(--color-gold);
+  font-weight: 600;
+}
+
+.avatar-hint {
+  font-size: var(--font-xs);
+  color: var(--white-50);
+}
+
+/* ステップインジケーター（将来用） */
+.auth-steps {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-xl);
+}
+
+.auth-step {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+.auth-step.active {
+  background: var(--color-gold);
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+}
+
+/* パスワード強度インジケーター */
+.password-strength {
+  margin-top: var(--spacing-sm);
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.password-strength-bar {
+  height: 100%;
+  width: 0;
+  transition: all 0.3s ease;
+  border-radius: 2px;
+}
+
+.password-strength-bar.weak {
+  width: 33%;
+  background: #ef4444;
+}
+
+.password-strength-bar.medium {
+  width: 66%;
+  background: #f59e0b;
+}
+
+.password-strength-bar.strong {
+  width: 100%;
+  background: #22c55e;
+}
+
+/* 利用規約 */
+.auth-terms {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-lg);
+  font-size: var(--font-sm);
+  color: var(--white-60);
+}
+
+.auth-terms input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--color-gold);
+  margin-top: 2px;
+}
+
+.auth-terms a {
+  color: var(--color-gold);
+  text-decoration: none;
+}
+
+.auth-terms a:hover {
+  text-decoration: underline;
+}
+
+/* フォームグリッド（2列レイアウト） */
+@media (min-width: 480px) {
+  .auth-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-md);
+  }
+
+  .auth-form-grid .auth-input-group.full-width {
+    grid-column: 1 / -1;
+  }
+}
+
+/* サクセスアニメーション */
+@keyframes checkmark {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.auth-success {
+  text-align: center;
+  padding: var(--spacing-2xl);
+}
+
+.auth-success-icon {
+  width: 80px;
+  height: 80px;
+  background: var(--gradient-gold);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto var(--spacing-lg);
+  animation: checkmark 0.5s ease-out;
+}
+
+.auth-success-icon i {
+  width: 40px;
+  height: 40px;
+  color: #000;
+}
+
+.auth-success h3 {
+  font-size: var(--font-xl);
+  color: #fff;
+  margin-bottom: var(--spacing-sm);
+}
+
+.auth-success p {
+  color: var(--white-60);
+}

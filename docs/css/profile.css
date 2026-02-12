@@ -1,0 +1,464 @@
+/* ============================================
+   プロフィールページスタイル
+   ============================================ */
+
+/* プロフィールカード */
+.profile-card {
+  text-align: center;
+}
+
+/* アバターセクション */
+.avatar-section {
+  margin-bottom: var(--spacing-lg);
+}
+
+.avatar-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.avatar-edit-btn {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 32px;
+  height: 32px;
+  background: var(--color-gold);
+  color: var(--color-white);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform var(--transition-fast);
+  font-size: var(--font-sm);
+}
+
+.avatar-edit-btn:hover {
+  transform: scale(1.1);
+}
+
+/* プロフィール情報 */
+.profile-info {
+  margin-bottom: var(--spacing-lg);
+}
+
+.editable-field {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+}
+
+.username-display {
+  font-size: var(--font-xl);
+  font-weight: bold;
+  color: var(--color-white);
+}
+
+.edit-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: var(--font-base);
+  color: var(--color-white);
+  transition: transform var(--transition-fast);
+}
+
+.edit-btn:hover {
+  transform: scale(1.2);
+}
+
+/* 編集フォーム */
+.edit-form {
+  margin-top: var(--spacing-md);
+}
+
+.edit-form .form-input {
+  text-align: center;
+  margin-bottom: var(--spacing-sm);
+}
+
+.edit-actions {
+  display: flex;
+  gap: var(--spacing-sm);
+  justify-content: center;
+}
+
+.btn-sm {
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: var(--font-sm);
+}
+
+/* ユーザーIDセクション */
+.user-id-section {
+  background: var(--white-05);
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-md);
+}
+
+.user-id-label {
+  display: block;
+  font-size: var(--font-sm);
+  color: var(--white-60);
+  margin-bottom: var(--spacing-sm);
+}
+
+.user-id-value {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+}
+
+.user-id-value code {
+  font-size: var(--font-lg);
+  color: var(--color-gold);
+  font-family: var(--font-family-en);
+  letter-spacing: 0.05em;
+}
+
+.copy-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: var(--font-base);
+  color: var(--color-gold);
+  transition: transform var(--transition-fast);
+}
+
+.copy-btn:hover {
+  transform: scale(1.2);
+  color: var(--color-dark-gold);
+}
+
+.user-id-hint {
+  font-size: var(--font-xs);
+  color: var(--white-40);
+  margin-top: var(--spacing-sm);
+}
+
+/* スコア統計 */
+.stats-section {
+  margin-top: var(--spacing-lg);
+}
+
+.stats-section .card-title {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-md);
+}
+
+.stat-item {
+  background: var(--white-05);
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-md);
+  text-align: center;
+}
+
+.stat-value {
+  display: block;
+  font-family: var(--font-family-en);
+  font-size: var(--font-xl);
+  font-weight: 700;
+  color: var(--color-gold);
+  margin-bottom: var(--spacing-xs);
+}
+
+.stat-label {
+  font-size: var(--font-xs);
+  color: var(--white-60);
+}
+
+/* トレーニング履歴 */
+.history-section {
+  margin-top: var(--spacing-lg);
+}
+
+.history-section .card-title {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.history-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.history-list::-webkit-scrollbar-track {
+  background: var(--white-05);
+  border-radius: 3px;
+}
+
+.history-list::-webkit-scrollbar-thumb {
+  background: var(--gold-30);
+  border-radius: 3px;
+}
+
+.history-list::-webkit-scrollbar-thumb:hover {
+  background: var(--gold-50);
+}
+
+.history-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-md);
+  background: var(--white-05);
+  border-radius: var(--border-radius-md);
+}
+
+.history-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.history-type {
+  font-weight: 500;
+}
+
+.history-details {
+  font-size: var(--font-xs);
+  color: var(--white-60);
+}
+
+.history-date {
+  font-size: var(--font-xs);
+  color: var(--white-40);
+}
+
+.history-score {
+  font-family: var(--font-family-en);
+  font-weight: 700;
+  color: var(--color-gold);
+}
+
+/* ログアウトボタン */
+#logout-btn {
+  margin-bottom: var(--spacing-xl);
+}
+
+/* ============================================
+   レスポンシブ - PC用レイアウト
+   ============================================ */
+
+/* 上段：プロフィールカード + トレーニング履歴 */
+.profile-top-row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+}
+
+/* 下段：スコア統計 + グラフ */
+.profile-bottom-row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.profile-bottom-row .stats-section {
+  margin-top: 0;
+}
+
+.profile-bottom-row .graph-section {
+  margin-top: 0;
+}
+
+@media (min-width: 480px) {
+  .stats-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (min-width: 768px) {
+  .profile-container {
+    max-width: 900px;
+  }
+
+  /* 上段：横並び */
+  .profile-top-row {
+    flex-direction: row;
+    align-items: stretch;
+  }
+
+  .profile-top-row .profile-card {
+    width: 300px;
+    flex-shrink: 0;
+  }
+
+  .profile-top-row .history-section {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    margin-top: 0;
+  }
+
+  .profile-top-row .history-section .history-list {
+    flex: 1;
+    max-height: 240px;
+  }
+
+  /* 下段：横並び */
+  .profile-bottom-row {
+    flex-direction: row;
+    align-items: stretch;
+  }
+
+  .profile-bottom-row .stats-section {
+    width: 300px;
+    flex-shrink: 0;
+  }
+
+  .profile-bottom-row .graph-section {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  #logout-btn {
+    margin-bottom: 0;
+  }
+}
+
+@media (min-width: 1024px) {
+  .profile-container {
+    max-width: 1100px;
+  }
+
+  .profile-top-row .profile-card {
+    width: 340px;
+  }
+
+  .profile-bottom-row .stats-section {
+    width: 340px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .profile-container {
+    max-width: 1200px;
+  }
+
+  .profile-top-row .profile-card {
+    width: 380px;
+  }
+
+  .profile-bottom-row .stats-section {
+    width: 380px;
+  }
+}
+
+/* ============================================
+   グラフセクションスタイル
+   ============================================ */
+
+   .graph-section {
+    margin-top: 1.5rem;
+  }
+  
+  .graph-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  
+  .graph-tabs {
+    display: flex;
+    gap: 0.5rem;
+  }
+  
+  .graph-tab {
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-secondary);
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+  }
+  
+  .graph-tab:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+  
+  .graph-tab.active {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--bg-primary);
+    font-weight: 600;
+  }
+  
+  .graph-container {
+    position: relative;
+    height: 250px;
+    margin-bottom: 1rem;
+  }
+  
+  .graph-summary {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+  }
+  
+  .summary-item {
+    text-align: center;
+  }
+  
+  .summary-label {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.25rem;
+  }
+  
+  .summary-value {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+  
+  /* レスポンシブ対応 */
+  @media (max-width: 480px) {
+    .graph-header {
+      flex-direction: column;
+      gap: 0.75rem;
+      align-items: flex-start;
+    }
+  
+    .graph-summary {
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+    }
+  
+    .summary-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      text-align: left;
+    }
+  }

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>プロフィール - Fit Fight</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/profile.css">
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="page-wrapper has-bottom-nav">
+    <!-- ヘッダー（モバイル用） -->
+    <header class="header mobile-only">
+      <div class="header-content">
+        <a href="home.html" class="back-button">
+          <span>←</span>
+          <span>ホーム</span>
+        </a>
+        <h1 class="header-title">プロフィール</h1>
+        <div style="width: 60px;"></div>
+      </div>
+    </header>
+
+    <main class="main-content">
+      <div class="container profile-container">
+        <!-- メッセージ表示 -->
+        <div id="error-message" class="error-message"></div>
+        <div id="success-message" class="success-message"></div>
+
+        <!-- 上段：プロフィールカード + トレーニング履歴 -->
+        <div class="profile-top-row">
+          <!-- プロフィールカード -->
+          <section class="profile-card card slide-up">
+            <!-- アイコン -->
+            <div class="avatar-section">
+              <div class="avatar-wrapper">
+                <img id="profile-avatar" src="" alt="プロフィール画像" class="avatar avatar-lg">
+                <label for="avatar-input" class="avatar-edit-btn" title="画像を変更">
+                  <i data-lucide="camera"></i>
+                </label>
+                <input type="file" id="avatar-input" accept="image/*" style="display: none;">
+              </div>
+            </div>
+
+            <!-- ユーザーネーム編集 -->
+            <div class="profile-info">
+              <div class="editable-field">
+                <span id="username-display" class="username-display"></span>
+                <button id="edit-username-btn" class="edit-btn" title="編集">
+                  <i data-lucide="pencil"></i>  
+                </button>
+              </div>
+              <div id="username-edit" class="edit-form" style="display: none;">
+                <input type="text" id="username-input" class="form-input" maxlength="20">
+                <div class="edit-actions">
+                  <button id="save-username-btn" class="btn btn-primary btn-sm">保存</button>
+                  <button id="cancel-username-btn" class="btn btn-secondary btn-sm">キャンセル</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- ユーザーID -->
+            <div class="user-id-section">
+              <span class="user-id-label">ユーザーID</span>
+              <div class="user-id-value">
+                <code id="user-id-code"></code>
+                <button id="copy-id-btn" class="copy-btn" title="コピー">
+                  <i data-lucide="copy"></i>
+                </button>
+              </div>
+              <p class="user-id-hint">このIDをフレンドに共有しよう</p>
+            </div>
+          </section>
+
+          <!-- トレーニング履歴 -->
+          <section class="history-section card slide-up">
+            <h2 class="card-title">
+              <span><i data-lucide="clipboard-list"></i></span>
+              トレーニング履歴
+            </h2>
+
+            <div id="training-history" class="history-list">
+              <!-- 履歴はJSで動的に追加 -->
+              <div class="empty-state" id="empty-history">
+                <div class="empty-state-icon"><i data-lucide="activity"></i></div>
+                <p>まだトレーニング履歴がありません</p>
+              </div>
+            </div>
+
+          </section>
+        </div>
+
+        <!-- 下段：スコア統計 + グラフ -->
+        <div class="profile-bottom-row">
+          <!-- スコア統計 -->
+          <section class="stats-section card slide-up">
+            <h2 class="card-title">
+              <span><i data-lucide="bar-chart-3"></i></span>
+              スコア統計
+            </h2>
+
+            <div class="stats-grid">
+              <div class="stat-item">
+                <span class="stat-value" id="total-score">0</span>
+                <span class="stat-label">累計スコア</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-value" id="today-score">0</span>
+                <span class="stat-label">今日のスコア</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-value" id="total-trainings">0</span>
+                <span class="stat-label">トレーニング回数</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-value" id="total-calories">0</span>
+                <span class="stat-label">消費カロリー</span>
+              </div>
+            </div>
+          </section>
+
+          <!-- スコア推移グラフ -->
+          <section class="graph-section card slide-up">
+            <div class="graph-header">
+              <h2 class="card-title">スコア推移</h2>
+              <div class="graph-tabs">
+                <button class="graph-tab active" data-period="week">週間</button>
+                <button class="graph-tab" data-period="month">月間</button>
+              </div>
+            </div>
+
+            <div class="graph-container">
+              <canvas id="score-chart"></canvas>
+            </div>
+
+            <!-- グラフ下の統計サマリー -->
+            <div class="graph-summary">
+              <div class="summary-item">
+                <span class="summary-label">期間合計</span>
+                <span id="graph-total-score" class="summary-value">0 pt</span>
+              </div>
+              <div class="summary-item">
+                <span class="summary-label">1日平均</span>
+                <span id="graph-avg-score" class="summary-value">0 pt</span>
+              </div>
+              <div class="summary-item">
+                <span class="summary-label">最高スコア日</span>
+                <span id="graph-best-day" class="summary-value">-</span>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- ログアウトボタン -->
+        <button id="logout-btn" class="btn btn-danger btn-full mt-lg">
+          ログアウト
+        </button>
+      </div>
+    </main>
+
+    <nav class="nav-bottom">
+      <ul class="nav-list">
+        <li class="nav-item"><a href="home.html" class="nav-link"><span class="nav-icon"><i data-lucide="home"></i></span><span>ホーム</span></a></li>
+        <li class="nav-item"><a href="ranking.html" class="nav-link"><span class="nav-icon"><i data-lucide="trophy"></i></span><span>ランキング</span></a></li>
+        <li class="nav-item"><a href="training.html" class="nav-link"><span class="nav-icon"><i data-lucide="dumbbell"></i></span><span>記録</span></a></li>
+        <li class="nav-item"><a href="friends.html" class="nav-link"><span class="nav-icon"><i data-lucide="users"></i></span><span>フレンド</span></a></li>
+        <li class="nav-item"><a href="profile.html" class="nav-link active"><span class="nav-icon"><i data-lucide="user"></i></span><span>プロフィール</span></a></li>
+      </ul>
+      <button class="nav-logout-btn" id="nav-logout-btn" title="ログアウト"><i data-lucide="log-out"></i></button>
+    </nav>
+  </div>
+
+  <!-- ローディング -->
+  <div id="loading" class="loading">
+    <div class="loading-spinner"></div>
+  </div>
+
+  <!-- JavaScript -->
+  <script src="js/firebase-config.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/profile.js"></script>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>lucide.createIcons();</script>
+</body>
+</html>

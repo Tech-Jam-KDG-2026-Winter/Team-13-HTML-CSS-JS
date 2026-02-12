@@ -1,0 +1,27 @@
+.HTMLAnimation-value {
+    display: none;
+}
+
+.HTMLAnimation-meter {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.HTMLAnimation-meter svg {
+    transform: rotate(-90deg);
+}
+
+.HTMLAnimation-meter svg .progress {
+    stroke-linecap: round;
+}
+
+.HTMLAnimation-meter .percentage {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 16px;
+    text-align: center;
+}

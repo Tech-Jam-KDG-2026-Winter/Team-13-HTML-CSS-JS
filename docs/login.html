@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ログイン - Fit Fight</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/login.css">
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+</head>
+<body>
+  <div class="auth-page">
+    <!-- 左側：ブランドエリア（デスクトップのみ） -->
+    <div class="auth-brand">
+      <div class="brand-content">
+        <div class="brand-logo">
+          <div class="brand-logo-icon">
+            <i data-lucide="dumbbell"></i>
+          </div>
+          <span class="brand-logo-text">Fit Fight</span>
+        </div>
+
+        <h1 class="brand-headline">
+          体と心を<br>
+          <span>変えていこう</span>
+        </h1>
+
+        <p class="brand-description">
+          トレーニングを記録し、仲間と競い合い、一緒にフィットネスゴールを達成しよう。
+        </p>
+
+        <div class="brand-features">
+          <div class="brand-feature">
+            <i data-lucide="trophy"></i>
+            <span>フレンドとリアルタイムで対戦</span>
+          </div>
+          <div class="brand-feature">
+            <i data-lucide="bar-chart-3"></i>
+            <span>日々の進捗をトラッキング</span>
+          </div>
+          <div class="brand-feature">
+            <i data-lucide="flame"></i>
+            <span>カロリー消費でポイント獲得</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 右側：フォームエリア -->
+    <div class="auth-form-section">
+      <div class="auth-form-container">
+        <!-- モバイル用ロゴ -->
+        <div class="mobile-logo">
+          <div class="mobile-logo-icon">
+            <i data-lucide="dumbbell"></i>
+          </div>
+          <span class="mobile-logo-text">Fit Fight</span>
+        </div>
+
+        <!-- フォームヘッダー -->
+        <div class="auth-header">
+          <h2 class="auth-title">おかえりなさい</h2>
+          <p class="auth-subtitle">ログインして続けましょう</p>
+        </div>
+
+        <!-- フォームカード -->
+        <div class="auth-card">
+          <!-- エラーメッセージ -->
+          <div id="error-message" class="auth-error">
+            <i data-lucide="alert-circle"></i>
+            <span></span>
+          </div>
+
+          <form id="login-form">
+            <div class="auth-input-group">
+              <label for="email">メールアドレス</label>
+              <div class="auth-input-wrapper">
+                <i data-lucide="mail"></i>
+                <input
+                  type="email"
+                  id="email"
+                  class="auth-input"
+                  placeholder="example@email.com"
+                  required
+                  autocomplete="email"
+                >
+              </div>
+            </div>
+
+            <div class="auth-input-group">
+              <label for="password">パスワード</label>
+              <div class="auth-input-wrapper">
+                <i data-lucide="lock"></i>
+                <input
+                  type="password"
+                  id="password"
+                  class="auth-input has-toggle"
+                  placeholder="6文字以上"
+                  required
+                  autocomplete="current-password"
+                >
+                <button type="button" class="password-toggle" data-target="password">
+                  <i data-lucide="eye"></i>
+                </button>
+              </div>
+            </div>
+
+            <button type="submit" class="auth-submit-btn">
+              ログイン
+            </button>
+          </form>
+        </div>
+
+        <!-- フッター -->
+        <div class="auth-footer">
+          <p>アカウントをお持ちでない方は <a href="register.html">新規登録</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ローディング -->
+  <div id="loading" class="loading">
+    <div class="loading-spinner"></div>
+  </div>
+
+  <!-- JavaScript -->
+  <script src="js/firebase-config.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/login.js"></script>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>lucide.createIcons();</script>
+</body>
+</html>

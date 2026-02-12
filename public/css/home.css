@@ -1,0 +1,608 @@
+/* ============================================
+   ホームページスタイル
+   ============================================ */
+
+/* ログアウトボタン */
+.logout-btn {
+  background: transparent;
+  border: 1px solid var(--color-gold);
+  color: var(--color-gold);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-size: var(--font-lg);
+}
+
+.logout-btn:hover {
+  background: var(--gold-10);
+}
+
+/* 今日のスコアカード */
+.today-score-card {
+  text-align: center;
+  background: linear-gradient(135deg, rgba(184, 134, 11, 0.2), var(--gold-10));
+  border-color: var(--color-gold);
+}
+
+/* スコアメーターラッパー */
+.score-meter-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: var(--spacing-lg) 0;
+}
+
+.score-meter-wrapper .HTMLAnimation-meter {
+  margin: 0 auto;
+}
+
+.score-meter-wrapper .percentage {
+  text-align: center;
+}
+
+.score-meter-wrapper .score-display {
+  font-size: 2.5rem;
+  margin: 0;
+  line-height: 1;
+}
+
+.score-meter-wrapper .score-label {
+  margin-top: var(--spacing-xs);
+  font-size: var(--font-sm);
+}
+
+.score-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+}
+
+.score-header h2 {
+  font-size: var(--font-lg);
+  color: var(--color-white);
+}
+
+.score-icon {
+  font-size: var(--font-2xl);
+  animation: pulse 2s infinite;
+}
+
+.score-display {
+  font-family: var(--font-family-en);
+  font-size: 4rem;
+  font-weight: 800;
+  background: var(--gradient-gold);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1;
+  margin: var(--spacing-md) 0;
+}
+
+/* ランキングセクション */
+.ranking-section {
+  margin-top: var(--spacing-lg);
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-md);
+  gap: var(--spacing-sm);
+}
+
+.section-header .card-title {
+  margin-bottom: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  font-size: var(--font-sm);
+  min-width: 0;
+  flex-shrink: 1;
+}
+
+.section-header .card-title span {
+  flex-shrink: 0;
+}
+
+.add-friend-link {
+  font-size: var(--font-xs);
+  color: var(--color-gold);
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  transition: opacity var(--transition-fast);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.add-friend-link:hover {
+  opacity: 0.8;
+}
+
+@media (min-width: 360px) {
+  .section-header .card-title {
+    font-size: var(--font-base);
+    gap: var(--spacing-sm);
+  }
+
+  .add-friend-link {
+    font-size: var(--font-sm);
+    gap: var(--spacing-xs);
+  }
+}
+
+/* ランキングリスト */
+.ranking-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+.ranking-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.ranking-list::-webkit-scrollbar-track {
+  background: var(--white-05);
+  border-radius: 3px;
+}
+
+.ranking-list::-webkit-scrollbar-thumb {
+  background: var(--gold-30);
+  border-radius: 3px;
+}
+
+.ranking-list::-webkit-scrollbar-thumb:hover {
+  background: var(--gold-50);
+}
+
+.ranking-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  background: var(--white-05);
+  border-radius: var(--border-radius-md);
+  transition: background var(--transition-fast);
+}
+
+.ranking-item:hover {
+  background: var(--white-10);
+}
+
+.ranking-item.is-me {
+  background: var(--gold-10);
+  border: 1px solid var(--gold-30);
+}
+
+.rank-badge {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: var(--font-sm);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.rank-badge.rank-1 {
+  background: linear-gradient(135deg, #FFD700, #FFA500);
+  color: var(--color-black);
+}
+
+.rank-badge.rank-2 {
+  background: linear-gradient(135deg, #C0C0C0, #A8A8A8);
+  color: var(--color-black);
+}
+
+.rank-badge.rank-3 {
+  background: linear-gradient(135deg, #CD7F32, #8B4513);
+  color: var(--color-white);
+}
+
+.rank-badge.rank-other {
+  background: var(--white-10);
+  color: var(--color-white);
+}
+
+.ranking-user-info {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  min-width: 0;
+}
+
+.ranking-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid var(--color-gold);
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.ranking-username {
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ranking-score {
+  font-family: var(--font-family-en);
+  font-weight: 700;
+  color: var(--color-gold);
+  flex-shrink: 0;
+}
+
+/* 最近のトレーニングセクション */
+.recent-section {
+  margin-top: var(--spacing-lg);
+}
+
+.recent-section .card-title {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.recent-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+.recent-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.recent-list::-webkit-scrollbar-track {
+  background: var(--white-05);
+  border-radius: 3px;
+}
+
+.recent-list::-webkit-scrollbar-thumb {
+  background: var(--gold-30);
+  border-radius: 3px;
+}
+
+.recent-list::-webkit-scrollbar-thumb:hover {
+  background: var(--gold-50);
+}
+
+.recent-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-md);
+  background: var(--white-05);
+  border-radius: var(--border-radius-md);
+}
+
+.recent-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.recent-type {
+  font-weight: 500;
+}
+
+.recent-details {
+  font-size: var(--font-xs);
+  color: var(--white-60);
+}
+
+.recent-score {
+  font-family: var(--font-family-en);
+  font-weight: 700;
+  color: var(--color-gold);
+}
+
+/* 空の状態 */
+.empty-state {
+  padding: var(--spacing-xl);
+}
+
+.empty-state p {
+  line-height: 1.5;
+}
+
+.home-challenge-section {
+  margin-top: var(--spacing-lg);
+}
+
+/* 届いている挑戦状のカード */
+.home-pending-card {
+  border: 1px solid var(--color-gold);
+  background: linear-gradient(135deg, var(--gold-10), rgba(0, 0, 0, 0.6));
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+  border-radius: var(--border-radius-lg);
+  position: relative;
+  overflow: hidden;
+}
+
+.challenge-alert-header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-sm);
+}
+
+.challenge-alert-header h3 {
+  font-size: var(--font-sm);
+  color: var(--color-gold);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* 進行中の対戦カード */
+.active-challenge-card {
+  background: var(--white-05);
+  border: 1px solid var(--gold-20);
+  padding: var(--spacing-lg);
+  border-radius: var(--border-radius-lg);
+  margin-bottom: var(--spacing-md);
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+}
+
+.active-challenge-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-gold);
+}
+
+.challenge-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-sm);
+}
+
+.match-label {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  font-size: var(--font-sm);
+  font-weight: 600;
+  color: var(--color-gold);
+}
+
+/* チャレンジヘッダー（相手アイコン付き） */
+.active-challenge-card .challenge-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-md);
+}
+
+.challenge-opponent-info {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.challenge-opponent-info .challenge-vs-label {
+  font-size: var(--font-xs);
+  font-weight: 700;
+  color: var(--color-gold);
+  text-transform: uppercase;
+}
+
+.challenge-opponent-info .challenge-opponent-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid var(--color-gold);
+  object-fit: cover;
+}
+
+.challenge-opponent-info .challenge-opponent-name {
+  font-weight: 600;
+  color: var(--color-white);
+  font-size: var(--font-md);
+}
+
+/* VSグリッド（あなた vs 相手） */
+.home-vs-grid {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--white-05);
+  padding: var(--spacing-md);
+  border-radius: var(--border-radius-md);
+  margin: var(--spacing-md) 0;
+}
+
+.vs-unit {
+  flex: 1;
+  text-align: center;
+}
+
+.vs-name {
+  font-size: var(--font-xs);
+  color: var(--white-60);
+  margin-bottom: var(--spacing-xs);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.vs-score {
+  font-family: var(--font-family-en);
+  font-size: var(--font-xl);
+  font-weight: 800;
+  color: var(--color-white);
+}
+
+/* 自分のスコアを少し強調 */
+.vs-unit:first-child .vs-score {
+  color: var(--color-gold);
+}
+
+.vs-middle {
+  padding: 0 var(--spacing-md);
+  font-weight: 800;
+  color: var(--gold-40);
+  font-size: var(--font-lg);
+}
+
+/* 残り時間タイマー */
+.home-challenge-time {
+  font-family: var(--font-family-en);
+  font-size: var(--font-xs);
+  color: var(--color-gold);
+  background: var(--gold-10);
+  padding: 2px 8px;
+  border-radius: 12px;
+  border: 1px solid var(--gold-30);
+}
+
+/* ボタングループ */
+.home-challenge-btn-group {
+  display: flex;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-sm);
+}
+
+.btn-sm {
+  padding: 6px 12px;
+  font-size: var(--font-xs);
+}
+
+/* 挑戦状のアニメーション */
+@keyframes pulse-border {
+  0% { border-color: var(--color-gold); }
+  50% { border-color: var(--gold-30); }
+  100% { border-color: var(--color-gold); }
+}
+
+.home-pending-card {
+  animation: pulse-border 2s infinite;
+}
+
+/* ============================================
+   レスポンシブ - PC用2カラムレイアウト
+   ============================================ */
+
+/* ホームレイアウト */
+.home-layout {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.home-left,
+.home-right {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.home-left .today-score-card,
+.home-left .recent-section {
+  margin-top: 0;
+}
+
+.home-right .ranking-section,
+.home-right .home-challenge-section {
+  margin-top: 0;
+}
+
+@media (min-width: 480px) {
+  .score-display {
+    font-size: 5rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .home-container {
+    max-width: 900px;
+  }
+
+  .ranking-section {
+    margin-top: 0;
+  }
+
+  .home-challenge-section {
+    margin-top: 0;
+  }
+
+  .recent-section {
+    margin-top: 0;
+  }
+
+  .home-layout {
+    display: grid;
+    grid-template-columns: 1fr 360px;
+    grid-template-rows: auto auto;
+    gap: var(--spacing-lg);
+    align-items: stretch;
+  }
+
+  .home-left {
+    display: contents;
+  }
+
+  .home-right {
+    display: contents;
+  }
+
+  .home-left .today-score-card {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .home-right .ranking-section {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .home-left .recent-section {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .home-right .home-challenge-section {
+    grid-column: 2;
+    grid-row: 2;
+  }
+}
+
+@media (min-width: 1024px) {
+  .home-container {
+    max-width: 1100px;
+  }
+
+  .home-layout {
+    grid-template-columns: 1fr 400px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .home-container {
+    max-width: 1200px;
+  }
+
+  .home-layout {
+    grid-template-columns: 1fr 450px;
+  }
+}

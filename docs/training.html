@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>トレーニング記録 - Fit Fight</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/training.css">
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+</head>
+<body>
+  <div class="page-wrapper has-bottom-nav">
+    <!-- ヘッダー（モバイル用） -->
+    <header class="header mobile-only">
+      <div class="header-content">
+        <a href="home.html" class="back-button">
+          <span>←</span>
+          <span>ホーム</span>
+        </a>
+        <h1 class="header-title">トレーニング記録</h1>
+        <div style="width: 60px;"></div>
+      </div>
+    </header>
+
+    <main class="main-content">
+      <div class="container training-container">
+        <!-- メッセージ表示 -->
+        <div id="error-message" class="error-message"></div>
+        <div id="success-message" class="success-message"></div>
+
+        <!-- カテゴリタブ -->
+        <section class="category-section slide-up">
+          <div class="category-tabs" id="category-tabs">
+            <!-- カテゴリタブはJSで動的に生成 -->
+          </div>
+        </section>
+
+        <!-- 2カラムレイアウト -->
+        <div class="training-layout">
+          <!-- 左カラム：種目選択 -->
+          <div class="training-left">
+            <section class="training-type-section card slide-up">
+              <h2 class="card-title">トレーニング種目</h2>
+              <div class="training-types" id="training-types">
+                <!-- 種目ボタンはJSで動的に生成 -->
+              </div>
+            </section>
+
+            
+          </div>
+
+          <!-- 右カラム：時間・プレビュー・ボタン -->
+          <div class="training-right">
+            <!-- 時間入力 -->
+            <section class="duration-section card slide-up">
+              <h2 class="card-title">トレーニング時間</h2>
+
+              <div class="duration-input-row">
+                <input type="number" id="duration-number" class="duration-number-input" value="30" min="1" max="300">
+                <span class="duration-unit">分</span>
+              </div>
+
+              <div class="duration-slider-wrapper">
+                <span class="slider-label">5</span>
+                <input type="range" id="duration-input" class="duration-slider" value="30" min="5" max="120" step="5">
+                <span class="slider-label">120</span>
+              </div>
+
+              <div class="quick-duration">
+                <button class="quick-btn" data-duration="10">10分</button>
+                <button class="quick-btn" data-duration="20">20分</button>
+                <button class="quick-btn" data-duration="30">30分</button>
+                <button class="quick-btn" data-duration="45">45分</button>
+                <button class="quick-btn" data-duration="60">60分</button>
+              </div>
+            </section>
+
+            <!-- 計算結果プレビュー -->
+            <section class="preview-section card slide-up">
+              <h2 class="card-title">獲得予定</h2>
+
+              <div class="preview-grid">
+                <div class="preview-item">
+                  <span class="preview-value" id="preview-calories">0</span>
+                  <span class="preview-label">消費カロリー</span>
+                </div>
+                <div class="preview-item highlight">
+                  <span class="preview-value" id="preview-score">0</span>
+                  <span class="preview-label">獲得スコア</span>
+                </div>
+              </div>
+            </section>
+          </div>
+          
+        </div>
+        <div class="training-action">
+          <button id="save-training-btn" class="btn btn-primary btn-lg">
+            トレーニングを記録
+          </button>
+        </div>
+
+      </div>
+      
+
+    <nav class="nav-bottom">
+      <ul class="nav-list">
+        <li class="nav-item"><a href="home.html" class="nav-link"><span class="nav-icon"><i data-lucide="home"></i></span><span>ホーム</span></a></li>
+        <li class="nav-item"><a href="ranking.html" class="nav-link"><span class="nav-icon"><i data-lucide="trophy"></i></span><span>ランキング</span></a></li>
+        <li class="nav-item"><a href="training.html" class="nav-link active"><span class="nav-icon"><i data-lucide="dumbbell"></i></span><span>記録</span></a></li>
+        <li class="nav-item"><a href="friends.html" class="nav-link"><span class="nav-icon"><i data-lucide="users"></i></span><span>フレンド</span></a></li>
+        <li class="nav-item"><a href="profile.html" class="nav-link"><span class="nav-icon"><i data-lucide="user"></i></span><span>プロフィール</span></a></li>
+      </ul>
+      <button class="nav-logout-btn" id="nav-logout-btn" title="ログアウト"><i data-lucide="log-out"></i></button>
+    </nav>
+  </div>
+
+  <!-- 成功モーダル -->
+  <div id="success-modal" class="modal">
+    <div class="modal-content success-modal-content">
+      <h3 class="success-title">トレーニング完了！</h3>
+
+      <!-- 励ましメッセージ(追加) -->
+      <p id="encouragement-message" class="encouragement-message"></p>
+
+      <div class="success-stats">
+        <div class="success-stat">
+          <span class="success-stat-value" id="modal-calories">0</span>
+          <span class="success-stat-label">kcal消費</span>
+        </div>
+        <div class="success-stat highlight">
+          <span class="success-stat-value" id="modal-score">0</span>
+          <span class="success-stat-label">pt獲得</span>
+        </div>
+      </div>
+
+      <!-- 今日の累計 -->
+       <div class="today-total">
+        <p class="today-total-label">今日の累計</p>
+        <div class="today-total-stats">
+          <span id="modal-today-score">0</span>pt
+        </div>
+       </div>
+
+       <!-- シェアボタン(実装間に合わないのでコメントアウト) -->
+        <!-- <div class="shere-buttons">
+          <button id="share-twitter" class="share-btn share-twitter">
+            <i data-lucide="twitter"></i>シェア
+          </button>
+          <button id="share-line" class="share-btn share-line">
+            <i deta-lucide="message-circle"></i> LINE
+          </button>
+        </div> -->
+        
+      <button id="close-success-modal" class="btn btn-primary btn-full">
+        ホームに戻る
+      </button>
+    </div>
+  </div>
+
+  <!-- ローディング -->
+  <div id="loading" class="loading">
+    <div class="loading-spinner"></div>
+  </div>
+
+  <!-- JavaScript -->
+  <script src="js/firebase-config.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/training-data.js"></script>
+  <script src="js/training.js"></script>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>lucide.createIcons();</script>
+</body>
+</html>
