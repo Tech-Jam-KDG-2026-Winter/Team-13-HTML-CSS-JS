@@ -6,6 +6,7 @@
 let currentUser = null;
 let selectedType = null;
 let selectedCategory = "all";
+let userWeight = 60; // ユーザーの体重（デフォルト60kg）
 
 let duration = 30;
 
@@ -62,9 +63,21 @@ const inputContainer = document.getElementById("input-container");
 // 初期化処理
 // ============================================
 document.addEventListener("DOMContentLoaded", () => {
-  requireAuth((user) => {
+  requireAuth(async (user) => {
     currentUser = user;
+
+    // ユーザーの体重を取得
+    try {
+      const userData = await getUserData(user.uid);
+      if (userData && userData.weight) {
+        userWeight = userData.weight;
+      }
+    } catch (error) {
+      console.error('ユーザーデータ取得エラー:', error);
+    }
+
     console.log("トレーニング記録ページ準備完了");
+    updatePreview(); // 体重読み込み後にプレビューを更新
   });
 
   renderStyleTabs();
@@ -488,7 +501,7 @@ function updatePreview() {
         type.id,
         inputValues.duration,
         null,
-        currentUser?.weight
+        userWeight
       );
       break;
 
@@ -497,7 +510,7 @@ function updatePreview() {
         type.id,
         inputValues.reps,
         null,
-        currentUser?.weight
+        userWeight
       );
       break;
 
@@ -506,7 +519,7 @@ function updatePreview() {
         type.id,
         inputValues.weight,
         inputValues.reps,
-        currentUser?.weight
+        userWeight
       );
       break;
 
@@ -576,7 +589,7 @@ async function handleSaveTraining() {
         type.id,
         inputValues.duration,
         null,
-        currentUser?.weight
+        userWeight
       );
       break;
     case "reps":
@@ -584,7 +597,7 @@ async function handleSaveTraining() {
         type.id,
         inputValues.reps,
         null,
-        currentUser?.weight
+        userWeight
       );
       break;
     case "weight_reps":
@@ -592,7 +605,7 @@ async function handleSaveTraining() {
         type.id,
         inputValues.weight,
         inputValues.reps,
-        currentUser?.weight
+        userWeight
       );
       break;
   }

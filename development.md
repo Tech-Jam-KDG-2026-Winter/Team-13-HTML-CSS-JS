@@ -58,8 +58,9 @@ public/
 1. ユーザーがフォームに入力
 2. ランダムなDiceBearアバターを生成（ページロード時）
 3. オプションでカスタムアバターをアップロード（Cloudinary）
-4. Firebase Authenticationでアカウント作成
-5. Firestoreにユーザードキュメント作成
+4. オプションで体重を入力（20〜300kg、カロリー計算精度向上のため）
+5. Firebase Authenticationでアカウント作成
+6. Firestoreにユーザードキュメント作成（体重含む）
 
 ```javascript
 // ユーザードキュメントの構造
@@ -68,6 +69,7 @@ public/
   email: "email@example.com",
   uniqueId: "username#1234",  // Discord風ID
   iconURL: "https://...",     // アバターURL
+  weight: 60,                 // 体重（kg）- 任意、未設定時はnull
   friends: [],                // フレンドのUID配列
   createdAt: Timestamp,
   updatedAt: Timestamp
@@ -484,6 +486,84 @@ console.log(localStorage.getItem('milestones_CHALLENGE_ID'));
 
 ---
 
+## 体重機能
+
+### 体重の保存と利用
+
+ユーザーの体重を保存し、カロリー計算に使用します。
+
+```javascript
+// training.js - 体重の読み込みとカロリー計算への適用
+let userWeight = 60; // デフォルト値
+
+document.addEventListener("DOMContentLoaded", () => {
+  requireAuth(async (user) => {
+    const userData = await getUserData(user.uid);
+    if (userData && userData.weight) {
+      userWeight = userData.weight;
+    }
+  });
+});
+
+// カロリー計算時に体重を使用
+function calculateCalories(type, value) {
+  const weightFactor = userWeight / 60;
+  return baseCalories * weightFactor;
+}
+```
+
+### プロフィールでの体重編集
+
+スライダーUIで直感的に体重を変更できます。
+
+```javascript
+// profile.js - スライダーと入力欄の同期
+function updateWeightUI(value) {
+  const numValue = parseFloat(value) || 60;
+  weightValueDisplay.textContent = numValue;
+  weightSlider.value = Math.min(Math.max(numValue, 20), 150);
+  weightInput.value = numValue;
+}
+
+// スライダーイベント
+weightSlider.addEventListener('input', (e) => {
+  updateWeightUI(e.target.value);
+});
+
+// 手入力イベント（スライダー範囲外も対応）
+weightInput.addEventListener('input', (e) => {
+  const value = parseFloat(e.target.value);
+  if (!isNaN(value)) {
+    weightValueDisplay.textContent = value;
+    if (value >= 20 && value <= 150) {
+      weightSlider.value = value;
+    }
+  }
+});
+```
+
+### 体重スライダーのCSS
+
+```css
+.weight-slider {
+  -webkit-appearance: none;
+  height: 8px;
+  background: var(--white-10);
+  border-radius: 4px;
+}
+
+.weight-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 24px;
+  height: 24px;
+  background: var(--color-gold);
+  border-radius: 50%;
+  cursor: pointer;
+}
+```
+
+---
+
 ## 検索・お気に入り機能
 
 ### 検索機能 (`training.js`)
@@ -539,8 +619,8 @@ function toggleFavorite(typeId) {
 ---
 
 ## 今後の改善点
-- 身体情報入力機能の実装
 - 消費カロリー算出ロジックの精度向上
 - スコア計算の最適化
 - ヘルスケアAPI連携の検討
+- 目標設定機能の追加
 
