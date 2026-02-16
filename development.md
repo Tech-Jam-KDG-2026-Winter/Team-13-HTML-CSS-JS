@@ -1,6 +1,6 @@
 # 開発ドキュメント
 
-このドキュメントでは、FITNESSアプリの技術的な実装詳細を説明します。
+このドキュメントでは、Fit Fightアプリの技術的な実装詳細を説明します。
 
 ## 目次
 
@@ -484,6 +484,60 @@ console.log(localStorage.getItem('milestones_CHALLENGE_ID'));
 
 ---
 
+## 検索・お気に入り機能
+
+### 検索機能 (`training.js`)
+
+トレーニング種目を名前で検索できます。
+
+```javascript
+let searchQuery = "";
+
+// 検索入力イベント
+searchInput.addEventListener("input", (e) => {
+  searchQuery = e.target.value.toLowerCase();
+  renderTrainingTypes();
+});
+
+// フィルタリング
+function filterTrainingTypes() {
+  return TRAINING_TYPES.filter(type => {
+    const matchesSearch = type.name.toLowerCase().includes(searchQuery);
+    const matchesCategory = selectedCategory === "all" || type.category === selectedCategory;
+    return matchesSearch && matchesCategory;
+  });
+}
+```
+
+### お気に入り機能 (`training.js`)
+
+よく使うトレーニングをお気に入りに登録し、素早くアクセスできます。
+データはlocalStorageに保存されます。
+
+```javascript
+// お気に入りの読み込み
+let favorites = JSON.parse(localStorage.getItem('trainingFavorites')) || [];
+
+// お気に入りの保存
+function saveFavorites() {
+  localStorage.setItem('trainingFavorites', JSON.stringify(favorites));
+}
+
+// お気に入りの切り替え
+function toggleFavorite(typeId) {
+  const index = favorites.indexOf(typeId);
+  if (index === -1) {
+    favorites.push(typeId);
+  } else {
+    favorites.splice(index, 1);
+  }
+  saveFavorites();
+  renderTrainingTypes();
+}
+```
+
+---
+
 ## 今後の改善点
-言語変更
-楽しさの追求
+- 多言語対応
+- 楽しさの追求（アニメーション、サウンドエフェクトなど）
