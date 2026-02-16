@@ -48,28 +48,32 @@
           <section class="profile-card card slide-up">
             <!-- アイコン -->
             <div class="avatar-section">
-              <div class="avatar-wrapper">
+              <label class="avatar-wrapper clickable" for="avatar-input">
                 <img id="profile-avatar" src="" alt="プロフィール画像" class="avatar avatar-lg">
-                <label for="avatar-input" class="avatar-edit-btn" title="画像を変更">
+                <div class="avatar-overlay">
                   <i data-lucide="camera"></i>
-                </label>
+                </div>
                 <input type="file" id="avatar-input" accept="image/*" style="display: none;">
-              </div>
+              </label>
             </div>
 
-            <!-- ユーザーネーム編集 -->
-            <div class="profile-info">
-              <div class="editable-field">
-                <span id="username-display" class="username-display"></span>
-                <button id="edit-username-btn" class="edit-btn" title="編集">
-                  <i data-lucide="pencil"></i>  
-                </button>
+            <!-- ユーザーネーム・体重表示 -->
+            <div class="profile-info-row">
+              <!-- 名前 -->
+              <div class="profile-info-item" id="edit-username-trigger">
+                <span class="profile-info-label">名前</span>
+                <div class="editable-field clickable">
+                  <span id="username-display" class="username-display"></span>
+                  <i data-lucide="pencil" class="edit-icon"></i>
+                </div>
               </div>
-              <div id="username-edit" class="edit-form" style="display: none;">
-                <input type="text" id="username-input" class="form-input" maxlength="20">
-                <div class="edit-actions">
-                  <button id="save-username-btn" class="btn btn-primary btn-sm">保存</button>
-                  <button id="cancel-username-btn" class="btn btn-secondary btn-sm">キャンセル</button>
+
+              <!-- 体重 -->
+              <div class="profile-info-item" id="edit-weight-trigger">
+                <span class="profile-info-label">体重</span>
+                <div class="editable-field clickable">
+                  <span id="weight-display" class="weight-value">未設定</span>
+                  <i data-lucide="pencil" class="edit-icon"></i>
                 </div>
               </div>
             </div>
@@ -183,6 +187,71 @@
       </ul>
       <button class="nav-logout-btn" id="nav-logout-btn" title="ログアウト"><i data-lucide="log-out"></i></button>
     </nav>
+  </div>
+
+  <!-- 名前編集モーダル -->
+  <div id="username-modal" class="modal">
+    <div class="modal-overlay"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">名前を変更</h3>
+        <button class="modal-close" id="close-username-modal">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-input-group">
+          <label for="username-input">ユーザーネーム</label>
+          <input type="text" id="username-input" class="modal-input" maxlength="20" placeholder="1〜20文字">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="cancel-username-btn">キャンセル</button>
+        <button class="btn btn-primary" id="save-username-btn">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 体重編集モーダル -->
+  <div id="weight-modal" class="modal">
+    <div class="modal-overlay"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">体重を変更</h3>
+        <button class="modal-close" id="close-weight-modal">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="weight-slider-container">
+          <!-- 大きな数値表示 -->
+          <div class="weight-display-large">
+            <span id="weight-value-display">60</span>
+            <span class="weight-display-unit">kg</span>
+          </div>
+
+          <!-- スライダー -->
+          <div class="weight-slider-wrapper">
+            <span class="weight-slider-label">20</span>
+            <input type="range" id="weight-slider" class="weight-slider" min="20" max="150" step="0.5" value="60">
+            <span class="weight-slider-label">150</span>
+          </div>
+
+          <!-- 手打ち入力（小さく） -->
+          <div class="weight-manual-input">
+            <span>または直接入力:</span>
+            <input type="number" id="weight-input" class="weight-input-small" min="20" max="300" step="0.1" value="60">
+            <span>kg</span>
+          </div>
+
+          <p class="modal-hint">カロリー計算の精度が上がります</p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="cancel-weight-btn">キャンセル</button>
+        <button class="btn btn-primary" id="save-weight-btn">保存</button>
+      </div>
+    </div>
   </div>
 
   <!-- ローディング -->

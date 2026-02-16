@@ -12,14 +12,27 @@ const TRAININGS_PER_PAGE = 10;
 const profileAvatar = document.getElementById('profile-avatar');
 const avatarInput = document.getElementById('avatar-input');
 const usernameDisplay = document.getElementById('username-display');
-const editUsernameBtn = document.getElementById('edit-username-btn');
-const usernameEdit = document.getElementById('username-edit');
+const userIdCode = document.getElementById('user-id-code');
+const copyIdBtn = document.getElementById('copy-id-btn');
+const weightDisplay = document.getElementById('weight-display');
+const totalScoreElement = document.getElementById('total-score');
+
+// モーダル関連
+const usernameModal = document.getElementById('username-modal');
 const usernameInput = document.getElementById('username-input');
 const saveUsernameBtn = document.getElementById('save-username-btn');
 const cancelUsernameBtn = document.getElementById('cancel-username-btn');
-const userIdCode = document.getElementById('user-id-code');
-const copyIdBtn = document.getElementById('copy-id-btn');
-const totalScoreElement = document.getElementById('total-score');
+const closeUsernameModal = document.getElementById('close-username-modal');
+const editUsernameTrigger = document.getElementById('edit-username-trigger');
+
+const weightModal = document.getElementById('weight-modal');
+const weightInput = document.getElementById('weight-input');
+const weightSlider = document.getElementById('weight-slider');
+const weightValueDisplay = document.getElementById('weight-value-display');
+const saveWeightBtn = document.getElementById('save-weight-btn');
+const cancelWeightBtn = document.getElementById('cancel-weight-btn');
+const closeWeightModal = document.getElementById('close-weight-modal');
+const editWeightTrigger = document.getElementById('edit-weight-trigger');
 const todayScoreElement = document.getElementById('today-score');
 const totalTrainingsElement = document.getElementById('total-trainings');
 const totalCaloriesElement = document.getElementById('total-calories');
@@ -63,13 +76,42 @@ function setupEventListeners() {
   // アバター変更
   avatarInput.addEventListener('change', handleAvatarChange);
 
-  // ユーザーネーム編集
-  editUsernameBtn.addEventListener('click', showUsernameEdit);
-  saveUsernameBtn.addEventListener('click', saveUsername);
-  cancelUsernameBtn.addEventListener('click', hideUsernameEdit);
+  // ユーザーネーム編集モーダル
+  if (editUsernameTrigger) {
+    editUsernameTrigger.addEventListener('click', openUsernameModal);
+  }
+  if (saveUsernameBtn) {
+    saveUsernameBtn.addEventListener('click', saveUsername);
+  }
+  if (cancelUsernameBtn) {
+    cancelUsernameBtn.addEventListener('click', closeUsernameModalFn);
+  }
+  if (closeUsernameModal) {
+    closeUsernameModal.addEventListener('click', closeUsernameModalFn);
+  }
+  if (usernameModal) {
+    usernameModal.querySelector('.modal-overlay').addEventListener('click', closeUsernameModalFn);
+  }
 
   // ユーザーIDコピー
   copyIdBtn.addEventListener('click', copyUserId);
+
+  // 体重編集モーダル
+  if (editWeightTrigger) {
+    editWeightTrigger.addEventListener('click', openWeightModal);
+  }
+  if (saveWeightBtn) {
+    saveWeightBtn.addEventListener('click', saveWeight);
+  }
+  if (cancelWeightBtn) {
+    cancelWeightBtn.addEventListener('click', closeWeightModalFn);
+  }
+  if (closeWeightModal) {
+    closeWeightModal.addEventListener('click', closeWeightModalFn);
+  }
+  if (weightModal) {
+    weightModal.querySelector('.modal-overlay').addEventListener('click', closeWeightModalFn);
+  }
 
   // もっと見る（ボタンが存在する場合のみ）
   if (loadMoreBtn) {
@@ -108,6 +150,12 @@ function displayProfile() {
 
   // ユーザーID
   userIdCode.textContent = currentUserData?.userID || '未設定';
+
+  // 体重
+  if (weightDisplay) {
+    const weight = currentUserData?.weight;
+    weightDisplay.textContent = weight ? `${weight} kg` : '未設定';
+  }
 }
 
 // ============================================
@@ -166,19 +214,17 @@ async function handleAvatarChange(e) {
 }
 
 // ============================================
-// ユーザーネーム編集
+// ユーザーネーム編集モーダル
 // ============================================
 
-function showUsernameEdit() {
+function openUsernameModal() {
   usernameInput.value = currentUserData?.username || '';
-  usernameDisplay.parentElement.style.display = 'none';
-  usernameEdit.style.display = 'block';
+  usernameModal.classList.add('active');
   usernameInput.focus();
 }
 
-function hideUsernameEdit() {
-  usernameEdit.style.display = 'none';
-  usernameDisplay.parentElement.style.display = 'flex';
+function closeUsernameModalFn() {
+  usernameModal.classList.remove('active');
 }
 
 async function saveUsername() {
@@ -201,7 +247,7 @@ async function saveUsername() {
     usernameDisplay.textContent = newUsername;
     currentUserData.username = newUsername;
 
-    hideUsernameEdit();
+    closeUsernameModalFn();
     showSuccess('ユーザーネームを更新しました');
   } catch (error) {
     console.error('ユーザーネーム更新エラー:', error);
@@ -224,6 +270,86 @@ async function copyUserId() {
     showSuccess('ユーザーIDをコピーしました');
   } else {
     showError('コピーに失敗しました');
+  }
+}
+
+// ============================================
+// 体重編集モーダル
+// ============================================
+
+function openWeightModal() {
+  const weight = currentUserData?.weight || 60;
+  updateWeightUI(weight);
+  weightModal.classList.add('active');
+}
+
+function closeWeightModalFn() {
+  weightModal.classList.remove('active');
+}
+
+// スライダーと入力欄の同期
+function updateWeightUI(value) {
+  const numValue = parseFloat(value) || 60;
+  weightValueDisplay.textContent = numValue;
+  weightSlider.value = Math.min(Math.max(numValue, 20), 150); // スライダー範囲内に収める
+  weightInput.value = numValue;
+}
+
+// スライダーのイベント
+if (weightSlider) {
+  weightSlider.addEventListener('input', (e) => {
+    updateWeightUI(e.target.value);
+  });
+}
+
+// 手入力のイベント
+if (weightInput) {
+  weightInput.addEventListener('input', (e) => {
+    const value = parseFloat(e.target.value);
+    if (!isNaN(value)) {
+      weightValueDisplay.textContent = value;
+      // スライダー範囲内なら同期
+      if (value >= 20 && value <= 150) {
+        weightSlider.value = value;
+      }
+    }
+  });
+}
+
+async function saveWeight() {
+  const newWeight = weightInput.value ? parseFloat(weightInput.value) : null;
+
+  // バリデーション
+  if (newWeight !== null && (newWeight < 20 || newWeight > 300)) {
+    showError('体重は20〜300kgの範囲で入力してください');
+    return;
+  }
+
+  try {
+    toggleLoading(true);
+
+    // Firestoreを更新
+    const updateData = {};
+    if (newWeight !== null) {
+      updateData.weight = newWeight;
+    } else {
+      // 体重を削除（未設定に戻す）
+      updateData.weight = firebase.firestore.FieldValue.delete();
+    }
+
+    await db.collection('users').doc(currentUser.uid).update(updateData);
+
+    // 表示を更新
+    weightDisplay.textContent = newWeight ? `${newWeight} kg` : '未設定';
+    currentUserData.weight = newWeight;
+
+    closeWeightModalFn();
+    showSuccess('体重を更新しました');
+  } catch (error) {
+    console.error('体重更新エラー:', error);
+    showError('体重の更新に失敗しました');
+  } finally {
+    toggleLoading(false);
   }
 }
 

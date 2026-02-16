@@ -8,6 +8,7 @@ const usernameInput = document.getElementById('username');
 const emailInput = document.getElementById('email');
 const passwordInput = document.getElementById('password');
 const passwordConfirmInput = document.getElementById('password-confirm');
+const weightInput = document.getElementById('weight');
 const avatarInput = document.getElementById('avatar-input');
 const avatarPreview = document.getElementById('avatar-preview');
 const avatarUploadTrigger = document.getElementById('avatar-upload-trigger');
@@ -121,6 +122,7 @@ async function handleRegister(e) {
   const email = emailInput.value.trim();
   const password = passwordInput.value;
   const passwordConfirm = passwordConfirmInput.value;
+  const weight = weightInput && weightInput.value ? parseFloat(weightInput.value) : null;
 
   // バリデーション
   if (!validateForm(username, email, password, passwordConfirm)) {
@@ -138,7 +140,7 @@ async function handleRegister(e) {
     const userID = generateUserId(username);
 
     // Firestoreにユーザー情報を保存
-    await db.collection('users').doc(user.uid).set({
+    const userData = {
       username: username,
       email: email,
       userID: userID,
@@ -146,7 +148,14 @@ async function handleRegister(e) {
       totalScore: 0,
       friends: [],
       createdAt: firebase.firestore.FieldValue.serverTimestamp()
-    });
+    };
+
+    // 体重が入力されている場合のみ保存
+    if (weight !== null && weight >= 20 && weight <= 300) {
+      userData.weight = weight;
+    }
+
+    await db.collection('users').doc(user.uid).set(userData);
 
     // 登録成功 - ホームページへリダイレクト
     window.location.href = 'home.html';
