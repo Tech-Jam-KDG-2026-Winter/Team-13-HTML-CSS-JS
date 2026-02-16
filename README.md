@@ -1,10 +1,10 @@
-# FITNESS - フィットネストラッキングアプリ
+# Fit Fight - フィットネストラッキングアプリ
 
 フレンドと競い合えるゲーミフィケーション型フィットネス記録アプリ
 
 ## 概要
 
-FITNESSは、トレーニングを記録してスコアを獲得し、フレンドとランキングで競い合えるWebアプリケーションです。ゲーミフィケーション要素を取り入れることで、トレーニングのモチベーション維持をサポートします。
+Fit Fightは、トレーニングを記録してスコアを獲得し、フレンドとランキングで競い合えるWebアプリケーションです。ゲーミフィケーション要素を取り入れることで、トレーニングのモチベーション維持をサポートします。
 
 ## 主な機能
 
@@ -19,8 +19,10 @@ FITNESSは、トレーニングを記録してスコアを獲得し、フレン�
   - カスタム画像をアップロードすることも可能
 
 ### 2. トレーニング記録
-- **100種類以上**のトレーニング種目から選択
+- **110種類以上**のトレーニング種目から選択
 - カテゴリ別フィルタリング（腕、足、腹筋、背中、胸、全身、有酸素、格闘技、柔軟、水中運動、スポーツ）
+- **検索機能**: 種目名で素早く検索
+- **お気に入り機能**: よく使う種目をお気に入り登録してすぐアクセス
 - トレーニング時間の設定（スライダー・クイックボタン対応）
 - 消費カロリーとスコアの自動計算
 - 励ましメッセージ表示
@@ -122,7 +124,7 @@ firebase login
 #### 1. プロジェクトフォルダに移動
 
 ```bash
-cd tachjam_rizap
+cd Team-13-HTML-CSS-JS
 ```
 
 ※ パスは自分の環境に合わせて変更（例: `cd ~/Desktop/tachjam_rizap`）
@@ -188,7 +190,7 @@ Firebase CLIが使えない場合の代替手段：
 #### Python（Macに標準搭載）
 
 ```bash
-cd tachjam_rizap/public
+cd Team-13-HTML-CSS-JS/public
 python3 -m http.server 8000
 ```
 
@@ -262,8 +264,10 @@ Firebase Console → Firestore → インデックス で以下を作成：
 ## フォルダ構成
 
 ```
-tachjam_rizap/
+Team-13-HTML-CSS-JS/
 ├── README.md          # このファイル
+├── development.md     # 開発ドキュメント
+├── FAQ.md             # よくある質問
 ├── public/            # Webアプリ本体
 │   ├── css/           # スタイルシート
 │   │   ├── common.css
@@ -288,10 +292,7 @@ tachjam_rizap/
 │   ├── training.html
 │   ├── friends.html
 │   └── profile.html
-└── docs/              # ドキュメント・GitHub Pages
-    ├── development.md       # 開発ドキュメント
-    ├── data-types.md
-    └── lucide-icon-guide.md
+└── docs/              # GitHub Pages用（publicのコピー）
 ```
 
 ## 技術スタック
@@ -340,8 +341,6 @@ tachjam_rizap/
 - スコア: 300 × 1.5 = **450pt**
 
 ---
-
-## 開発メモ
 
 ### DiceBearアバターシステム
 

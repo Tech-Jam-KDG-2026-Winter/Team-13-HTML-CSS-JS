@@ -636,24 +636,109 @@ async function handleSaveTraining() {
 // ============================================
 
 async function showSuccessModal(calories, score) {
-  // 1. 基本情報を表示
-  modalCalories.textContent = calories.toLocaleString();
-  modalScore.textContent = score.toLocaleString();
+  // 初期値を0にセット
+  modalCalories.textContent = "0";
+  modalScore.textContent = "0";
 
-  // 2. 励ましのメッセージ
+  // 励ましのメッセージ
   encouragementMessage.textContent = getEncouragementMessage(score);
 
+  let todayTotalScore = score;
   try {
-    // 今日の累計スコア取得 (引数を currentUser.uid に修正)
     const previousTodayScore = await getTodayScore(currentUser.uid);
-    modalTodayScore.textContent = (previousTodayScore + score).toLocaleString();
+    todayTotalScore = previousTodayScore + score;
   } catch (error) {
     console.error("累計スコア取得エラー:", error);
-    modalTodayScore.textContent = score.toLocaleString();
+  }
+  modalTodayScore.textContent = "0";
+
+  // モーダルをアクティブにする
+  successModal.classList.add("active");
+
+  // 紙吹雪を生成
+  createConfetti();
+
+  // カウントアップアニメーション（少し遅延させて開始）
+  setTimeout(() => {
+    animateCountUp(modalCalories, 0, calories, 1000);
+    animateCountUp(modalScore, 0, score, 1200);
+    animateCountUp(modalTodayScore, 0, todayTotalScore, 1400);
+  }, 400);
+}
+
+// ============================================
+// カウントアップアニメーション
+// ============================================
+function animateCountUp(element, start, end, duration) {
+  const startTime = performance.now();
+  const diff = end - start;
+
+  function update(currentTime) {
+    const elapsed = currentTime - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+
+    // イージング（ease-out）
+    const easeOut = 1 - Math.pow(1 - progress, 3);
+    const current = Math.floor(start + diff * easeOut);
+
+    element.textContent = current.toLocaleString();
+
+    // パルスエフェクト
+    if (progress < 1) {
+      element.classList.add('counting');
+      setTimeout(() => element.classList.remove('counting'), 50);
+      requestAnimationFrame(update);
+    }
   }
 
-  // 3. モーダルをアクティブにする
-  successModal.classList.add("active");
+  requestAnimationFrame(update);
+}
+
+// ============================================
+// 紙吹雪アニメーション
+// ============================================
+function createConfetti() {
+  const modalContent = document.querySelector('.success-modal-content');
+
+  // 既存の紙吹雪コンテナを削除
+  const existingContainer = modalContent.querySelector('.confetti-container');
+  if (existingContainer) {
+    existingContainer.remove();
+  }
+
+  // 新しいコンテナを作成
+  const container = document.createElement('div');
+  container.className = 'confetti-container';
+  modalContent.style.position = 'relative';
+  modalContent.style.overflow = 'hidden';
+  modalContent.appendChild(container);
+
+  // 紙吹雪を生成
+  const colors = ['#d4af37', '#f4d03f', '#ffffff', '#ffd700'];
+  const confettiCount = 30;
+
+  for (let i = 0; i < confettiCount; i++) {
+    const confetti = document.createElement('div');
+    confetti.className = 'confetti';
+    confetti.style.left = Math.random() * 100 + '%';
+    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+    confetti.style.animationDelay = Math.random() * 0.5 + 's';
+    confetti.style.animationDuration = (2 + Math.random() * 2) + 's';
+    confetti.style.setProperty('--drift', (Math.random() - 0.5) * 100 + 'px');
+
+    // ランダムな形状
+    const shapes = ['', '50%', '0'];
+    confetti.style.borderRadius = shapes[Math.floor(Math.random() * shapes.length)];
+    confetti.style.width = (5 + Math.random() * 10) + 'px';
+    confetti.style.height = (5 + Math.random() * 10) + 'px';
+
+    container.appendChild(confetti);
+  }
+
+  // 3秒後に紙吹雪を削除
+  setTimeout(() => {
+    container.remove();
+  }, 4000);
 }
 
 // ============================================
