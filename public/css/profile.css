@@ -59,6 +59,12 @@
 
 .profile-info-item {
   text-align: center;
+  min-width: 0;
+}
+
+.profile-info-item:first-child {
+  flex: 1;
+  max-width: 180px;
 }
 
 .profile-info-label {
@@ -80,9 +86,14 @@
 }
 
 .username-display {
-  font-size: var(--font-xl);
+  font-size: var(--font-lg);
   font-weight: bold;
   color: var(--color-white);
+  display: block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .weight-value {

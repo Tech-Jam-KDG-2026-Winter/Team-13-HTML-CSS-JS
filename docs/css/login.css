@@ -281,6 +281,16 @@
   box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.1);
 }
 
+/* ブラウザのオートフィル背景を上書き */
+.auth-input:-webkit-autofill,
+.auth-input:-webkit-autofill:hover,
+.auth-input:-webkit-autofill:focus,
+.auth-input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px rgba(20, 20, 20, 1) inset !important;
+  -webkit-text-fill-color: var(--color-white) !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
 .auth-input-wrapper:focus-within > svg,
 .auth-input-wrapper:focus-within > i {
   color: var(--color-gold);
