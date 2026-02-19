@@ -305,6 +305,7 @@ a:hover {
 .btn-primary:hover {
   box-shadow: var(--shadow-gold);
   transform: translateY(-2px);
+  color: var(--color-black);
 }
 
 .btn-primary:active {

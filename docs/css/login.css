@@ -73,11 +73,15 @@
 .brand-logo-icon {
   width: 60px;
   height: 60px;
-  background: var(--gradient-gold);
-  border-radius: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.brand-logo-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 .brand-logo-icon i {
@@ -164,13 +168,16 @@
 .mobile-logo-icon {
   width: 70px;
   height: 70px;
-  background: var(--gradient-gold);
-  border-radius: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 0 auto var(--spacing-md);
-  box-shadow: 0 10px 40px rgba(212, 175, 55, 0.3);
+}
+
+.mobile-logo-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 .mobile-logo-icon i {
@@ -274,9 +281,37 @@
   box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.1);
 }
 
+/* ブラウザのオートフィル背景を上書き */
+.auth-input:-webkit-autofill,
+.auth-input:-webkit-autofill:hover,
+.auth-input:-webkit-autofill:focus,
+.auth-input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px rgba(20, 20, 20, 1) inset !important;
+  -webkit-text-fill-color: var(--color-white) !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
 .auth-input-wrapper:focus-within > svg,
 .auth-input-wrapper:focus-within > i {
   color: var(--color-gold);
+}
+
+/* 入力フィールドの単位表示 */
+.input-unit {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--white-40);
+  font-size: var(--font-sm);
+  pointer-events: none;
+}
+
+/* 入力フィールドのヒントテキスト */
+.input-hint {
+  font-size: var(--font-xs);
+  color: var(--white-40);
+  margin-top: var(--spacing-xs);
 }
 
 /* パスワード表示トグルボタン */

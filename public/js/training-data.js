@@ -8,6 +8,7 @@ const TRAINING_STYLES = [
 
 const TRAINING_CATEGORIES = [
   { id: 'all', name: 'すべて' },
+  { id: 'favorites', name: 'お気に入り' },
   { id: 'arms', name: '腕' },
   { id: 'legs', name: '足' },
   { id: 'abs', name: '腹筋' },

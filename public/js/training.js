@@ -6,11 +6,18 @@
 let currentUser = null;
 let selectedType = null;
 let selectedCategory = "all";
+let userWeight = 60; // ユーザーの体重（デフォルト60kg）
 
 let duration = 30;
 
 // 絞り込みを追加
 let selectedStyle = "all";
+
+// 検索クエリ
+let searchQuery = "";
+
+// お気に入り（localStorageから読み込み）
+let favorites = JSON.parse(localStorage.getItem('trainingFavorites')) || [];
 
 // 追加部分データのformatを参照して入力カードの内容を切り替える
 // ==============================
@@ -56,15 +63,28 @@ const inputContainer = document.getElementById("input-container");
 // 初期化処理
 // ============================================
 document.addEventListener("DOMContentLoaded", () => {
-  requireAuth((user) => {
+  requireAuth(async (user) => {
     currentUser = user;
+
+    // ユーザーの体重を取得
+    try {
+      const userData = await getUserData(user.uid);
+      if (userData && userData.weight) {
+        userWeight = userData.weight;
+      }
+    } catch (error) {
+      console.error('ユーザーデータ取得エラー:', error);
+    }
+
     console.log("トレーニング記録ページ準備完了");
+    updatePreview(); // 体重読み込み後にプレビューを更新
   });
 
   renderStyleTabs();
   renderCategoryTabs();
   renderTrainingTypes();
   setupEventListeners();
+  setupSearchListener();
   updatePreview();
 
   // 初期表示を設定
@@ -80,8 +100,73 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // ============================================
+// 検索機能
+// ============================================
+function setupSearchListener() {
+  const searchInput = document.getElementById("training-search");
+  const clearBtn = document.getElementById("clear-search");
+
+  if (searchInput) {
+    searchInput.addEventListener("input", (e) => {
+      searchQuery = e.target.value.trim().toLowerCase();
+
+      // クリアボタンの表示/非表示
+      if (clearBtn) {
+        clearBtn.style.display = searchQuery ? "flex" : "none";
+      }
+
+      renderTrainingTypes();
+    });
+  }
+
+  if (clearBtn) {
+    clearBtn.addEventListener("click", () => {
+      searchInput.value = "";
+      searchQuery = "";
+      clearBtn.style.display = "none";
+      renderTrainingTypes();
+    });
+  }
+}
+
+// ============================================
+// お気に入り機能
+// ============================================
+function toggleFavorite(trainingId, event) {
+  event.stopPropagation();
+
+  const index = favorites.indexOf(trainingId);
+  if (index > -1) {
+    favorites.splice(index, 1);
+  } else {
+    favorites.push(trainingId);
+  }
+
+  // localStorageに保存
+  localStorage.setItem('trainingFavorites', JSON.stringify(favorites));
+
+  // 再描画
+  renderTrainingTypes();
+}
+
+function isFavorite(trainingId) {
+  return favorites.includes(trainingId);
+}
+
+// ============================================
 // スタイルタブ生成
 // ============================================
+
+// スタイルアイコンを返す
+function getStyleTabIcon(styleId) {
+  const icons = {
+    'all': 'layout-grid',
+    'aerobic': 'heart-pulse',
+    'bodyweight': 'user',
+    'gym': 'dumbbell'
+  };
+  return icons[styleId] || 'circle';
+}
 
 function renderStyleTabs() {
   const tabsHTML = TRAINING_STYLES.map(
@@ -89,12 +174,17 @@ function renderStyleTabs() {
       <button class="style-tab ${
         style.id === selectedStyle ? "active" : ""
       }" data-style="${style.id}">
-        ${style.name}
+        <i data-lucide="${getStyleTabIcon(style.id)}" class="tab-icon"></i>
+        <span>${style.name}</span>
       </button>
     `
   ).join("");
 
   styleTabs.innerHTML = tabsHTML;
+
+  if (typeof lucide !== 'undefined') {
+    lucide.createIcons();
+  }
 
   styleTabs.addEventListener("click", (e) => {
     const tab = e.target.closest(".style-tab");
@@ -118,18 +208,43 @@ function renderStyleTabs() {
 // 絞り込みタブ表示
 // ============================================
 
+// カテゴリアイコンを返す
+function getCategoryTabIcon(categoryId) {
+  const icons = {
+    'all': 'layout-grid',
+    'favorites': 'star',
+    'arms': 'biceps-flexed',
+    'legs': 'footprints',
+    'abs': 'rectangle-vertical',
+    'back': 'arrow-up-from-line',
+    'chest': 'shield',
+    'fullbody': 'person-standing',
+    'cardio': 'heart-pulse',
+    'martial': 'swords',
+    'flexibility': 'stretch-horizontal',
+    'water': 'waves',
+    'sports': 'trophy'
+  };
+  return icons[categoryId] || 'circle';
+}
+
 function renderCategoryTabs() {
   const tabsHTML = TRAINING_CATEGORIES.map(
     (cat) => `
     <button class="category-tab ${
       cat.id === selectedCategory ? "active" : ""
     }" data-category="${cat.id}">
-      ${cat.name}
+      <i data-lucide="${getCategoryTabIcon(cat.id)}" class="tab-icon"></i>
+      <span>${cat.name}</span>
     </button>
   `
   ).join("");
 
   categoryTabs.innerHTML = tabsHTML;
+
+  if (typeof lucide !== 'undefined') {
+    lucide.createIcons();
+  }
 
   categoryTabs.addEventListener("click", (e) => {
     const tab = e.target.closest(".category-tab");
@@ -161,17 +276,69 @@ function resetFilters() {
 // トレーニング種目生成
 // ============================================
 
+// スタイルに応じたアイコンを返す
+function getStyleIcon(style) {
+  switch (style) {
+    case 'gym':
+      return '<i data-lucide="dumbbell" class="type-icon"></i>';
+    case 'bodyweight':
+      return '<i data-lucide="user" class="type-icon"></i>';
+    case 'aerobic':
+      return '<i data-lucide="heart-pulse" class="type-icon"></i>';
+    default:
+      return '';
+  }
+}
+
 function renderTrainingTypes() {
-  const types = getTrainings(selectedCategory, selectedStyle);
+  let types;
+
+  // お気に入りカテゴリの場合
+  if (selectedCategory === 'favorites') {
+    types = TRAINING_TYPES.filter(t => favorites.includes(t.id));
+    // スタイルフィルター適用
+    if (selectedStyle !== 'all') {
+      types = types.filter(t => t.trainingStyle === selectedStyle);
+    }
+  } else {
+    types = getTrainings(selectedCategory, selectedStyle);
+  }
+
+  // 検索フィルター適用
+  if (searchQuery) {
+    types = types.filter(t =>
+      t.name.toLowerCase().includes(searchQuery) ||
+      t.id.toLowerCase().includes(searchQuery)
+    );
+  }
 
   if (types.length === 0) {
+    let emptyMessage = "該当するトレーニングがありません";
+    let emptySubMessage = "カテゴリやスタイルを変更してみてください";
+
+    if (selectedCategory === 'favorites' && favorites.length === 0) {
+      emptyMessage = "お気に入りがありません";
+      emptySubMessage = "星マークをタップしてお気に入りに追加しましょう";
+    } else if (searchQuery) {
+      emptyMessage = `「${searchQuery}」に一致する種目がありません`;
+      emptySubMessage = "別のキーワードで検索してみてください";
+    }
+
     trainingTypes.innerHTML = `
-        <p class="empty-title">該当するトレーニングがありません</p>
-        <p class="empty-sub">カテゴリやスタイルを変更してみてください</p>
-        <button class="reset-filter-btn ">絞り込みをリセット</button>
+      <div class="empty-state">
+        <div class="empty-icon"><i data-lucide="${selectedCategory === 'favorites' ? 'star' : 'search-x'}"></i></div>
+        <p class="empty-title">${emptyMessage}</p>
+        <p class="empty-sub">${emptySubMessage}</p>
+        ${selectedCategory !== 'favorites' || favorites.length > 0 ? '<button class="reset-filter-btn">絞り込みをリセット</button>' : ''}
+      </div>
     `;
+    if (typeof lucide !== 'undefined') {
+      lucide.createIcons();
+    }
     const resetBtn = document.querySelector(".reset-filter-btn");
-    resetBtn.addEventListener("click", resetFilters);
+    if (resetBtn) {
+      resetBtn.addEventListener("click", resetFilters);
+    }
     return;
   }
 
@@ -179,6 +346,10 @@ function renderTrainingTypes() {
     .map(
       (t) => `
     <button class="type-btn ${selectedType === t.id ? "selected" : ""}" data-type="${t.id}">
+        <span class="favorite-btn ${isFavorite(t.id) ? 'active' : ''}" onclick="toggleFavorite('${t.id}', event)">
+          <i data-lucide="${isFavorite(t.id) ? 'star' : 'star'}" class="favorite-icon"></i>
+        </span>
+        ${getStyleIcon(t.trainingStyle)}
         <span class="type-name">${t.name}</span>
     </button>
   `
@@ -186,6 +357,11 @@ function renderTrainingTypes() {
     .join("");
 
   trainingTypes.innerHTML = typesHTML;
+
+  // Lucideアイコンを再描画
+  if (typeof lucide !== 'undefined') {
+    lucide.createIcons();
+  }
 }
 
 // ============================================
@@ -325,7 +501,7 @@ function updatePreview() {
         type.id,
         inputValues.duration,
         null,
-        currentUser?.weight
+        userWeight
       );
       break;
 
@@ -334,7 +510,7 @@ function updatePreview() {
         type.id,
         inputValues.reps,
         null,
-        currentUser?.weight
+        userWeight
       );
       break;
 
@@ -343,7 +519,7 @@ function updatePreview() {
         type.id,
         inputValues.weight,
         inputValues.reps,
-        currentUser?.weight
+        userWeight
       );
       break;
 
@@ -413,7 +589,7 @@ async function handleSaveTraining() {
         type.id,
         inputValues.duration,
         null,
-        currentUser?.weight
+        userWeight
       );
       break;
     case "reps":
@@ -421,7 +597,7 @@ async function handleSaveTraining() {
         type.id,
         inputValues.reps,
         null,
-        currentUser?.weight
+        userWeight
       );
       break;
     case "weight_reps":
@@ -429,7 +605,7 @@ async function handleSaveTraining() {
         type.id,
         inputValues.weight,
         inputValues.reps,
-        currentUser?.weight
+        userWeight
       );
       break;
   }
@@ -473,24 +649,109 @@ async function handleSaveTraining() {
 // ============================================
 
 async function showSuccessModal(calories, score) {
-  // 1. 基本情報を表示
-  modalCalories.textContent = calories.toLocaleString();
-  modalScore.textContent = score.toLocaleString();
+  // 初期値を0にセット
+  modalCalories.textContent = "0";
+  modalScore.textContent = "0";
 
-  // 2. 励ましのメッセージ
+  // 励ましのメッセージ
   encouragementMessage.textContent = getEncouragementMessage(score);
 
+  let todayTotalScore = score;
   try {
-    // 今日の累計スコア取得 (引数を currentUser.uid に修正)
     const previousTodayScore = await getTodayScore(currentUser.uid);
-    modalTodayScore.textContent = (previousTodayScore + score).toLocaleString();
+    todayTotalScore = previousTodayScore + score;
   } catch (error) {
     console.error("累計スコア取得エラー:", error);
-    modalTodayScore.textContent = score.toLocaleString();
+  }
+  modalTodayScore.textContent = "0";
+
+  // モーダルをアクティブにする
+  successModal.classList.add("active");
+
+  // 紙吹雪を生成
+  createConfetti();
+
+  // カウントアップアニメーション（少し遅延させて開始）
+  setTimeout(() => {
+    animateCountUp(modalCalories, 0, calories, 1000);
+    animateCountUp(modalScore, 0, score, 1200);
+    animateCountUp(modalTodayScore, 0, todayTotalScore, 1400);
+  }, 400);
+}
+
+// ============================================
+// カウントアップアニメーション
+// ============================================
+function animateCountUp(element, start, end, duration) {
+  const startTime = performance.now();
+  const diff = end - start;
+
+  function update(currentTime) {
+    const elapsed = currentTime - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+
+    // イージング（ease-out）
+    const easeOut = 1 - Math.pow(1 - progress, 3);
+    const current = Math.floor(start + diff * easeOut);
+
+    element.textContent = current.toLocaleString();
+
+    // パルスエフェクト
+    if (progress < 1) {
+      element.classList.add('counting');
+      setTimeout(() => element.classList.remove('counting'), 50);
+      requestAnimationFrame(update);
+    }
   }
 
-  // 3. モーダルをアクティブにする
-  successModal.classList.add("active");
+  requestAnimationFrame(update);
+}
+
+// ============================================
+// 紙吹雪アニメーション
+// ============================================
+function createConfetti() {
+  const modalContent = document.querySelector('.success-modal-content');
+
+  // 既存の紙吹雪コンテナを削除
+  const existingContainer = modalContent.querySelector('.confetti-container');
+  if (existingContainer) {
+    existingContainer.remove();
+  }
+
+  // 新しいコンテナを作成
+  const container = document.createElement('div');
+  container.className = 'confetti-container';
+  modalContent.style.position = 'relative';
+  modalContent.style.overflow = 'hidden';
+  modalContent.appendChild(container);
+
+  // 紙吹雪を生成
+  const colors = ['#d4af37', '#f4d03f', '#ffffff', '#ffd700'];
+  const confettiCount = 30;
+
+  for (let i = 0; i < confettiCount; i++) {
+    const confetti = document.createElement('div');
+    confetti.className = 'confetti';
+    confetti.style.left = Math.random() * 100 + '%';
+    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+    confetti.style.animationDelay = Math.random() * 0.5 + 's';
+    confetti.style.animationDuration = (2 + Math.random() * 2) + 's';
+    confetti.style.setProperty('--drift', (Math.random() - 0.5) * 100 + 'px');
+
+    // ランダムな形状
+    const shapes = ['', '50%', '0'];
+    confetti.style.borderRadius = shapes[Math.floor(Math.random() * shapes.length)];
+    confetti.style.width = (5 + Math.random() * 10) + 'px';
+    confetti.style.height = (5 + Math.random() * 10) + 'px';
+
+    container.appendChild(confetti);
+  }
+
+  // 3秒後に紙吹雪を削除
+  setTimeout(() => {
+    container.remove();
+  }, 4000);
 }
 
 // ============================================
@@ -634,6 +895,22 @@ function renderInputUI(type) {
   }
 
   inputContainer.innerHTML = html;
+
+  // 入力フォーマットに応じてクラスを切り替え
+  const trainingLayout = document.querySelector('.training-layout');
+  if (trainingLayout) {
+    // 全てのモードクラスを削除
+    trainingLayout.classList.remove('weight-reps-mode', 'reps-mode', 'time-mode');
+
+    // フォーマットに応じてクラスを追加
+    if (format === 'weight_reps') {
+      trainingLayout.classList.add('weight-reps-mode');
+    } else if (format === 'reps') {
+      trainingLayout.classList.add('reps-mode');
+    } else if (format === 'time') {
+      trainingLayout.classList.add('time-mode');
+    }
+  }
 
   setupInputEvents(format);
 }
