@@ -659,7 +659,7 @@ async function showSuccessModal(calories, score) {
   let todayTotalScore = score;
   try {
     const previousTodayScore = await getTodayScore(currentUser.uid);
-    todayTotalScore = previousTodayScore + score;
+    todayTotalScore = previousTodayScore;
   } catch (error) {
     console.error("累計スコア取得エラー:", error);
   }
